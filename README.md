@@ -1,4 +1,4 @@
-# SAE 2.01 - Jeu du démineur
+# SAE 2.01 - Projet Allo45
 
 Fait par :
 
