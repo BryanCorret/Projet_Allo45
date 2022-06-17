@@ -1,3 +1,3 @@
-public class FenetreConnexion {
+public class FenetreConnexion extends VBox{
     
 }

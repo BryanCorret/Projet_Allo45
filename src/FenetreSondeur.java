@@ -1,3 +1,3 @@
-public class FenetreSondeur {
+public class FenetreSondeur extends BorderPane{
     
 }

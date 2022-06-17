@@ -1,3 +1,5 @@
-public class FenetreAnalyste {
+
+
+public class FenetreAnalyste extends BorderPane{
     
 }

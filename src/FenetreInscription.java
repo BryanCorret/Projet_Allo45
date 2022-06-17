@@ -1,3 +1,3 @@
-public class FenetreInscription {
+public class FenetreInscription extends VBox{
     
 }

@@ -1,3 +1,3 @@
-public class FenetreDonneesBrutes {
+public class FenetreDonneesBrutes extends VBox{
     
 }
