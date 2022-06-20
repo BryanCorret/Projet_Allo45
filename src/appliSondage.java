@@ -19,6 +19,8 @@ public class appliSondage extends Application{
 
     private RequetesSQL lesRequetes;
 
+    private ConnexionMySQL ConnexionSQL;
+
     private Button boutonConnexion;
 
     private Button boutonAnalyste;
@@ -43,6 +45,8 @@ public class appliSondage extends Application{
 /**
     @Override
     public void init(){
+        this.ConnexionSQL = new ConnexionMySQL();
+        this.lesRequetes = new RequetesSQL(this.ConnexionSQL);
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
