@@ -36,6 +36,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
+import javafx.scene.shape.Circle;
 
 
 
@@ -51,22 +52,25 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboQuestion;
 
     //la lise des questions
-    private List<String> sondage;
+    private String sondage;
+    private List<String> lesQuestions;
     private String questionActuel;
     
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, List<String> sondage){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, String sondage){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonParametre = boutonParametre;
         this.boutonDonneeBrute = new Button("Données Brutes");
+        this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
 
         this.comboAnalyse = new ComboBox<>();
         this.comboClasse = new ComboBox<>();
         this.comboQuestion = new ComboBox<>();
 
         this.sondage = sondage;
-        this.questionActuel = sondage.get(0);
+        this.lesQuestions = new ArrayList<>();
+        this.questionActuel = "";
 
 
         //on créer notre fenêtre
@@ -86,8 +90,11 @@ public class FenetreAnalyste extends BorderPane{
     public String getQuestionActuel(){
         return this.questionActuel;
     }
-    public List<String> getSondage(){
+    public String getSondage(){
         return this.sondage;
+    }
+    public List<String> getLesQuestions(){
+        return this.lesQuestions;
     }
     
     public String getTextComboBoxAnalyse() throws NullPointerException{
@@ -119,7 +126,6 @@ public class FenetreAnalyste extends BorderPane{
     }
 
 
-
     // les méthodes pour découper la création de la fenetre
     public BorderPane topBorderPane(){
 
@@ -128,12 +134,12 @@ public class FenetreAnalyste extends BorderPane{
         HBox hboxBoutons = new HBox();
         hboxBoutons.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
-        Label titreSondage = new Label("Sondage de satisfaction par Concession Renault");
+        Label titreSondage = new Label(this.sondage);
         titreSondage.setFont(Font.font(" Arial ",FontWeight.BOLD,15));
 
         HBox hboxAvatar = new HBox();
 
-        ImageView profil = new ImageView("./cookie.jpeg");
+        ImageView profil = new ImageView("./user.jpg");
         profil.setFitHeight(50);profil.setFitWidth(50);
 
         hboxAvatar.getChildren().addAll(profil, this.boutonParametre, new Label(""));
@@ -167,9 +173,30 @@ public class FenetreAnalyste extends BorderPane{
         new PieChart.Data ("Autre", 4) ) ;
         tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
 
-        
 
-        vboxGraphique.getChildren().addAll(titreGraphique, tarte);
+        //les flèches
+        BorderPane bpFleche = new BorderPane();
+        ImageView imgFlecheGauche = new ImageView("./fleche.png");
+        ImageView imgFlecheDroite = new ImageView("./fleche.png");
+        imgFlecheDroite.setRotate(180.0);
+        imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
+        imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
+
+        Button boutonFlecheGauche = new Button("", imgFlecheGauche);
+        Button boutonFlecheDroite = new Button("", imgFlecheDroite);
+        //cache la partie visible des boutons
+        boutonFlecheGauche.setStyle("-fx-background-color:transparent;");
+        boutonFlecheDroite.setStyle("-fx-background-color:transparent;");
+
+        //pour les différencier dans le Controlleur Fleche
+        boutonFlecheGauche.setId("flecheGauche");
+        boutonFlecheDroite.setId("flecheDroite");
+
+        bpFleche.setRight(boutonFlecheDroite);
+        bpFleche.setLeft(boutonFlecheGauche);
+
+
+        vboxGraphique.getChildren().addAll(titreGraphique, tarte, bpFleche);
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -182,6 +209,8 @@ public class FenetreAnalyste extends BorderPane{
 
         //on ajoute tout
         vbox.getChildren().addAll(vboxGraphique, titreCommentaire, commentaire);
+
+        vbox.setPadding(new Insets(5,5,0,5));
         
         return vbox;
     }
@@ -208,13 +237,13 @@ public class FenetreAnalyste extends BorderPane{
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
 
         //on rempli la ComboBox avec les questions
-        for (String question : this.sondage){
+        for (String question : this.lesQuestions){
             this.comboQuestion.getItems().add(question);
         }
 
         vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
         vboxHaute.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
-
+        vboxHaute.setAlignment(Pos.CENTER);
 
         //la vbox en bas
         Text titreDonne = new Text("Données Autres\n");
@@ -231,7 +260,7 @@ public class FenetreAnalyste extends BorderPane{
 
         //on ajoute les deux petites vbox à la grande vbox
         vbox.getChildren().addAll(vboxHaute, new Label("\n"), vboxBasse);
-        
+        vbox.setPadding(new Insets(0,5,5,5));
         return vbox;
     }
 
