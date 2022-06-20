@@ -98,7 +98,7 @@ public class BiblioSQL {
     catch (SQLException e) {
       e.getMessage();
     }
-  }
+  } 
 
   /**
      public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){

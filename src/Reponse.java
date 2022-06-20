@@ -4,7 +4,7 @@ public class Reponse{
     private int repNum;
     private String value;
     private int valueInt;
-
+ 
     public Reponse(int idQ, int numQ, int repNum, String value){
         this.idQ = idQ;
         this.numQ = numQ;
