@@ -42,7 +42,7 @@ public class appliSondage extends Application{
     private String sondageSelectionne;
 
     private Scene scene;
-
+/**
     @Override
     public void init(){
         this.ConnexionSQL = new ConnexionMySQL();
@@ -85,6 +85,7 @@ public class appliSondage extends Application{
         this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
+*/
     @Override
     public void start(Stage stage){
         Pane root = new FenetreConnexion();
@@ -93,7 +94,7 @@ public class appliSondage extends Application{
         stage.setTitle("Allo45");
         stage.show();
     }
-
+/**
     public void modeAnalyste(){
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
         this.scene.setRoot(root);
@@ -165,7 +166,7 @@ public class appliSondage extends Application{
     // public Chart Diagrammes(){
         
     // }
-
+*/
     public static void main(String[] args){
         Application.launch(args);
     }

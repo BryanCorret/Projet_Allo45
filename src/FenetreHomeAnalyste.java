@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.io.File;
 import java.util.ArrayList;
 
-public class FenetreHome extends BorderPane {
+public class FenetreHomeAnalyste extends BorderPane {
 
     
     private Button boutonHome;
@@ -30,7 +30,7 @@ public class FenetreHome extends BorderPane {
     private Button boutonInspect;
     
   
-    public FenetreHome(Button boutonHome,Button boutonRefresh,Button boutonDeco){
+    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
