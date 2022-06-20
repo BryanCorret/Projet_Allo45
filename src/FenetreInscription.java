@@ -29,8 +29,7 @@ public class FenetreInscription extends VBox{
         this.NomU = new TextField();
         this.NomP = new TextField();
         this.NomF = new TextField();
-
-        appliSondage sondage = new appliSondage();
+        this.sondage = new appliSondage();
 
         this.setTitle();
         this.setText();
@@ -61,6 +60,7 @@ public class FenetreInscription extends VBox{
         textP.setFont(javafx.scene.text.Font.font("Arial", 15));
 
         //textfield Prénom
+        TextField NomP = new TextField();
         NomP.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomP.setPromptText("Jean");
 
@@ -69,6 +69,7 @@ public class FenetreInscription extends VBox{
         textNom.setFont(javafx.scene.text.Font.font("Arial", 15)); 
  
         //textfield Nom
+        TextField NomF = new TextField();
         NomF.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomF.setPromptText("Dupont");
         
@@ -78,6 +79,7 @@ public class FenetreInscription extends VBox{
         textU.setFont(javafx.scene.text.Font.font("Arial", 15)); 
     
         //textfield Utilisateur
+        TextField NomU = new TextField();
         NomU.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomU.setPromptText("Nom utilisateur");
 
@@ -94,6 +96,7 @@ public class FenetreInscription extends VBox{
         textM.setFont(javafx.scene.text.Font.font("Arial", 15)); 
    
         //textfield mdp
+        TextField Mdp = new TextField();
         Mdp.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp.setPromptText("Un mot de passe");
 
@@ -102,12 +105,13 @@ public class FenetreInscription extends VBox{
         textM2.setFont(javafx.scene.text.Font.font("Arial", 15));
        
         //textfield mdp
+        TextField Mdp2 = new TextField();
         Mdp2.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp2.setPromptText("Confirmation du mot de passe");
 
         
         // Button
-        ImageView img = new ImageView(new Image("file:IMG/button2.png"));
+        ImageView img = new ImageView(new Image("file:IMG/buttonIn.png"));
         img.setFitHeight(100);
         img.setFitWidth(200);
 
@@ -154,10 +158,5 @@ public class FenetreInscription extends VBox{
     public String getNomP(){
         return NomP.getText();
     }
-
-    
-
-
-
 
 }
