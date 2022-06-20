@@ -19,6 +19,7 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
         
         String NomU = fenConnexion.getNomU();
         String Mdp = fenConnexion.getMdp();
+        System.out.println("Nom utilisateur : "+ NomU+ "Mdp : "+ Mdp);
 
         //this.sondage.Connexion(NomU, Mdp); 
 
