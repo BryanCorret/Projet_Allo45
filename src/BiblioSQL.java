@@ -88,32 +88,4 @@ public class BiblioSQL {
       return questionnaire;
     } 
 
-  public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
-    Statement st;
-    try {
-      st = laConnexion.createStatement();
-      st.executeUpdate("INSERT INTO REPONDRE VALUES(" + rep.getIdQ() + "," + rep.getNumQ() + "," + sonde.getCaracteristique() + "," + rep.getValue() + ");");
-      
-    }
-    catch (SQLException e) {
-      e.getMessage();
-    }
-  } 
-
-  /**
-     public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){
-       Statement st;
-       List<String> reponses = new ArrayList<String>();
-       try {
-         st = laConnection.createStatement();
-         ResultSet rs = st.executeQuery("SELECT * FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
-         while(rs.next()){
-           reponses.add(rs.getString("texteR"));
-         }
-       }
-      String.valueOf(value); catch (SQLException e) {
-         e.getMessage();
-       }
-     }
-     */
 }
