@@ -30,16 +30,17 @@ public class LoginRegister {
     try{
       if(laConnexion.isConnecte())
       laConnexion.close();
-      laConnexion.connecter("127.0.0.1", "sondage", username, password);
+      laConnexion.connecter(username, password);
     }
     catch(Exception ex){
         ex.getMessage();
     }
   }
-
+/**
   public void register(Utilisateur user){
     String requette = "INSERT INTO UTILISATEUR VALUES(" ;
 		st = laConnexion.createStatement();
 		st.executeUpdate(requette);
   }
+*/
 } 

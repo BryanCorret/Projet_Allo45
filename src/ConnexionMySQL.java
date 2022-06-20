@@ -9,11 +9,11 @@ public class ConnexionMySQL {
 		Class.forName("org.mariadb.jdbc.Driver");
 	}
 
-	public void connecter(String nomServeur, String nomBase, String nomLogin, String motDePasse) throws SQLException {
+	public void connecter(String nomLogin, String motDePasse) throws SQLException {
 		this.mysql=null;
 		this.connecte=false;
 		this.mysql = DriverManager.getConnection(
-					"jdbc:mysql://"+nomServeur+":3306/"+nomBase,nomLogin, motDePasse);
+					"jdbc:mysql://localhost:3306/sondage",nomLogin,motDePasse);
 		this.connecte=true;
 	}
 	public void close() throws SQLException {
