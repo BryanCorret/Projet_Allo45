@@ -28,17 +28,35 @@ public class appliSondage extends Application{
 
     private Button boutonInscription;
 
+    private Button boutonParam;
+
+    private Button boutonRefresh;
+
+    private String sondageSelectionne;
+
     private Scene scene;
 
     @Override
     public void init(){
-        this.boutonConnexion = new Button("Se connecter");
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
         this.boutonHome = new Button(); //image home
+        this.boutonParam = new Button(); //image Param
+        this.boutonRefresh = new Button(); //image f5
         this.boutonDeconnexion = new Button("Se déconnecter");
-        this.boutonInscription = new Button("S'inscrire");
+        ImageView home = new ImageView("./home.png");
+        ImageView refresh = new ImageView("./reload.png");
+        ImageView deco = new ImageView("./Disconnect.png");
+        home.setFitHeight(30);home.setFitWidth(30);
+        refresh.setFitHeight(30);refresh.setFitWidth(30);
+        deco.setFitHeight(30);deco.setFitWidth(30);
+        this.boutonHome.setGraphic(home);
+        this.boutonRefresh.setGraphic(refresh);
+        this.boutonDeconnexion.setGraphic(deco);
+        this.boutonHome.setStyle("-fx-background-color:transparent;");
+        this.boutonConnexion.setStyle("-fx-background-color:transparent;");
+        this.boutonDeconnexion.setStyle("-fx-background-color:transparent;");
 
         ControleurChangementFenetre windowSwitcher = new ControleurChangementFenetre(this);
         RetourHome controlHome = new RetourHome(this);
@@ -50,11 +68,13 @@ public class appliSondage extends Application{
         this.boutonSondeur.setOnAction(windowSwitcher);
         this.boutonDonneesBrutes.setOnAction(windowSwitcher);
         this.boutonHome.setOnAction(controlHome);
+        this.boutonParam.setOnAction(windowSwitcher);
+        this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
     @Override
     public void start(Stage stage){
-        Pane root = new FenetreConnexion(this.btnConnexion);
+        Pane root = new FenetreConnexion();
         this.scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Allo45");
@@ -62,10 +82,17 @@ public class appliSondage extends Application{
     }
 
     public void modeAnalyste(){
-        Pane root = new FenetreAnalyste(this.btnConnexion);
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
+
+    public void modeHome(){
+        Pane root = new FenetreHome(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        this.scene.setRoot(root);
+        root.getScene().getWindow().sizeToScene();
+    }
+
 
     public void modeDonneesBrutes(){
         Pane root = new FenetreDonneesBrutes(this.btnConnexion);
@@ -76,25 +103,37 @@ public class appliSondage extends Application{
     public void modeSondeur(){
         Pane root = new FenetreSondeur(this.btnConnexion);
         this.scene.setRoot(root);
-        root.getScene().getWindow().sizeToScene();
+        root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
     }
 
     public void modeConnexion(){
-        Pane root = new FenetreConnexion(this.btnConnexion);
+        Pane root = new FenetreConnexion();
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeInscription(){
-        Pane root = new FenetreInscription(this.btnConnexion);
+        Pane root = new FenetreInscription();
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeParametreAnalyste(){
-        Pane root = new FenetreParametreAnalyste(this.btnConnexion);
+        Pane root = new FenetreParametreAnalyste(this.boutonHome,this.boutonRefresh);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
+    }
+
+    public void remplirSondage(Questionnaire q){
+        this.sondageSelectionne = q.getTitre();
+    }
+
+    public void majAffichageAnalyste(){
+
+    }
+
+    public void EnregistrerReponses(){
+
     }
 
     public static void main(String[] args){
