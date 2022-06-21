@@ -44,13 +44,22 @@ public class BiblioSQL {
             ex.getMessage();
         }
       }
-
-      public void createUser(FenetreInscription ){
-
+      public static ConnexionMySQL connectRoot(){
+        try {
+          ConnexionMySQL temp = new ConnexionMySQL();
+          temp.connecter("root", "mdp_root");
+          return temp;
+        } catch (ClassNotFoundException e) {
+          e.getMessage();
+        } catch (SQLException e){
+          System.out.println("Problème lors du log");
+        }
+        return null;
       }
-      public void register(ConnexionMySQL laConnexion, Utilisateur user){
+      public static void register(ConnexionMySQL laConnexion, FenetreInscription fenetre){
         Statement st;
-        String requette = "INSERT INTO UTILISATEUR VALUES(" + BiblioSQL.getMaxID(laConnexion) + ",'" + user.getNom() + "','" + user.getPrenom() + "','" + user.getLogin() + "','" + user.getPassword() + "','" + user.getIdRole() +"';";
+        Utilisateur user = new Utilisateur(BiblioSQL.getMaxID(laConnexion), fenetre.getNomF(), fenetre.getNomP(), fenetre.getNomU(), fenetre.getMdp(), 2);
+        String requette = "INSERT INTO UTILISATEUR VALUES(" + user.getId() + ",'" + user.getNom() + "','" + user.getPrenom() + "','" + user.getLogin() + "','" + user.getPassword() + "','" + user.getIdRole() +"';";
         try {
           st = laConnexion.createStatement();
           st.executeUpdate(requette);

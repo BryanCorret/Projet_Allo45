@@ -34,7 +34,8 @@ public class ControleurInscription implements EventHandler<ActionEvent> {
             }
 
             if (Mdp.equals(Conf)) {
-                System.out.println("Inscription réussie");
+                BiblioSQL.register(BiblioSQL.connectRoot(), this.fenInscription);
+                System.out.println("Le compte a bien été crée !");
 
             } 
             
