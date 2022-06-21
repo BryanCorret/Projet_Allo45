@@ -76,11 +76,9 @@ public class appliSondage extends Application{
         this.boutonParam.setGraphic(param);
         this.boutonParam.setStyle("-fx-background-color:transparent;");
         this.boutonHome.setStyle("-fx-background-color:transparent;");
-        this.boutonConnexion.setStyle("-fx-background-color:transparent;");
         this.boutonDeconnexion.setStyle("-fx-background-color:transparent;");
 
         ControleurChangementFenetre windowSwitcher = new ControleurChangementFenetre(this);
-        RetourHome controlHome = new RetourHome(this);
 
         this.boutonDeconnexion.setOnAction(windowSwitcher);
         this.boutonInscription.setOnAction(windowSwitcher);
