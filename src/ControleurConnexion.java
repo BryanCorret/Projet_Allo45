@@ -1,3 +1,5 @@
+import java.sql.SQLException;
+
 import javax.print.DocFlavor.STRING;
 
 import javafx.event.ActionEvent;
@@ -18,9 +20,22 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         
-        String NomU = fenConnexion.getNomU();
-        String Mdp = fenConnexion.getMdp();
-        System.out.println("Nom utilisateur : "+ NomU+ "Mdp : "+ Mdp);
+        // String NomU = fenConnexion.getNomU();
+        // String Mdp = fenConnexion.getMdp();
+        try{
+            System.out.println("Est tu connecté ? ");
+            ConnexionMySQL laConnexion = new ConnexionMySQL();
+            laConnexion.connecter("root", "mdp_root");
+            BiblioSQL.login(laConnexion, this.fenConnexion.getNomU(), this.fenConnexion.getMdp());
+        }    
+        catch (ClassNotFoundException ex){
+            System.out.println("Driver MySQL non trouvé!!!");
+            System.exit(1);
+        }
+        catch (SQLException ex){
+            System.out.println("Erreur de connexion!!!");
+            System.exit(1);
+        }
 
         // this.sondage.Connexion(NomU, Mdp)
         if(this.sondage.estCorrect(NomU, Mdp)){

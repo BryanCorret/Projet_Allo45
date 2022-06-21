@@ -39,7 +39,9 @@ public class appliSondage extends Application{
 
     private Button boutonRefresh;
 
-    private String sondageSelectionne;
+    private Questionnaire sondageSelectionne;
+
+    private String fenetreActu;
 
     private Scene scene;
 
@@ -57,7 +59,7 @@ public class appliSondage extends Application{
         ImageView home = new ImageView("./home.png");
         ImageView refresh = new ImageView("./reload.png");
         ImageView deco = new ImageView("./Disconnect.png");
-        ImageView param = new ImageView("./parametre.jpg");
+        ImageView param = new ImageView("./menu.jpg");
         home.setFitHeight(30);home.setFitWidth(30);
         refresh.setFitHeight(30);refresh.setFitWidth(30);
         deco.setFitHeight(30);deco.setFitWidth(30);
@@ -68,11 +70,9 @@ public class appliSondage extends Application{
         this.boutonParam.setGraphic(param);
         this.boutonParam.setStyle("-fx-background-color:transparent;");
         this.boutonHome.setStyle("-fx-background-color:transparent;");
-        this.boutonConnexion.setStyle("-fx-background-color:transparent;");
         this.boutonDeconnexion.setStyle("-fx-background-color:transparent;");
 
         ControleurChangementFenetre windowSwitcher = new ControleurChangementFenetre(this);
-        RetourHome controlHome = new RetourHome(this);
 
         this.boutonDeconnexion.setOnAction(windowSwitcher);
         this.boutonInscription.setOnAction(windowSwitcher);
@@ -80,65 +80,81 @@ public class appliSondage extends Application{
         this.boutonAnalyste.setOnAction(windowSwitcher);
         this.boutonSondeur.setOnAction(windowSwitcher);
         this.boutonDonneesBrutes.setOnAction(windowSwitcher);
-        this.boutonHome.setOnAction(controlHome);
+        this.boutonHome.setOnAction(windowSwitcher);
         this.boutonParam.setOnAction(windowSwitcher);
         this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
+
     @Override
     public void start(Stage stage){
         Pane root = new FenetreConnexion();
         this.scene = new Scene(root);
+        this.fenetreActu = "Connexion";
         stage.setScene(scene);
         stage.setTitle("Allo45");
         stage.show();
     }
 
     public void modeAnalyste(){
+        this.fenetreActu = "Analyste";
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
-    public void modeHome(){
-        Pane root = new FenetreHome(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+    public void modeHomeSondeur(){
+        this.fenetreActu = "HomeSondeur";
+        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
+    public void modeHomeAnalyste(){
+        this.fenetreActu = "HomeAnalyste";
+        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+    }
 
     public void modeDonneesBrutes(){
-        Pane root = new FenetreDonneesBrutes(this.btnConnexion); //fenetre pas encore faite
+        this.fenetreActu = "Donnees";
+        Pane root = new FenetreDonneesBrutes(); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeSondeur(){
-        Pane root = new FenetreSondeur(this.btnConnexion); //fenetre pas encore faite
+        this.fenetreActu = "Sondeur";
+        Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
     }
 
     public void modeConnexion(){
+        this.fenetreActu = "Connexion";
         Pane root = new FenetreConnexion();
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeInscription(){
+        this.fenetreActu = "Inscription";
         Pane root = new FenetreInscription();
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeParametreAnalyste(){
+        this.fenetreActu = "ParamAnalyste";
         Pane root = new FenetreParametreAnalyste(this.boutonHome,this.boutonRefresh);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void remplirSondage(Questionnaire q){
-        this.sondageSelectionne = q.getTitre();
+        this.sondageSelectionne = q;
+    }
+    public String getFenetreActu(){
+        return this.fenetreActu;
     }
 
     public void majAffichageAnalyste(){
@@ -165,7 +181,7 @@ public class appliSondage extends Application{
     // public Chart Diagrammes(){
         
     // }
-
+*/
     public static void main(String[] args){
         Application.launch(args);
     }
