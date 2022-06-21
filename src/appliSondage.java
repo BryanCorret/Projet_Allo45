@@ -40,11 +40,15 @@ public class appliSondage extends Application{
 
     private Button boutonRefresh;
 
+    private BorderPane fleches;
+
     private Questionnaire sondageSelectionne;
 
     private String fenetreActu;
 
     private Scene scene;
+
+    private Utilisateur utilisateurActu;
 
     @Override
     public void init(){
@@ -64,6 +68,7 @@ public class appliSondage extends Application{
         this.boutonDeconnexion = new Button(); //image deconnexion
         this.boutonConnexion = new Button();
         this.boutonInscription = new Button();
+        this.fleches = this.lesFleches();
         ImageView home = new ImageView("file:IMG/home.png");
         ImageView refresh = new ImageView("file:IMG/reload.png");
         ImageView deco = new ImageView("file:IMG/Disconnect.png");
@@ -94,6 +99,29 @@ public class appliSondage extends Application{
         this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
+    private BorderPane lesFleches(){
+        //les flèches
+        BorderPane bpFleche = new BorderPane();
+        ImageView imgFlecheGauche = new ImageView("./fleche.png");
+        ImageView imgFlecheDroite = new ImageView("./fleche.png");
+        imgFlecheDroite.setRotate(180.0);
+        imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
+        imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
+
+        Button boutonFlecheGauche = new Button("", imgFlecheGauche);
+        Button boutonFlecheDroite = new Button("", imgFlecheDroite);
+        //cache la partie visible des boutons
+        boutonFlecheGauche.setStyle("-fx-background-color:transparent;");
+        boutonFlecheDroite.setStyle("-fx-background-color:transparent;");
+
+        //pour les différencier dans le Controlleur Fleche
+        boutonFlecheGauche.setId("flecheGauche");
+        boutonFlecheDroite.setId("flecheDroite");
+
+        bpFleche.setRight(boutonFlecheDroite);
+        bpFleche.setLeft(boutonFlecheGauche);
+        return bpFleche;
+    }
 
     @Override
     public void start(Stage stage){
@@ -106,16 +134,16 @@ public class appliSondage extends Application{
         stage.show();
     }
 
-    // public void modeAnalyste(){
-    //     this.fenetreActu = "Analyste";
-    //     Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
-    //     this.scene.setRoot(root);
-    //     root.getScene().getWindow().sizeToScene();
-    // }
+    public void modeAnalyste(){
+        this.fenetreActu = "Analyste";
+         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches,this.connexionSQL);
+         this.scene.setRoot(root);
+        root.getScene().getWindow().sizeToScene();
+    }
     
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
-        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this.fleches);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -134,12 +162,12 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
 
-    // public void modeSondeur(){
-    //     this.fenetreActu = "Sondeur";
-    //     Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
-    //     this.scene.setRoot(root);
-    //     root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
-    // }
+     public void modeSondeur(){
+         this.fenetreActu = "Sondeur";
+         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.ConnexionSQL); //fenetre pas encore faite
+         this.scene.setRoot(root);
+         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
+     }
     
 
     public void modeConnexion(){
@@ -182,6 +210,9 @@ public class appliSondage extends Application{
     public void majAffichageSondeur(){
 
     }
+    public void setUtilisateur(Utilisateur u){
+        this.utilisateurActu = u;
+    }
     
     public List<String> rechercherSondage(String StrRecherche){
         List<String> listeDesSondages = new ArrayList<String>();
@@ -189,6 +220,9 @@ public class appliSondage extends Application{
     }
     public ConnexionMySQL getConnexion(){
         return this.ConnexionSQL;
+    }
+    public int getUserRole(){
+        return this.utilisateurActu.getIdRole();
     }
 
     public void quitter(){
