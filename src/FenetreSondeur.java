@@ -176,7 +176,7 @@ public class FenetreSondeur extends BorderPane {
     
     private ComboBox comboBoxMultiple(){
         ComboBox res = this.comboMultiple;
-        for(String reponsePossible : this.Questionnaire){
+        for(String reponsePossible : this.listeQuestions){
             res.getItems().add(reponsePossible);
         }
         
@@ -312,7 +312,7 @@ public class FenetreSondeur extends BorderPane {
 
     //ComboBox 
     public String getValeurCombo(){return this.comboMultiple.getValue();}
-    public void setValeurCombo(String valeur){this.comboMultiple.setPlaceholder(valeur);}
+    public void setValeurCombo(String valeur){this.comboMultiple.setValue(valeur);}
 
     // Le controleur set une valeur a cette variable
     // Bouton

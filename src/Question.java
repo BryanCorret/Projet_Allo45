@@ -14,7 +14,7 @@ public class Question{
     public int getNumQ(){return numQ;}
     public String getTextQ(){return textQ;}
     public int getMaxVal(){return MaxVal;}
-    public int getType(){return type;}
+    public char getType(){return type;}
 
     public void setNumQ(int numQ){this.numQ = numQ;}
     public void setTextQ(String textQ){this.textQ = textQ;}

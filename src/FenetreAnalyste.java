@@ -53,7 +53,7 @@ public class FenetreAnalyste extends BorderPane{
 
     //la lise des questions
     private Questionnaire questionnaire;
-    private String questionActuel;
+    private Question questionActuel;
 
     private TextArea commentaire;
     
@@ -89,7 +89,7 @@ public class FenetreAnalyste extends BorderPane{
     }
 
     //les getteurs
-    public String getQuestionActuel(){
+    public Question getQuestionActuel(){
         return this.questionActuel;
     }
     public Questionnaire getQuesionnaire(){
