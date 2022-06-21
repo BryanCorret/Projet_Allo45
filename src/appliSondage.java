@@ -61,10 +61,12 @@ public class appliSondage extends Application{
         this.boutonParam = new Button(); //image Param
         this.boutonRefresh = new Button(); //image f5
         this.boutonDeconnexion = new Button(); //image deconnexion
-        ImageView home = new ImageView("./home.png");
-        ImageView refresh = new ImageView("./reload.png");
-        ImageView deco = new ImageView("./Disconnect.png");
-        ImageView param = new ImageView("./menu.jpg");
+        this.boutonConnexion = new Button();
+        this.boutonInscription = new Button();
+        ImageView home = new ImageView("file:IMG/home.png");
+        ImageView refresh = new ImageView("file:IMG/reload.png");
+        ImageView deco = new ImageView("file:IMG/Disconnect.png");
+        ImageView param = new ImageView("file:IMG/menu.jpg");
         home.setFitHeight(30);home.setFitWidth(30);
         refresh.setFitHeight(30);refresh.setFitWidth(30);
         deco.setFitHeight(30);deco.setFitWidth(30);
@@ -85,15 +87,15 @@ public class appliSondage extends Application{
         this.boutonAnalyste.setOnAction(windowSwitcher);
         this.boutonSondeur.setOnAction(windowSwitcher);
         this.boutonDonneesBrutes.setOnAction(windowSwitcher);
-        this.boutonHome.setOnAction(windowSwitcher);
+        //this.boutonHome.setOnAction(controlHome);
         this.boutonParam.setOnAction(windowSwitcher);
-        this.boutonRefresh.setOnAction(new ControleurRefresh(this));
+        //this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
 
     @Override
     public void start(Stage stage){
-        Pane root = new FenetreConnexion();
+        Pane root = new FenetreConnexion(this);
         this.scene = new Scene(root);
         this.fenetreActu = "Connexion";
         stage.setScene(scene);
@@ -107,6 +109,7 @@ public class appliSondage extends Application{
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
+    
 
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
@@ -135,17 +138,19 @@ public class appliSondage extends Application{
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
     }
+    
 
     public void modeConnexion(){
         this.fenetreActu = "Connexion";
-        Pane root = new FenetreConnexion();
+        Pane root = new FenetreConnexion(this);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeInscription(){
         this.fenetreActu = "Inscription";
-        Pane root = new FenetreInscription();
+        Pane root = new FenetreInscription(this);
+        System.out.println(this.scene);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -180,6 +185,9 @@ public class appliSondage extends Application{
         List<String> listeDesSondages = new ArrayList<String>();
         return listeDesSondages;
     }
+    public ConnexionMySQL getConnexion(){
+        return this.ConnexionSQL;
+    }
 
     public void quitter(){
         Platform.exit();
@@ -188,7 +196,6 @@ public class appliSondage extends Application{
     // public Chart Diagrammes(){
         
     // }
-
     public static void main(String[] args){
         Application.launch(args);
     }

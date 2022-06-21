@@ -12,5 +12,11 @@ public class ControleurChangementFenetre implements EventHandler<ActionEvent>{
   public void handle(ActionEvent e){
     
   }
+
+  @Override
+  public void handle(ActionEvent event) {
+    // TODO Auto-generated method stub
+    
+  }
     
 }
