@@ -7,47 +7,61 @@ import java.util.List;
 public class BiblioSQL {
     public static int getMaxID(ConnexionMySQL laConnection){
         Statement st;
-		try {
-			st = laConnection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT MAX(IDU) FROM UTILISATEUR;");    
-            return rs.getInt("IDU");
+		    try {
+			      st = laConnection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT MAX(IDU) IDU FROM UTILISATEUR;");  
+            rs.next();  
+            return rs.getInt("IDU")+1;
 		} catch (SQLException e) {
 			e.getMessage();
 		}
 		return -1;
     }
 
-    public static boolean userExists(ConnexionMySQL laConnexion, String username, String password){
+    public static int userExists(String username, String password){
       Statement st;
-      String requete = "SELECT U.LOGIN LOG, U.MOTDEPASSE MDP FROM UTILISATEUR U;";
-      try {
-        st = laConnexion.createStatement();
-        ResultSet rs = st.executeQuery(requete);
-        while(rs.next())
-          if(rs.getString("LOG") == username && rs.getString("MDP") == password) return true;
-          return false;
-          } 
-          catch (SQLException e) {
-              e.getMessage();
-        return false;
-      }
-    }  
+      ConnexionMySQL connect = BiblioSQL.connectRoot();
+      String requete = "SELECT U.LOGIN LOG, U.MOTDEPASSE MDP, U.IDR IDR FROM UTILISATEUR U;";
+        try {
+          st = connect.createStatement();
+          ResultSet rs = st.executeQuery(requete);
+          while(rs.next())
+          if(rs.getString("LOG").equals(username) && rs.getString("MDP").equals(password))
+          return rs.getInt("IDR");
+        } catch (SQLException e) {
+          e.getMessage();
+          System.out.println("Problème d'existence utilisateur");
+        }
+        try {
+          connect.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+        return -1;
+    }
 
-    public static void login(ConnexionMySQL laConnexion, String username, String password){
-      if(BiblioSQL.userExists(laConnexion,username, password))
+    public static Utilisateur login(ConnexionMySQL laConnexion, String username, String password){
+      if(BiblioSQL.userExists(username, password) != -1){
         try{
-          if(laConnexion.isConnecte())
+          ConnexionMySQL connectTemp = BiblioSQL.connectRoot();
+          Statement st = connectTemp.createStatement();
+          ResultSet rs = st.executeQuery("SELECT IDU, NOMU, PRENOMU, LOGIN, MOTDEPASSE FROM UTILISATEUR WHERE LOGIN='" + username + "' AND MOTDEPASSE='" + password + "' AND IDU=" + BiblioSQL.userExists(username, password) +";");
+          connectTemp.close();
           laConnexion.close();
           laConnexion.connecter(username, password);
           System.out.println("Tu es connecté !");
+          return new Utilisateur(rs.getInt("IDU"), rs.getString("NOMU"), rs.getString("PRENOM"), username, password, BiblioSQL.userExists(username, password));
         }
         catch(Exception ex){
-            ex.getMessage();
-        }
-        else{
-          System.out.println("Ce compte n'existe pas");
+            System.out.println("bah non");
         }
       }
+      else{
+        System.out.println("Ce compte n'existe pas");
+      }
+        return null;
+      }
+
       public static ConnexionMySQL connectRoot(){
         try {
           ConnexionMySQL temp = new ConnexionMySQL();
@@ -64,8 +78,8 @@ public class BiblioSQL {
         Statement st;
         ConnexionMySQL laConnexion = BiblioSQL.connectRoot();
         Utilisateur user = new Utilisateur(BiblioSQL.getMaxID(laConnexion), fenetre.getNomF(), fenetre.getNomP(), fenetre.getNomU(), fenetre.getMdp(), 2);
-        String requette = "INSERT INTO UTILISATEUR VALUES(" + user.getId() + ",'" + user.getNom() + "','" + user.getPrenom() + "','" + user.getLogin() + "','" + user.getPassword() + "','" + user.getIdRole() +"';";
-        try {
+        String requette = "INSERT INTO UTILISATEUR VALUES(" + user.getId() + ",'" + user.getNom() + "','" + user.getPrenom() + "','" + user.getLogin() + "','" + user.getPassword() + "'," + user.getIdRole() +");";
+        try{
           st = laConnexion.createStatement();
           st.executeUpdate(requette);
           System.out.println("Le compte a bien été créé.");
@@ -73,6 +87,19 @@ public class BiblioSQL {
           e.getMessage();
           System.out.println("Le compte n'a pas été créé.");
         }
+        Statement st2;
+        ConnexionMySQL laCoUser = BiblioSQL.connectRoot();
+        String requette2 = "CREATE USER " + user.getLogin() + " IDENTIFIED BY '" + user.getPassword() + "';";
+        try {
+          laConnexion.close();
+          st2 = laCoUser.createStatement();
+          st2.executeUpdate(requette2);
+          st2.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+
+
       }
 
     public static String getEtatQuestionnaire(ConnexionMySQL laConnection, int idQ){
@@ -123,6 +150,8 @@ public class BiblioSQL {
           ex.getMessage();
         }
         return questionsSondage;
+
+
     }
 
 

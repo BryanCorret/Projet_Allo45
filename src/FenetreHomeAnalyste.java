@@ -28,16 +28,17 @@ public class FenetreHomeAnalyste extends BorderPane {
     private Button boutonSelect;
     private Button boutonResearch;
     private Button boutonInspect;
+    private appliSondage sondage;
     
   
-    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco){
+    public FenetreHomeAnalyste(appliSondage sondage, Button boutonHome,Button boutonRefresh,Button boutonDeco){
         super();
+        this.sondage = sondage;
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonDeco = boutonDeco;
         BorderPane borderTop = borderPaneTop();
         HBox hBox = HBoxMid();
-        
         this.setTop(borderTop);
         this.setCenter(hBox);
     }
@@ -47,8 +48,8 @@ public class FenetreHomeAnalyste extends BorderPane {
         
         HBox hHome = new HBox();
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
-
-        Label ltitre = new Label("Bienvenue"+"this.getNom()");
+        System.out.println(this.sondage);
+        Label ltitre = new Label("Bienvenue "+ this.sondage.getutilisateur().getPrenom());
 
         HBox hID = new HBox();
         

@@ -24,28 +24,21 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
         
         String NomU = fenConnexion.getNomU();
         String Mdp = fenConnexion.getMdp();
-        try{
             System.out.println("Est tu connecté ? ");
-            ConnexionMySQL laConnexion = new ConnexionMySQL();
-            laConnexion.connecter("root", "mdp_root");
-            BiblioSQL.login(laConnexion, this.fenConnexion.getNomU(), this.fenConnexion.getMdp());
-        }    
-        catch (ClassNotFoundException ex){
-            System.out.println("Driver MySQL non trouvé!!!");
-        }
-        catch (SQLException ex){
-            System.out.println("Erreur de connexion!!!");
-        }
-
+            BiblioSQL.login(this.sondage.getConnexion(), this.fenConnexion.getNomU(), this.fenConnexion.getMdp());
         // this.sondage.Connexion(NomU, Mdp)
-        if(BiblioSQL.userExists(this.connexion,NomU, Mdp)){
+        if(BiblioSQL.userExists(NomU, Mdp) != -1){
+            this.sondage.setUtilisateur(BiblioSQL.login(this.connexion,NomU, Mdp));
             System.out.println("Connexion réussie");
-            // POp up
-            BiblioSQL.login(this.connexion,NomU, Mdp);
-            Alert AlertConnexion = new Alert(Alert.AlertType.INFORMATION);
-            AlertConnexion.setTitle("Connexion réussie");
-            AlertConnexion.setHeaderText("Bienvenue "+NomU);
-            AlertConnexion.setContentText("Vous êtes connecté");
+            switch(BiblioSQL.userExists(NomU, Mdp)){
+                // case 1: this.sondage.modeConcepteur() / On a pas de concepteur
+                case 2:
+                    this.sondage.modeHomeSondeur();
+                    break;
+                case 3:
+                    this.sondage.modeHomeAnalyste();
+                    break;
+            }
         }
         else{
             System.out.println("Connexion échouée");
