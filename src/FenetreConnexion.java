@@ -35,6 +35,9 @@ public class FenetreConnexion extends VBox{
 
     }
 
+    public FenetreConnexion(appliSondage appliSondage) {
+    }
+
     public void setTitle(){
         Text title = new Text("Créez-votre compte");
         title.setFont(javafx.scene.text.Font.font("Arial", 20));

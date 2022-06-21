@@ -26,7 +26,7 @@ public class ControleurConnecterVous implements EventHandler<MouseEvent> {
     public void handle(MouseEvent event) {
         // Changer la fenetre d'inscription a connecterVous
         if (!(fenInscription == null)) {
-            this.sondage.
+            this.sondage.modeInscription();
         
         }
        
