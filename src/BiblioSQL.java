@@ -41,19 +41,24 @@ public class BiblioSQL {
     }
 
     public static Utilisateur login(ConnexionMySQL laConnexion, String username, String password){
-      if(BiblioSQL.userExists(username, password) != -1){
+      int valueRole = BiblioSQL.userExists(username, password);
+      if(valueRole != -1){
         try{
-          ConnexionMySQL connectTemp = BiblioSQL.connectRoot();
-          Statement st = connectTemp.createStatement();
-          ResultSet rs = st.executeQuery("SELECT IDU, NOMU, PRENOMU, LOGIN, MOTDEPASSE FROM UTILISATEUR WHERE LOGIN='" + username + "' AND MOTDEPASSE='" + password + "' AND IDU=" + BiblioSQL.userExists(username, password) +";");
-          connectTemp.close();
+          if(laConnexion.isConnecte())
           laConnexion.close();
           laConnexion.connecter(username, password);
+          Statement st = laConnexion.createStatement();
+          ResultSet rs = st.executeQuery("SELECT IDU, NOMU, PRENOMU, LOGIN, MOTDEPASSE FROM UTILISATEUR WHERE LOGIN='" + username +"';");
+          rs.first();
+          System.out.println(rs.getRow());
+          Utilisateur tempUser = new Utilisateur(rs.getInt("IDU"), rs.getString("NOMU"), rs.getString("PRENOMU"), username, password, valueRole);
           System.out.println("Tu es connecté !");
-          return new Utilisateur(rs.getInt("IDU"), rs.getString("NOMU"), rs.getString("PRENOM"), username, password, BiblioSQL.userExists(username, password));
+          return tempUser;
+          
         }
         catch(Exception ex){
-            System.out.println("bah non");
+            ex.printStackTrace();
+            System.exit(1);
         }
       }
       else{
@@ -74,6 +79,7 @@ public class BiblioSQL {
         }
         return null;
       }
+
       public static void register(FenetreInscription fenetre){
         Statement st;
         ConnexionMySQL laConnexion = BiblioSQL.connectRoot();
@@ -89,14 +95,57 @@ public class BiblioSQL {
         }
         Statement st2;
         ConnexionMySQL laCoUser = BiblioSQL.connectRoot();
-        String requette2 = "CREATE USER " + user.getLogin() + " IDENTIFIED BY '" + user.getPassword() + "';";
-        try {
-          laConnexion.close();
-          st2 = laCoUser.createStatement();
-          st2.executeUpdate(requette2);
-          st2.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
+        // if(user.getIdRole()==1) Le concepteur n'est pas implémenté.
+        switch(user.getIdRole()){
+          case 2:
+            String requette12 = "DROP USER " + user.getLogin() + ";";
+            String requette2 = "CREATE USER " + user.getLogin() + " IDENTIFIED BY '" + user.getPassword() + "';";
+            String requette4 = "GRANT ALL ON sondage.* TO " + user.getLogin() +";";
+            try {
+              laConnexion.close();
+              st2 = laCoUser.createStatement();
+              st2.executeUpdate(requette12);
+              st2.close();
+            } catch (SQLException e) {
+              e.printStackTrace();
+            }
+            try {
+              laConnexion.close();
+              st2 = laCoUser.createStatement();
+              st2.executeUpdate(requette2);
+              st2.close();
+            } catch (SQLException e) {
+              e.printStackTrace();
+            }
+            try {
+              laConnexion.close();
+              st2 = laCoUser.createStatement();
+              st2.executeUpdate(requette4);
+              st2.close();
+            } catch (SQLException e) {
+              e.printStackTrace();
+            }
+            break;
+          case 3:
+            String requette3 = "CREATE USER " + user.getLogin() + " IDENTIFIED BY '" + user.getPassword() +"';";
+            String requette5 = "GRANT ANALYSTE TO " + user.getLogin() +";";
+            try {
+              laConnexion.close();
+              st2 = laCoUser.createStatement();
+              st2.executeUpdate(requette3);
+              st2.close();
+            } catch (SQLException e) {
+              e.printStackTrace();
+            }
+            try {
+              laConnexion.close();
+              st2 = laCoUser.createStatement();
+              st2.executeUpdate(requette5);
+              st2.close();
+            } catch (SQLException e) {
+              e.printStackTrace();
+            }
+            break;
         }
 
 

@@ -21,16 +21,12 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        
-        String NomU = fenConnexion.getNomU();
-        String Mdp = fenConnexion.getMdp();
             System.out.println("Est tu connecté ? ");
-            BiblioSQL.login(this.sondage.getConnexion(), this.fenConnexion.getNomU(), this.fenConnexion.getMdp());
+            try{
+            Utilisateur userX = BiblioSQL.login(this.sondage.getConnexion(), this.fenConnexion.getNomU(), this.fenConnexion.getMdp());
         // this.sondage.Connexion(NomU, Mdp)
-        if(BiblioSQL.userExists(NomU, Mdp) != -1){
-            this.sondage.setUtilisateur(BiblioSQL.login(this.connexion,NomU, Mdp));
-            System.out.println("Connexion réussie");
-            switch(BiblioSQL.userExists(NomU, Mdp)){
+            this.sondage.setUtilisateur(userX);
+            switch(userX.getIdRole()){
                 // case 1: this.sondage.modeConcepteur() / On a pas de concepteur
                 case 2:
                     this.sondage.modeHomeSondeur();
@@ -40,14 +36,14 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
                     break;
             }
         }
-        else{
+        catch(Exception ex){
             System.out.println("Connexion échouée");
             Alert AlertErreur = new Alert(Alert.AlertType.INFORMATION);
             AlertErreur.setTitle("Connexion échouée");
             AlertErreur.setHeaderText("Erreur");
             AlertErreur.setContentText("Votre nom d'utilisateur ou votre mot de passe est incorrect");
-            
-        } 
+            AlertErreur.showAndWait();
+        }  
+    } 
 
-    }
 }
