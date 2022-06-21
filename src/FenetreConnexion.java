@@ -18,7 +18,7 @@ public class FenetreConnexion extends VBox{
 
     appliSondage sondage;
     
-    public FenetreConnexion(){
+    public FenetreConnexion(appliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");
@@ -27,7 +27,7 @@ public class FenetreConnexion extends VBox{
         this.Mdp = new PasswordField();
         this.NomU = new TextField();
 
-        this.sondage = new appliSondage();
+        this.sondage = sondage;
 
         this.setTitle();
         this.setText();
@@ -95,13 +95,13 @@ public class FenetreConnexion extends VBox{
         // Ajout text changment de page
         HBox HBox = new HBox();
         Text textMdp = new Text("Mot de passe oublié ? ");
-        Text textConnecter = new Text("Inscrivez-vous");
         textMdp.setFont(javafx.scene.text.Font.font("Arial", 15));
-        textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
 
-        textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurConnecterVous(this,this.sondage));
+        Label textConnecter = new Label("Inscrivez-vous");
         textConnecter.setUnderline(true);
+        textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
         textConnecter.setStyle("-fx-text-fill: blue;");
+        textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurInscrit(this,this.sondage));
 
         HBox.getChildren().addAll(textMdp, textConnecter);
         VBincription.getChildren().addAll(textU, NomU, textM, Mdp, btn, HBox);

@@ -4,6 +4,7 @@ import javax.print.DocFlavor.STRING;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 
 
 public class ControleurConnexion implements EventHandler<ActionEvent> {
@@ -36,7 +37,24 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
             System.exit(1);
         }
 
-        //this.sondage.Connexion(NomU, Mdp); 
+        // this.sondage.Connexion(NomU, Mdp)
+        if(this.sondage.estCorrect(NomU, Mdp)){
+            System.out.println("Connexion réussie");
+            // POp up
+            this.sondage.Connexion(NomU, Mdp);
+            Alert AlertConnexion = new Alert(Alert.AlertType.INFORMATION);
+            AlertConnexion.setTitle("Connexion réussie");
+            AlertConnexion.setHeaderText("Bienvenue "+NomU);
+            AlertConnexion.setContentText("Vous êtes connecté");
+        }
+        else{
+            System.out.println("Connexion échouée");
+            Alert AlertErreur = new Alert(Alert.AlertType.INFORMATION);
+            AlertErreur.setTitle("Connexion échouée");
+            AlertErreur.setHeaderText("Erreur");
+            AlertErreur.setContentText("Votre nom d'utilisateur ou votre mot de passe est incorrect");
+            
+        } 
 
     }
 }
