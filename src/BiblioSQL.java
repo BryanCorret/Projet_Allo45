@@ -39,9 +39,13 @@ public class BiblioSQL {
           if(laConnexion.isConnecte())
           laConnexion.close();
           laConnexion.connecter(username, password);
+          System.out.println("Tu es connecté !");
         }
         catch(Exception ex){
             ex.getMessage();
+        }
+        else{
+          System.out.println("Ce compte n'existe pas");
         }
       }
       public static ConnexionMySQL connectRoot(){
@@ -56,8 +60,9 @@ public class BiblioSQL {
         }
         return null;
       }
-      public static void register(ConnexionMySQL laConnexion, FenetreInscription fenetre){
+      public static void register(FenetreInscription fenetre){
         Statement st;
+        ConnexionMySQL laConnexion = BiblioSQL.connectRoot();
         Utilisateur user = new Utilisateur(BiblioSQL.getMaxID(laConnexion), fenetre.getNomF(), fenetre.getNomP(), fenetre.getNomU(), fenetre.getMdp(), 2);
         String requette = "INSERT INTO UTILISATEUR VALUES(" + user.getId() + ",'" + user.getNom() + "','" + user.getPrenom() + "','" + user.getLogin() + "','" + user.getPassword() + "','" + user.getIdRole() +"';";
         try {
@@ -96,7 +101,6 @@ public class BiblioSQL {
       return "";
     }
 
-  /**
     //dans la bd, il cherche la question contenant le mot recherché
     public static List<List<String>> getQuestion(ConnexionMySQL laConnection, String mot){
         Statement st;
@@ -120,23 +124,9 @@ public class BiblioSQL {
         }
         return questionsSondage;
     }
- */
- 
-    public static List<String> getValeurQuestion(ConnexionMySQL laConnection, int idQ, int numQuestion){
-        Statement st;
-        List<String> valeurs = new ArrayList<>();
-        try{
-            st = laConnection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT Valeur FROM QUESTIONNAIRE natural join QUESTION natural join VALPOSSIBLE WHERE IDQ = " + idQ + " and numQ="+numQuestion+";");
-            while(rs.next()){
-                valeurs.add(rs.getString("Valeur"));
-            }
-        }
-        catch(Exception ex){
-          ex.getMessage();
-        }
-        return valeurs;
-    }
+
+
+
 
   /** 
     numQ = numéro question
@@ -148,28 +138,20 @@ public class BiblioSQL {
     idT = type de question (entier, caractère, etc.)
     Valeur = valeur possible de la question (quand la question est à choix fermé)  
 */
-    public static List<List<Object>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
+    public static List<List<String>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
-      List<List<Object>> questionnaire = new ArrayList<List<Object>>();
+      List<List<String>> questionnaire = new ArrayList<List<String>>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT FROM TYPEQUESTION natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
-
-        int numQuestionActuelle = 0;
+        ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
         while(rs.next()){
-          numQuestionActuelle = rs.getInt("numQ");
-          List<Object> question = new ArrayList<Object>();
-          List<String> lesValeurs = getValeurQuestion(laConnection, idQ, numQuestionActuelle);
-
+          List<String> question = new ArrayList<String>();
           int idQst = rs.getInt("numQ");
           String idQstS = String.valueOf(idQst);
           question.add(idQstS);
           question.add(rs.getString("texteQ"));
           question.add(rs.getString("MaxVal"));
           question.add(rs.getString("idT"));
-          question.add(lesValeurs);         
-          
-          
           questionnaire.add(question);
         }
       }
@@ -178,8 +160,6 @@ public class BiblioSQL {
       }
       return questionnaire;
     } 
-
-
 
   public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
     Statement st;
