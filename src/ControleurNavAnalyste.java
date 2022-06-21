@@ -7,6 +7,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
     
@@ -23,12 +24,11 @@ public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
        // ArrayList<String> lSondage = BiblioSQL.getListSondage(maConnexion);
-       ArrayList<String> lSondage = new ArrayList<>();
-        lSondage.add("Sondage 1");
-        lSondage.add("Sondage 2");
-        lSondage.add("Sondage 3");
-        lSondage.add("Sondage 4");
-        lSondage.add("Sondage 5");
+       ArrayList<Questionnaire> lSondage = new ArrayList<>();
+       lSondage.add(new Questionnaire(1, "Totot", "Ouvert"));
+       lSondage.add(new Questionnaire(2, "ratatata", "Ouvert"));
+
+        
         
         System.out.println("Lancement Pop-up");
         Alert Listesondage = new Alert(Alert.AlertType.INFORMATION);
@@ -41,21 +41,36 @@ public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
         
         
         // radio buttons
-        for (String sondage : lSondage) {
-            RadioButton s = new RadioButton("" + sondage);
-            vbox.getChildren().add(s);
+        for (Questionnaire sondage : lSondage) {
+            RadioButton s = new RadioButton(sondage.getIdQ()+". " + sondage.toString());
+            
+            vbox.getChildren().addAll(s);
             s.setToggleGroup(group);
         }
         // radio button sélectionné
         Listesondage.getDialogPane().setContent(vbox);
         Listesondage.showAndWait();
+        // Afficher le nom sur la vue
+        try{
         String s = group.getSelectedToggle().toString();
         String[] parts = s.split("'"); 
-        System.out.println("Sondage sélectionné : " + parts[1]);
-        this.fen.setSondageSelectionne(parts[1]);
+        
+        String Nom = parts[1].split(" ")[1];
 
-   
+        System.out.println("Sondage sélectionné : " + Nom);
+        this.fen.setSondageNom(Nom);
+        String id = parts[1].split(" ")[0].charAt(0)+"";
+
+        System.out.println("Num sondage sélectionné : " + id);
+        
+
+        this.fen.setSondageId(id);
+        
+        
         this.fen.MajVue();
+        }catch(NullPointerException e){
+            System.out.println("Pas de sondage sélectionné");
+        }
     }
 
 }

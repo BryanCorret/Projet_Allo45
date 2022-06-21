@@ -28,8 +28,9 @@ public class FenetreHomeAnalyste extends BorderPane {
     private Button boutonSelect;
     private Button boutonResearch;
     private Button boutonInspect;
-    private String sondageSelectionne;
+    private String sondageid;
     private appliSondage sondage;
+    public String SondageNom;
     
   
     public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, appliSondage s){
@@ -37,7 +38,8 @@ public class FenetreHomeAnalyste extends BorderPane {
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonDeco = boutonDeco;
-        this.sondageSelectionne = "";
+        this.sondageid = "";
+        this.SondageNom = "";
         this.sondage = s;
         BorderPane borderTop = borderPaneTop();
         HBox hBox = HBoxMid();
@@ -50,15 +52,19 @@ public class FenetreHomeAnalyste extends BorderPane {
         
         HBox hHome = new HBox();
         HBox hRefresh = new HBox();
-        Text textHome = new Text("Sondage séléctionné : " + sondageSelectionne);
+        Text textHome = new Text("Sondage séléctionné : " + SondageNom);
         textHome.setFont(Font.font("Arial",15));
         hRefresh.getChildren().add(textHome);
         hRefresh.setAlignment(Pos.CENTER);
         hRefresh.setPadding(new Insets(10,-310,10,10));
         
-        if (sondageSelectionne.equals("")){
+        if (sondageid.equals("")){
             textHome.setVisible(false);
         }
+        else{
+            textHome.setVisible(true);
+        }
+
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh, hRefresh);
         hHome.setSpacing(10);
 
@@ -84,6 +90,12 @@ public class FenetreHomeAnalyste extends BorderPane {
         Insets arg1 =new Insets(30, 10, 20, 30);
        
         border.setPadding(arg1);
+
+        if(!(this.sondageid.equals("")) && !(this.SondageNom.equals(""))){
+            System.out.println("Sondage séléctionné par la vue : " + this.SondageNom);
+            System.out.println("Sondage séléctionné par la vue : " + this.sondageid);
+        }
+     
 
         return border;
     }
@@ -135,10 +147,14 @@ public class FenetreHomeAnalyste extends BorderPane {
         return hBox;
     }
 
-    public void setSondageSelectionne(String sondageSelectionne) {
-        this.sondageSelectionne = sondageSelectionne;
+
+    public void setSondageId(String id){
+        this.sondageid = id;
     }
-    
+
+    public void setSondageNom(String sondageNom) {
+        SondageNom = sondageNom;
+    }
     public void MajVue(){
         this.setTop(borderPaneTop());
     }
