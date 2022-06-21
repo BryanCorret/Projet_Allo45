@@ -39,7 +39,7 @@ public class appliSondage extends Application{
 
     private Button boutonRefresh;
 
-    private String sondageSelectionne;
+    private Questionnaire sondageSelectionne;
 
     private String fenetreActu;
 
@@ -59,7 +59,7 @@ public class appliSondage extends Application{
         ImageView home = new ImageView("./home.png");
         ImageView refresh = new ImageView("./reload.png");
         ImageView deco = new ImageView("./Disconnect.png");
-        ImageView param = new ImageView("./parametre.jpg");
+        ImageView param = new ImageView("./menu.jpg");
         home.setFitHeight(30);home.setFitWidth(30);
         refresh.setFitHeight(30);refresh.setFitWidth(30);
         deco.setFitHeight(30);deco.setFitWidth(30);
@@ -105,24 +105,28 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
 
-    public void modeHome(){
-        this.fenetreActu = "Home";
-        Pane root = new FenetreHome(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+    public void modeHomeSondeur(){
+        this.fenetreActu = "HomeSondeur";
+        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
+    public void modeHomeAnalyste(){
+        this.fenetreActu = "HomeAnalyste";
+        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+    }
 
     public void modeDonneesBrutes(){
         this.fenetreActu = "Donnees";
-        Pane root = new FenetreDonneesBrutes(this.btnConnexion); //fenetre pas encore faite
+        Pane root = new FenetreDonneesBrutes(); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeSondeur(){
         this.fenetreActu = "Sondeur";
-        Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam); //fenetre pas encore faite
+        Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
     }
