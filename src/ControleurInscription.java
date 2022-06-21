@@ -13,15 +13,16 @@ public class ControleurInscription implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         // recuperer les donnees de la fenetre
         String Nom = this.fenInscription.getNomF();
-        System.out.println(Nom);
         String Prenom = this.fenInscription.getNomP();
-        System.out.println(Prenom);
         String NomU = this.fenInscription.getNomU();
-        System.out.println(NomU);
         String Mdp = this.fenInscription.getMdp();
-        System.out.println(Mdp);
         String Conf = this.fenInscription.getMdp2();
-        System.out.println(Conf);
+        
+        //System.out.println(Nom);
+        //System.out.println(Prenom);
+        //System.out.println(NomU);
+        //System.out.println(Mdp);
+        //System.out.println(Conf);
 
 
 
@@ -33,8 +34,9 @@ public class ControleurInscription implements EventHandler<ActionEvent> {
                 System.out.println("Veuillez rentrer un mot de passe de plus de 8 caracteres");
             }
 
-            if (Mdp.equals(Conf)) {
+            else if (Mdp.equals(Conf)) {
                 System.out.println("Inscription réussie");
+                //this.sondage.Inscription(Nom, Prenom, NomU, Mdp);
 
             } 
             
