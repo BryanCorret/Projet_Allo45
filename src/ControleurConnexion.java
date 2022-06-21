@@ -32,11 +32,9 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
         }    
         catch (ClassNotFoundException ex){
             System.out.println("Driver MySQL non trouvé!!!");
-            System.exit(1);
         }
         catch (SQLException ex){
             System.out.println("Erreur de connexion!!!");
-            System.exit(1);
         }
 
         // this.sondage.Connexion(NomU, Mdp)

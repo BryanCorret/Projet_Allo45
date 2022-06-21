@@ -32,8 +32,17 @@ public class Questionnaire {
         listQ.remove(quest);
     }
 
+    public Question getQuestion(int idQ){
+        for(Question quest : listQ){
+            if(quest.getNumQ() == idQ){
+                return quest;
+            }
+        }
+        return null;
+    }
+
     @Override
-    public String toString(){
-        return this.TitreQ ;
+    public String toString() {
+        return this.getTitreQ();
     }
 }
