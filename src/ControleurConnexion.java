@@ -11,17 +11,19 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
     
     private FenetreConnexion fenConnexion;
     private appliSondage sondage;
+    private ConnexionMySQL connexion;
 
-    public ControleurConnexion(FenetreConnexion fenConnexion, appliSondage appliSondage) {
+    public ControleurConnexion(FenetreConnexion fenConnexion, appliSondage appliSondage,ConnexionMySQL co) {
         this.fenConnexion = fenConnexion;
         this.sondage = appliSondage;
+        this.connexion = co;
     }
 
     @Override
     public void handle(ActionEvent event) {
         
-        // String NomU = fenConnexion.getNomU();
-        // String Mdp = fenConnexion.getMdp();
+        String NomU = fenConnexion.getNomU();
+        String Mdp = fenConnexion.getMdp();
         try{
             System.out.println("Est tu connecté ? ");
             ConnexionMySQL laConnexion = new ConnexionMySQL();
@@ -38,10 +40,10 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
         }
 
         // this.sondage.Connexion(NomU, Mdp)
-        if(this.sondage.estCorrect(NomU, Mdp)){
+        if(BiblioSQL.userExists(this.connexion,NomU, Mdp)){
             System.out.println("Connexion réussie");
             // POp up
-            this.sondage.Connexion(NomU, Mdp);
+            BiblioSQL.login(this.connexion,NomU, Mdp);
             Alert AlertConnexion = new Alert(Alert.AlertType.INFORMATION);
             AlertConnexion.setTitle("Connexion réussie");
             AlertConnexion.setHeaderText("Bienvenue "+NomU);

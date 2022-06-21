@@ -115,7 +115,7 @@ public class FenetreInscription extends VBox{
 
         btn.setAlignment(javafx.geometry.Pos.CENTER);
         btn.setStyle("-fx-background-color: transparent;");
-        btn.setOnAction((EventHandler<ActionEvent>) new ControleurInscription(this,this.sondage));
+        btn.setOnAction((EventHandler<ActionEvent>) new ControleurInscription(this,this.sondage);
 
         // Ajout text changment de page
         HBox HBox = new HBox();

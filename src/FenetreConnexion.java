@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.scene.control.Label;
 
 public class FenetreConnexion extends VBox{
 
@@ -33,9 +34,6 @@ public class FenetreConnexion extends VBox{
         this.setText();
         this.getChildren().add(VBprincipal);
 
-    }
-
-    public FenetreConnexion(appliSondage appliSondage) {
     }
 
     public void setTitle(){
@@ -90,7 +88,7 @@ public class FenetreConnexion extends VBox{
 
         btn.setAlignment(javafx.geometry.Pos.CENTER);
         btn.setStyle("-fx-background-color: transparent;");
-        btn.setOnAction((EventHandler<ActionEvent>) new ControleurConnexion(this,this.sondage));
+        btn.setOnAction((EventHandler<ActionEvent>) new ControleurConnexion(this,this.sondage,this.sondage.getConnexion()));
 
         // Ajout text changment de page
         HBox HBox = new HBox();

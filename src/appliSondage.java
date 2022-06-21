@@ -47,10 +47,11 @@ public class appliSondage extends Application{
 
     @Override
     public void init(){
-        try {
-            this.ConnexionSQL = new ConnexionMySQL();
-        } catch (Exception e) {
-            e.printStackTrace();
+        try{
+        this.ConnexionSQL = new ConnexionMySQL();
+        }
+        catch(ClassNotFoundException ce){
+            ce.getMessage();
         }
         this.lesRequetes = new RequetesSQL(this.ConnexionSQL);
         this.boutonAnalyste = new Button("Analyser les sondage");
@@ -101,14 +102,14 @@ public class appliSondage extends Application{
         stage.setTitle("Allo45");
         stage.show();
     }
-/**
+
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
-    */
+    
 
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
@@ -120,6 +121,8 @@ public class appliSondage extends Application{
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
         Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        this.scene.setRoot(root);
+        root.getScene().getWindow().sizeToScene();
     }
 
     public void modeDonneesBrutes(){
@@ -128,14 +131,14 @@ public class appliSondage extends Application{
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
-/**
+
     public void modeSondeur(){
         this.fenetreActu = "Sondeur";
         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
     }
-    */
+    
 
     public void modeConnexion(){
         this.fenetreActu = "Connexion";
@@ -146,7 +149,7 @@ public class appliSondage extends Application{
 
     public void modeInscription(){
         this.fenetreActu = "Inscription";
-        Pane root = new FenetreInscription();
+        Pane root = new FenetreInscription(this);
         System.out.println(this.scene);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
@@ -181,6 +184,9 @@ public class appliSondage extends Application{
     public List<String> rechercherSondage(String StrRecherche){
         List<String> listeDesSondages = new ArrayList<String>();
         return listeDesSondages;
+    }
+    public ConnexionMySQL getConnexion(){
+        return this.ConnexionSQL;
     }
 
     public void quitter(){
