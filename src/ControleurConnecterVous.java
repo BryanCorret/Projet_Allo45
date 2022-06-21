@@ -13,9 +13,6 @@ public class ControleurConnecterVous implements EventHandler<MouseEvent> {
         this.sondage = sondage;
     }
     
-
-
-
     @Override
     public void handle(MouseEvent event) {
         // Changer la fenetre d'inscription a connecterVous

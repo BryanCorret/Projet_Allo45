@@ -36,7 +36,7 @@ public class ControleurInscription implements EventHandler<ActionEvent> {
 
             else if (Mdp.equals(Conf)) {
                 System.out.println("Inscription réussie");
-                this.sondage.Inscription(Nom, Prenom, NomU, Mdp);
+                //this.sondage.Inscription(Nom, Prenom, NomU, Mdp);
 
             } 
             

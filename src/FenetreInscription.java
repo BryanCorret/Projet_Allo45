@@ -1,6 +1,7 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -125,13 +126,14 @@ public class FenetreInscription extends VBox{
         // Ajout text changment de page
         HBox HBox = new HBox();
         Text text = new Text("Déjà un compte ? ");
-        Text textConnecter = new Text("Connectez-vous");
         text.setFont(javafx.scene.text.Font.font("Arial", 15));
-        textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
 
-        textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurConnecterVous(this,this.sondage));
+
+        Label textConnecter = new Label("Connectez-vous");
         textConnecter.setUnderline(true);
+        textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
         textConnecter.setStyle("-fx-text-fill: blue;");
+        textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurConnecterVous(this,this.sondage));
 
         HBox.getChildren().addAll(text, textConnecter);
         VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, btn, HBox);
