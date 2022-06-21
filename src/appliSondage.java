@@ -102,7 +102,7 @@ public class appliSondage extends Application{
         stage.setTitle("Allo45");
         stage.show();
     }
-
+/**
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
@@ -110,7 +110,7 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
     
-
+*/
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
         Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
@@ -131,14 +131,14 @@ public class appliSondage extends Application{
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
-
+/**
     public void modeSondeur(){
         this.fenetreActu = "Sondeur";
         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
     }
-    
+    */
 
     public void modeConnexion(){
         this.fenetreActu = "Connexion";
