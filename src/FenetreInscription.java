@@ -1,12 +1,13 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Track;
 import javafx.scene.text.Text;
 
 public class FenetreInscription extends VBox{
@@ -18,19 +19,20 @@ public class FenetreInscription extends VBox{
     TextField NomP;
     appliSondage sondage;
     
-    public FenetreInscription(){
+    public FenetreInscription(appliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");
         VBprincipal.setPrefSize(600, 500);
         
-        this.Mdp2 = new TextField();
-        this.Mdp = new TextField();
+        this.Mdp2 = new PasswordField();
+        this.Mdp = new PasswordField();
         this.NomU = new TextField();
         this.NomP = new TextField();
         this.NomF = new TextField();
-        this.sondage = new appliSondage();
 
+        this.sondage = sondage;
+        
         this.setTitle();
         this.setText();
         this.getChildren().add(VBprincipal);
@@ -52,15 +54,12 @@ public class FenetreInscription extends VBox{
         "-fx-border-width: 1;" +
         "-fx-border-insets: 25 75 100 75;" +
         "-fx-padding: 1em;");
-        
-        
-        
+    
         // text Prénom
         Text textP = new Text("Prénom :");
         textP.setFont(javafx.scene.text.Font.font("Arial", 15));
 
         //textfield Prénom
-        TextField NomP = new TextField();
         NomP.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomP.setPromptText("Jean");
 
@@ -69,7 +68,6 @@ public class FenetreInscription extends VBox{
         textNom.setFont(javafx.scene.text.Font.font("Arial", 15)); 
  
         //textfield Nom
-        TextField NomF = new TextField();
         NomF.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomF.setPromptText("Dupont");
         
@@ -79,7 +77,6 @@ public class FenetreInscription extends VBox{
         textU.setFont(javafx.scene.text.Font.font("Arial", 15)); 
     
         //textfield Utilisateur
-        TextField NomU = new TextField();
         NomU.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomU.setPromptText("Nom utilisateur");
 
@@ -96,7 +93,6 @@ public class FenetreInscription extends VBox{
         textM.setFont(javafx.scene.text.Font.font("Arial", 15)); 
    
         //textfield mdp
-        TextField Mdp = new TextField();
         Mdp.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp.setPromptText("Un mot de passe");
 
@@ -105,7 +101,6 @@ public class FenetreInscription extends VBox{
         textM2.setFont(javafx.scene.text.Font.font("Arial", 15));
        
         //textfield mdp
-        TextField Mdp2 = new TextField();
         Mdp2.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp2.setPromptText("Confirmation du mot de passe");
 
@@ -125,13 +120,14 @@ public class FenetreInscription extends VBox{
         // Ajout text changment de page
         HBox HBox = new HBox();
         Text text = new Text("Déjà un compte ? ");
-        Text textConnecter = new Text("Connectez-vous");
         text.setFont(javafx.scene.text.Font.font("Arial", 15));
-        textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
 
-        textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurConnecterVous(this,this.sondage));
+
+        Label textConnecter = new Label("Connectez-vous");
         textConnecter.setUnderline(true);
+        textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
         textConnecter.setStyle("-fx-text-fill: blue;");
+        textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurConnecterVous(this,this.sondage));
 
         HBox.getChildren().addAll(text, textConnecter);
         VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, btn, HBox);
