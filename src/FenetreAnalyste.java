@@ -52,11 +52,12 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboQuestion;
 
     //la lise des questions
-    private String sondage;
-    private List<String> lesQuestions;
+    private Questionnaire questionnaire;
     private String questionActuel;
+
+    private TextArea commentaire;
     
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, String sondage){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -68,9 +69,10 @@ public class FenetreAnalyste extends BorderPane{
         this.comboClasse = new ComboBox<>();
         this.comboQuestion = new ComboBox<>();
 
-        this.sondage = sondage;
-        this.lesQuestions = new ArrayList<>();
-        this.questionActuel = "";
+        this.questionnaire = questionnaire;
+        this.questionActuel = this.questionnaire.getListQ().get(0); //la première question
+
+        this.commentaire = new TextArea();
 
 
         //on créer notre fenêtre
@@ -90,39 +92,31 @@ public class FenetreAnalyste extends BorderPane{
     public String getQuestionActuel(){
         return this.questionActuel;
     }
-    public String getSondage(){
-        return this.sondage;
+    public Questionnaire getQuesionnaire(){
+        return this.questionnaire;
     }
-    public List<String> getLesQuestions(){
-        return this.lesQuestions;
+    public TextArea getCommentaire(){
+        return this.commentaire;
     }
     
-    public String getTextComboBoxAnalyse() throws NullPointerException{
-        try{
-            return this.comboAnalyse.getValue();
-        }catch (NullPointerException e){
-            throw new NullPointerException();
-        }
+    public ComboBox<String>  getComboBoxAnalyse() {
+        return this.comboAnalyse;
+
     }
-    public String getTextComboBoxClasse() throws NullPointerException{
-        try{
-            return this.comboClasse.getValue();
-        }catch (NullPointerException e){
-            throw new NullPointerException();
-        }
+    public ComboBox<String>  getComboBoxClasse() {
+        return this.comboClasse;
     }
-    public String getTextComboBoxQuestion() throws NullPointerException{
-        try{
-            return this.comboQuestion.getValue();
-        }catch (NullPointerException e){
-            throw new NullPointerException();
-        }
+    public ComboBox<String> getComboBoxQuestion() {
+        return this.comboQuestion;
     }
 
 
     //les setteurs
     public void setQuestionActuel(String question){
         this.questionActuel = question;
+    }
+    public void setCommentaire(String comment){
+        this.commentaire.setText(comment);
     }
 
 
@@ -134,12 +128,12 @@ public class FenetreAnalyste extends BorderPane{
         HBox hboxBoutons = new HBox();
         hboxBoutons.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
-        Label titreSondage = new Label(this.sondage);
+        Label titreSondage = new Label(this.questionnaire.getTitreQ());
         titreSondage.setFont(Font.font(" Arial ",FontWeight.BOLD,15));
 
         HBox hboxAvatar = new HBox();
 
-        ImageView profil = new ImageView("./user.jpg");
+        ImageView profil = new ImageView("file:IMG/user.jpg");
         profil.setFitHeight(50);profil.setFitWidth(50);
 
         hboxAvatar.getChildren().addAll(profil, this.boutonParametre, new Label(""));
@@ -203,9 +197,8 @@ public class FenetreAnalyste extends BorderPane{
 
         //la partie commentaire
         Label titreCommentaire = new Label("        Commentaire");
-        TextArea commentaire = new TextArea("Lorem ipsum t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).");
-        commentaire.setWrapText(true);
-        commentaire.setPrefHeight(100.0); // taille maximal
+        this.commentaire.setWrapText(true);
+        this.commentaire.setPrefHeight(100.0); // taille maximal
 
         //on ajoute tout
         vbox.getChildren().addAll(vboxGraphique, titreCommentaire, commentaire);
@@ -237,7 +230,7 @@ public class FenetreAnalyste extends BorderPane{
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
 
         //on rempli la ComboBox avec les questions
-        for (String question : this.lesQuestions){
+        for (Question question : this.questionnaire.getListQ()){
             this.comboQuestion.getItems().add(question);
         }
 
