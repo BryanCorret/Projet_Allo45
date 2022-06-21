@@ -46,6 +46,8 @@ public class appliSondage extends Application{
 
     private Scene scene;
 
+    private Utilisateur utilisateurActu;
+
     @Override
     public void init(){
         try{
@@ -106,12 +108,12 @@ public class appliSondage extends Application{
         stage.show();
     }
 
-    // public void modeAnalyste(){
-    //     this.fenetreActu = "Analyste";
-    //     Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
-    //     this.scene.setRoot(root);
-    //     root.getScene().getWindow().sizeToScene();
-    // }
+    public void modeAnalyste(){
+        this.fenetreActu = "Analyste";
+         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne);
+         this.scene.setRoot(root);
+        root.getScene().getWindow().sizeToScene();
+    }
     
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
@@ -134,12 +136,12 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
 
-    // public void modeSondeur(){
-    //     this.fenetreActu = "Sondeur";
-    //     Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
-    //     this.scene.setRoot(root);
-    //     root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
-    // }
+     public void modeSondeur(){
+         this.fenetreActu = "Sondeur";
+         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())); //fenetre pas encore faite
+         this.scene.setRoot(root);
+         root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
+     }
     
 
     public void modeConnexion(){
@@ -182,6 +184,9 @@ public class appliSondage extends Application{
     public void majAffichageSondeur(){
 
     }
+    public void setUtilisateur(Utilisateur u){
+        this.utilisateurActu = u;
+    }
     
     public List<String> rechercherSondage(String StrRecherche){
         List<String> listeDesSondages = new ArrayList<String>();
@@ -189,6 +194,9 @@ public class appliSondage extends Application{
     }
     public ConnexionMySQL getConnexion(){
         return this.ConnexionSQL;
+    }
+    public int getUserRole(){
+        return this.utilisateurActu.getIdRole();
     }
 
     public void quitter(){
