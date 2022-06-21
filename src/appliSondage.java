@@ -47,7 +47,12 @@ public class appliSondage extends Application{
 
     @Override
     public void init(){
+        try{
         this.ConnexionSQL = new ConnexionMySQL();
+        }
+        catch(ClassNotFoundException ce){
+            ce.getMessage();
+        }
         this.lesRequetes = new RequetesSQL(this.ConnexionSQL);
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
@@ -113,6 +118,8 @@ public class appliSondage extends Application{
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
         Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        this.scene.setRoot(root);
+        root.getScene().getWindow().sizeToScene();
     }
 
     public void modeDonneesBrutes(){
@@ -181,7 +188,7 @@ public class appliSondage extends Application{
     // public Chart Diagrammes(){
         
     // }
-*/
+
     public static void main(String[] args){
         Application.launch(args);
     }
