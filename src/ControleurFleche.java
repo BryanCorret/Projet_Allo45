@@ -7,14 +7,14 @@ import java.util.*;
 
 public class ControleurFleche implements EventHandler<ActionEvent>{ 
 
-    private AppliTest appli;
+    private appliSondage appli;
     private FenetreAnalyste analyste;
     private FenetreSondeur sondeur;
 
-    public ControleurFleche(FenetreAnalyste analyste){
-        // this.appli = appli;
+    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste, FenetreSondeur sondeur){
+        this.appli = appli;
         this.analyste = analyste;
-        this.
+        this.sondeur = sondeur;
     }
 
     @Override
@@ -33,12 +33,13 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
         */
         if (this.appli.getFenetreActu().equals("Analyste")){
 
-        
+            //si l'on a appuyé sur la flèche droite
             if (bouton.getId().equals("flecheDroite")){
                 
                 //on change la question observée 
-                List<String> questionnaire = this.analyste.getQuesionnaire().getListQ();
+                List<Question> questionnaire = this.analyste.getQuesionnaire().getListQ();
 
+                //la question d'après si possible, la toute première le cas contraire
                 int index = questionnaire.indexOf(this.analyste.getQuestionActuel());
                 if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
 
@@ -47,12 +48,16 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 
                 //                  PARTIE FICHIER
                 
-                //enregistrer les infos de la question dans un fichier
+                //on enregistre les infos de la question dans un fichier
 
                 //on récupère les infos déjà écrite dans le fichier
                 String prec = "infos précédente"; //ne sera pas écrite dans le fichier
-                File fic = new File("./fichier.txt");
                 try{
+                    File fic = new File("./infosTempQuestions.txt");
+                    // créer le fichier s'il n'existe pas
+                    if (!fic.exists()) {
+                        fic.createNewFile();
+                    }
                     FileReader fr = new FileReader(fic);
                     BufferedReader br = new BufferedReader(fr);  
                     StringBuffer sb = new StringBuffer();
@@ -63,11 +68,12 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     sb.append(line); sb.append("\n");     
                     }prec = sb.toString();
                     fr.close();    
-                }catch (IOException e){System.out.println("ERREUR fichier inexistant");}
+                }catch (IOException e){System.out.println("ERREUR 404");}
 
 
                 //on ré-écrit les anciennes infos et on ajoute les nouvelles au fichier
                 try{
+                    File fic = new File("./infosTempQuestions.txt");
                     FileWriter fw = new FileWriter(fic.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(prec);                                             //les infos précédentes
@@ -77,7 +83,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     bw.write(this.analyste.getComboBoxQuestion().getValue()+ "/");  //"ComboBox question
                     bw.write(this.analyste.getCommentaire() + "\n"); //"Commentaire 
                     bw.close();
-                }catch (IOException e){System.out.println("ERREUR fichier inexistant");}
+                }catch (IOException e){System.out.println("ERREUR 404");}
 
 
                 //maj de l'affichage de l'analyste
@@ -86,7 +92,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
             }else{  //la flèche de gauche est appuyée
                 
-                List<String> questionnaire = this.analyste.getquestionnaire().getListQ();
+                List<Question> questionnaire = this.analyste.getQuesionnaire().getListQ();
 
                 int index = questionnaire.indexOf(this.analyste.getQuestionActuel());
                 if (index-1 < 0){index = questionnaire.size()-1;}else{index--;}
@@ -98,8 +104,12 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 
                 //charger les infos du fichier
 
-                File fic = new File("./fichier.txt");
                 try{
+                    File fic = new File("./infosTempQuestions.txt");
+                    // créer le fichier s'il n'existe pas
+                    if (!fic.exists()) {
+                        fic.createNewFile();
+                    }
                     FileReader fr = new FileReader(fic);
                     BufferedReader br = new BufferedReader(fr);  
                     StringBuffer sb = new StringBuffer();
@@ -118,7 +128,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                         String donnee[] = question[i].split("/");
 
                         //si on a trouvé la question qu'on veut charger
-                        if (donnee[0].equals(this.analyste.getQuestionActuel())){
+                        if (donnee[0].equals(this.analyste.getQuestionActuel().getTextQ())){
                             this.analyste.getComboBoxAnalyse().setValue(donnee[1]);  //"ComboBox analyse
                             this.analyste.getComboBoxClasse().setValue(donnee[2]);    //"ComboBox classe
                             this.analyste.getComboBoxQuestion().setValue(donnee[3]);  //"ComboBox question
@@ -127,7 +137,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                     }
 
-                }catch (IOException e){System.out.println("ERREUR fichier inexistant");}
+                }catch (IOException e){System.out.println("ERREUR 404");}
 
                 
                 //maj de l'affichage de l'analyste
@@ -153,7 +163,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
             if (bouton.getId().equals("flecheDroite")){
                 
                 //on change la question observée 
-                List<String> questionnaire = this.sondeur.getSondage().getListQ();
+                List<Question> questionnaire = this.sondeur.getSondage().getListQ();
 
                 int index = questionnaire.indexOf(this.sondeur.getQuestion());
                 if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
@@ -167,8 +177,14 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                 //on récupère les infos déjà écrite dans le fichier
                 String prec = "infos précédente"; //ne sera pas écrite dans le fichier
-                File fic = new File("./fichier.txt");
+                
                 try{
+                    File fic = new File("./infosTempQuestions.txt");
+                    // créer le fichier s'il n'existe pas
+                    if (!fic.exists()) {
+                        fic.createNewFile();
+                    }
+
                     FileReader fr = new FileReader(fic);
                     BufferedReader br = new BufferedReader(fr);  
                     StringBuffer sb = new StringBuffer();
@@ -177,41 +193,44 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     while((line = br.readLine()) != null){
                     // ajoute la ligne au buffered reader
                     sb.append(line); sb.append("\n");     
-                    }prec = sb.toString();
+                    }
+                    prec = sb.toString();
                     fr.close();    
-                }catch (IOException e){System.out.println("ERREUR fichier inexistant");}
+                }catch (IOException e){System.out.println("ERREUR 404");}
 
 
                 //on ré-écrit les anciennes infos et on ajoute les nouvelles au fichier
                 try{
+                    File fic = new File("./infosTempQuestions.txt");
                     FileWriter fw = new FileWriter(fic.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(prec);     //les infos précédentes
                     
-                    //selon le type de la question
-                    if (this.sondeur.getTypeReponse().equals('u')){
+                    //selon le type de la question (actuel)
+                    //on récupère les données correspondantes
+                    if (this.sondeur.getTypeReponse() == 'u'){
                         bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getValeurBouton() + "\n");
 
-                    }else if (this.sondeur.getTypeReponse().equals('m')){
+                    }else if (this.sondeur.getTypeReponse() == 'm'){
                         bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getValeurCombo() + "\n");
 
-                    }else if (this.sondeur.getTypeReponse().equals('c')){
+                    }else if (this.sondeur.getTypeReponse() == 'c'){
                         //RIEN POUR L'INSTANT, IL FAUT FINIR L'IHM DU CLASSEMENT AVANT
 
-                    }else if (this.sondeur.getTypeReponse().equals('n')){
+                    }else if (this.sondeur.getTypeReponse() == 'n'){
                         bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getSlider() + "\n");
 
-                    }else if (this.sondeur.getTypeReponse().equals('l')){
+                    }else if (this.sondeur.getTypeReponse() == 'l'){
                         bw.write(this.sondeur.getTextArea() + "\n");
                     }
                     
                     else{ System.out.println("Mauvais type de Question");}
 
                     bw.close();
-                }catch (IOException e){System.out.println("ERREUR fichier inexistant");}
+                }catch (IOException e){System.out.println("ERREUR 404");}
 
 
 
@@ -221,7 +240,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
             }else{  //la flèche de gauche est appuyée
                 
-                List<String> questionnaire = this.sondeur.getSondage().getListQ();
+                List<Question> questionnaire = this.sondeur.getSondage().getListQ();
 
                 int index = questionnaire.indexOf(this.sondeur.getQuestion());
                 if (index-1 < 0){index = questionnaire.size()-1;}else{index--;}
@@ -233,8 +252,13 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 
                 //charger les infos du fichier
 
-                File fic = new File("./fichier.txt");
+                
                 try{
+                    File fic = new File("./infosTempQuestions.txt");
+                    // créer le fichier s'il n'existe pas
+                    if (!fic.exists()) {
+                        fic.createNewFile();
+                    }
                     FileReader fr = new FileReader(fic);
                     BufferedReader br = new BufferedReader(fr);  
                     StringBuffer sb = new StringBuffer();
@@ -253,23 +277,23 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                         String donnee[] = question[i].split("/");
 
                         //si on a trouvé la question qu'on veut charger
-                        if (donnee[0].equals(this.analyste.getQuestionActuel())){
-                            if (this.sondeur.getTypeReponse().equals('u')){
+                        if (donnee[0].equals(this.sondeur.getQuestion().getTextQ())){
+                            if (this.sondeur.getTypeReponse() == 'u'){
                                 this.sondeur.setTextArea( donnee[1] );
                                 this.sondeur.setValeurBouton( donnee[2] );
         
-                            }else if (this.sondeur.getTypeReponse().equals('m')){
+                            }else if (this.sondeur.getTypeReponse() == 'm'){
                                 this.sondeur.setTextArea( donnee[1] );
                                 this.sondeur.setValeurCombo( donnee[2] );
         
-                            }else if (this.sondeur.getTypeReponse().equals('c')){
+                            }else if (this.sondeur.getTypeReponse() == 'c'){
                                 //RIEN POUR L'INSTANT, IL FAUT FINIR L'IHM DU CLASSEMENT AVANT
         
-                            }else if (this.sondeur.getTypeReponse().equals('n')){
+                            }else if (this.sondeur.getTypeReponse() == 'n'){
                                 this.sondeur.setTextArea( donnee[1] );
-                                this.sondeur.setSlider( donnee[2] );
+                                this.sondeur.setSlider( Double.parseDouble(donnee[2]) );
         
-                            }else if (this.sondeur.getTypeReponse().equals('l')){
+                            }else if (this.sondeur.getTypeReponse() == 'l'){
                                 this.sondeur.setTextArea( donnee[1] );
                             }
                                 else{ System.out.println("Mauvais type de Question");}
@@ -277,7 +301,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                     }
 
-                }catch (IOException e){System.out.println("ERREUR fichier inexistant");}
+                }catch (IOException e){System.out.println("ERREUR 404");}
 
                 
                 //maj de l'affichage du sondeur
