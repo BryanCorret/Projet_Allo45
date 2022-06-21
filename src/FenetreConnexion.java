@@ -78,7 +78,7 @@ public class FenetreConnexion extends VBox{
         this.Mdp.setPromptText("Un mot de passe");
         
         // Button
-        ImageView img = new ImageView(new Image("file:IMG/buttonCo.png"));
+        ImageView img = new ImageView(new Image("file:IMG/ButtonCo.png"));
         img.setFitHeight(100);
         img.setFitWidth(200);
 

@@ -25,9 +25,7 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
             System.out.println("Est tu connecté ? ");
             ConnexionMySQL laConnexion = new ConnexionMySQL();
             laConnexion.connecter("root", "mdp_root");
-            // System.out.println("Est tu connécté ? "+ laConnexion.isConnecte());
-            if(laConnexion.isConnecte()) System.out.println("Connecté");
-            else System.out.println("Pas connecté");
+            BiblioSQL.login(laConnexion, this.fenConnexion.getNomU(), this.fenConnexion.getMdp());
         }    
         catch (ClassNotFoundException ex){
             System.out.println("Driver MySQL non trouvé!!!");
