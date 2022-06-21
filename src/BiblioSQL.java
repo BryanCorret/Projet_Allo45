@@ -2,19 +2,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BiblioSQL {
+
+    //récupérer l'id le plus haut
     public static int getMaxID(ConnexionMySQL laConnection){
-        Statement st;
-		try {
-			st = laConnection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT MAX(IDU) FROM UTILISATEUR;");    
-            return rs.getInt("IDU");
-		} catch (SQLException e) {
-			e.getMessage();
-		}
-		return -1;
+      Statement st;
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT MAX(IDU) FROM UTILISATEUR;");    
+        return rs.getInt("IDU");
+      } catch (SQLException e) {
+        e.getMessage();
+      }
+      return -1;
     }
 
     public static boolean userExists(ConnexionMySQL laConnexion, String username, String password){
@@ -80,6 +83,7 @@ public class BiblioSQL {
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT ETAT FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        rs.next();
         return rs.getString("ETAT");
       }
       catch (SQLException e) {
@@ -88,11 +92,13 @@ public class BiblioSQL {
       return "";
     }
 
+    //récupérer le nom du questionnaire
     public static String getTitreQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT TITRE FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        rs.next();
         return rs.getString("TITRE");
       }
       catch (SQLException e) {
@@ -124,9 +130,25 @@ public class BiblioSQL {
         }
         return questionsSondage;
     }
+ */
 
 
-
+    //récupérer les valeurs possibles d'une question
+    public static List<String> getValeurQuestion(ConnexionMySQL laConnection, int idQ, int numQuestion){
+        Statement st;
+        List<String> valeurs = new ArrayList<>();
+        try{
+            st = laConnection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT Valeur FROM QUESTIONNAIRE natural join QUESTION natural join VALPOSSIBLE WHERE IDQ = " + idQ + " and numQ="+numQuestion+";");
+            while(rs.next()){
+                valeurs.add(rs.getString("Valeur"));
+            }
+        }
+        catch(Exception ex){
+          ex.getMessage();
+        }
+        return valeurs;
+    }
 
   /** 
     numQ = numéro question
@@ -166,12 +188,15 @@ public class BiblioSQL {
     try {
       st = laConnexion.createStatement();
       st.executeUpdate("INSERT INTO REPONDRE VALUES(" + rep.getIdQ() + "," + rep.getNumQ() + "," + sonde.getCaracteristique() + "," + rep.getValue() + ");");
-      
+
+      st.executeUpdate("INSERT INTO INTERROGER VALUES("+utilisateur.getId()+","+sonde.getNumSond()+","+rep.getIdQ()+");");
     }
     catch (SQLException e) {
       e.getMessage();
     }
   }
+
+
 
   /**
      public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){
@@ -189,4 +214,37 @@ public class BiblioSQL {
        }
      }
      */
+
+
+  // a modif
+    // public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){
+    //   Statement st;
+    //   int nbQuestion = 0;
+    //   try {
+    //     st = laConnection.createStatement();
+    //     ResultSet rs = st.executeQuery("SELECT COUNT(*) AS nbQuestion FROM QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
+    //     rs.next();
+    //     nbQuestion = rs.getInt("nbQuestion");
+    //   }
+    //   catch (SQLException e) {
+    //     e.getMessage();
+    //   }
+    //   return nbQuestion;
+    // }
+
+
+    //  public static List<HashMap<String,List<Object>>> getReponseDunQuestionnaire(ConnexionMySQL laConnection, int idQ){
+    //    Statement st;
+    //     List<HashMap<String,List<Object>>> reponses = new ArrayList<HashMap<String,List<Object>>>();
+    //     int nbQuestion = getNbQuestionDansQuestionnaire(laConnection, idQ);
+    //     try {
+    //       st = laConnection.createStatement();
+    //       for (int i = 1; i <= nbQuestion; i++) {
+    //         ResultSet rs = st.executeQuery("SELECT * FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + " AND numQ = " + i + ";");
+    //       }
+    //     } catch (SQLException e) {
+    //       e.getMessage();
+    //     }
+    //     return reponses;
+    //  }
 }
