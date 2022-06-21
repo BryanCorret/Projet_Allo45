@@ -86,6 +86,8 @@ public class BiblioSQL {
       }
       return "";
     }
+
+    //dans la bd, il cherche la question contenant le mot recherché
     public static List<List<String>> getQuestion(ConnexionMySQL laConnection, String mot){
         Statement st;
         List<List<String>> questionsSondage = new ArrayList<>();
@@ -109,12 +111,25 @@ public class BiblioSQL {
         return questionsSondage;
     }
 
+
+
+
+  /** 
+    numQ = numéro question
+    texteQ = texte de la question
+    MaxVal = stocke une information différente suivant le type de question
+      -m et c : indique le nombre maximum de propositions que le sondé pourra sélectionner
+      -n : donne la valeur de la note maximum (le minimum étant toujours 0)
+      -u et l : inutilisé
+    idT = type de question (entier, caractère, etc.)
+    Valeur = valeur possible de la question (quand la question est à choix fermé)  
+*/
     public static List<List<String>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
       List<List<String>> questionnaire = new ArrayList<List<String>>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM QUESTION Qst natural join QUESTIONNAIRE Qest WHERE IDQ = " + idQ + ";");
+        ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
         while(rs.next()){
           List<String> question = new ArrayList<String>();
           int idQst = rs.getInt("numQ");
@@ -122,6 +137,7 @@ public class BiblioSQL {
           question.add(idQstS);
           question.add(rs.getString("texteQ"));
           question.add(rs.getString("MaxVal"));
+          question.add(rs.getString("idT"));
           questionnaire.add(question);
         }
       }
