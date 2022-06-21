@@ -1,6 +1,3 @@
-import javax.imageio.plugins.tiff.TIFFDirectory;
-import javax.management.loading.PrivateClassLoader;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 // import javafx.beans.binding.Bindings;
@@ -36,7 +33,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
-import javafx.scene.shape.Circle;
 
 
 
@@ -53,11 +49,13 @@ public class FenetreAnalyste extends BorderPane{
 
     //la lise des questions
     private Questionnaire questionnaire;
-    private String questionActuel;
+    private Question questionActuel;
 
     private TextArea commentaire;
+
+    private BorderPane lesFleches;
     
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -74,6 +72,8 @@ public class FenetreAnalyste extends BorderPane{
 
         this.commentaire = new TextArea();
 
+        this.lesFleches = lesFleches;
+
 
         //on créer notre fenêtre
         
@@ -89,7 +89,7 @@ public class FenetreAnalyste extends BorderPane{
     }
 
     //les getteurs
-    public String getQuestionActuel(){
+    public Question getQuestionActuel(){
         return this.questionActuel;
     }
     public Questionnaire getQuesionnaire(){
@@ -112,7 +112,7 @@ public class FenetreAnalyste extends BorderPane{
 
 
     //les setteurs
-    public void setQuestionActuel(String question){
+    public void setQuestionActuel(Question question){
         this.questionActuel = question;
     }
     public void setCommentaire(String comment){
@@ -157,7 +157,7 @@ public class FenetreAnalyste extends BorderPane{
         VBox vboxGraphique = new VBox();
 
         PieChart tarte = new PieChart();
-        Label titreGraphique = new Label("\n    " + this.questionActuel);
+        Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
 
         tarte.getData ().setAll (
@@ -168,29 +168,7 @@ public class FenetreAnalyste extends BorderPane{
         tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
 
 
-        //les flèches
-        BorderPane bpFleche = new BorderPane();
-        ImageView imgFlecheGauche = new ImageView("./fleche.png");
-        ImageView imgFlecheDroite = new ImageView("./fleche.png");
-        imgFlecheDroite.setRotate(180.0);
-        imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
-        imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
-
-        Button boutonFlecheGauche = new Button("", imgFlecheGauche);
-        Button boutonFlecheDroite = new Button("", imgFlecheDroite);
-        //cache la partie visible des boutons
-        boutonFlecheGauche.setStyle("-fx-background-color:transparent;");
-        boutonFlecheDroite.setStyle("-fx-background-color:transparent;");
-
-        //pour les différencier dans le Controlleur Fleche
-        boutonFlecheGauche.setId("flecheGauche");
-        boutonFlecheDroite.setId("flecheDroite");
-
-        bpFleche.setRight(boutonFlecheDroite);
-        bpFleche.setLeft(boutonFlecheGauche);
-
-
-        vboxGraphique.getChildren().addAll(titreGraphique, tarte, bpFleche);
+        vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -231,7 +209,7 @@ public class FenetreAnalyste extends BorderPane{
 
         //on rempli la ComboBox avec les questions
         for (Question question : this.questionnaire.getListQ()){
-            this.comboQuestion.getItems().add(question);
+            this.comboQuestion.getItems().add(question.getTextQ());
         }
 
         vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
