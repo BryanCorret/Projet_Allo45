@@ -32,5 +32,8 @@ public class Questionnaire {
         listQ.remove(quest);
     }
 
-
+    @Override
+    public String toString(){
+        return this.TitreQ ;
+    }
 }
