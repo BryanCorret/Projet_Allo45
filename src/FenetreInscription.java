@@ -2,6 +2,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,19 +20,20 @@ public class FenetreInscription extends VBox{
     TextField NomP;
     appliSondage sondage;
     
-    public FenetreInscription(){
+    public FenetreInscription(appliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");
         VBprincipal.setPrefSize(600, 500);
         
-        this.Mdp2 = new TextField();
-        this.Mdp = new TextField();
+        this.Mdp2 = new PasswordField();
+        this.Mdp = new PasswordField();
         this.NomU = new TextField();
         this.NomP = new TextField();
         this.NomF = new TextField();
-        this.sondage = new appliSondage();
 
+        this.sondage = sondage;
+        
         this.setTitle();
         this.setText();
         this.getChildren().add(VBprincipal);
@@ -53,15 +55,12 @@ public class FenetreInscription extends VBox{
         "-fx-border-width: 1;" +
         "-fx-border-insets: 25 75 100 75;" +
         "-fx-padding: 1em;");
-        
-        
-        
+    
         // text Prénom
         Text textP = new Text("Prénom :");
         textP.setFont(javafx.scene.text.Font.font("Arial", 15));
 
         //textfield Prénom
-        TextField NomP = new TextField();
         NomP.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomP.setPromptText("Jean");
 
@@ -70,7 +69,6 @@ public class FenetreInscription extends VBox{
         textNom.setFont(javafx.scene.text.Font.font("Arial", 15)); 
  
         //textfield Nom
-        TextField NomF = new TextField();
         NomF.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomF.setPromptText("Dupont");
         
@@ -80,7 +78,6 @@ public class FenetreInscription extends VBox{
         textU.setFont(javafx.scene.text.Font.font("Arial", 15)); 
     
         //textfield Utilisateur
-        TextField NomU = new TextField();
         NomU.setStyle("-fx-Background-Color: #ADAEB0;");
         this.NomU.setPromptText("Nom utilisateur");
 
@@ -97,7 +94,6 @@ public class FenetreInscription extends VBox{
         textM.setFont(javafx.scene.text.Font.font("Arial", 15)); 
    
         //textfield mdp
-        TextField Mdp = new TextField();
         Mdp.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp.setPromptText("Un mot de passe");
 
@@ -106,7 +102,6 @@ public class FenetreInscription extends VBox{
         textM2.setFont(javafx.scene.text.Font.font("Arial", 15));
        
         //textfield mdp
-        TextField Mdp2 = new TextField();
         Mdp2.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp2.setPromptText("Confirmation du mot de passe");
 
