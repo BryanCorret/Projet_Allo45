@@ -87,9 +87,9 @@ public class appliSondage extends Application{
         this.boutonAnalyste.setOnAction(windowSwitcher);
         this.boutonSondeur.setOnAction(windowSwitcher);
         this.boutonDonneesBrutes.setOnAction(windowSwitcher);
-        //this.boutonHome.setOnAction(controlHome);
+        this.boutonHome.setOnAction(windowSwitcher);
         this.boutonParam.setOnAction(windowSwitcher);
-        //this.boutonRefresh.setOnAction(new ControleurRefresh(this));
+        this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
 
