@@ -28,16 +28,19 @@ public class FenetreHomeAnalyste extends BorderPane {
     private Button boutonSelect;
     private Button boutonResearch;
     private Button boutonInspect;
+    private String sondageSelectionne;
+    private appliSondage sondage;
     
   
-    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco){
+    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, appliSondage s){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonDeco = boutonDeco;
+        this.sondageSelectionne = "";
+        this.sondage = s;
         BorderPane borderTop = borderPaneTop();
         HBox hBox = HBoxMid();
-        
         this.setTop(borderTop);
         this.setCenter(hBox);
     }
@@ -46,13 +49,26 @@ public class FenetreHomeAnalyste extends BorderPane {
         BorderPane border = new BorderPane();
         
         HBox hHome = new HBox();
-        hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
+        HBox hRefresh = new HBox();
+        Text textHome = new Text("Sondage séléctionné : " + sondageSelectionne);
+        textHome.setFont(Font.font("Arial",15));
+        hRefresh.getChildren().add(textHome);
+        hRefresh.setAlignment(Pos.CENTER);
+        hRefresh.setPadding(new Insets(10,-310,10,10));
+        
+        if (sondageSelectionne.equals("")){
+            textHome.setVisible(false);
+        }
+        hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh, hRefresh);
+        hHome.setSpacing(10);
+
 
         Label ltitre = new Label("Bienvenue"+"this.getNom()");
+        ltitre.setAlignment(Pos.CENTER);
 
         HBox hID = new HBox();
         
-        ImageView profil = new ImageView("./user.jpg");
+        ImageView profil = new ImageView("file:IMG/user.jpg");
         profil.setFitHeight(50);profil.setFitWidth(50);
        
         Button Deco = this.boutonDeco;  
@@ -72,15 +88,15 @@ public class FenetreHomeAnalyste extends BorderPane {
         return border;
     }
 
-    
+
 
     private HBox HBoxMid(){
         HBox hBox = new HBox();
 
-        ImageView Ilogo = new ImageView("./User.png");
-        ImageView IFormul =new ImageView("./Formulaire.png");
-        ImageView ISearch =new ImageView("./Search.png");
-        ImageView ISave =new ImageView("./Save.png");
+        ImageView Ilogo = new ImageView("file:IMG/User.png");
+        ImageView IFormul =new ImageView("file:IMG/Formulaire.png");
+        ImageView ISearch =new ImageView("file:IMG/Search.png");
+        ImageView ISave =new ImageView("file:IMG/Save.png");
         Ilogo.setFitHeight(70);Ilogo.setFitWidth(70);
         IFormul.setFitHeight(70);IFormul.setFitWidth(70);
         ISearch.setFitHeight(70);ISearch.setFitWidth(70);
@@ -89,6 +105,7 @@ public class FenetreHomeAnalyste extends BorderPane {
        
         Button bouton1 = new Button("Editer le compte",Ilogo);
         Button bouton2 = new Button("Sélectionner le Sondage",IFormul);
+        bouton2.setOnAction(new ControleurNavAnalyste(this, this.sondage));
         Button bouton3 = new Button("Rechercher une question",ISearch);
         Button bouton4 = new Button("Inspecter le Sondage",ISave);
 
@@ -118,6 +135,11 @@ public class FenetreHomeAnalyste extends BorderPane {
         return hBox;
     }
 
+    public void setSondageSelectionne(String sondageSelectionne) {
+        this.sondageSelectionne = sondageSelectionne;
+    }
     
-    
+    public void MajVue(){
+        this.setTop(borderPaneTop());
+    }
 }
