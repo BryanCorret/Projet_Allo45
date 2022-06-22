@@ -110,7 +110,7 @@ public class FenetreParametreSondeur extends BorderPane{
         buttonValider.setStyle("-fx-background-color: transparent;");buttonResultat.setStyle("-fx-background-color: transparent;");
         
         //on met en action les boutons
-        buttonValider.setOnAction(new ControleurValiderReponse(this.sondeur, this.laConnexionMySQL, this.sonde, this.utilisateur));
+        buttonValider.setOnAction(new ControleurValiderReponse(this.sondeur, this.appli, this.laConnexionMySQL, this.sonde, this.utilisateur));
         buttonResultat.setOnAction(new ControleurResultat(this.sondeur));
 
         //on met en forme tous les éléments
