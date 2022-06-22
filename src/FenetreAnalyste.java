@@ -27,17 +27,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-
 import java.util.*;
 
-import javafx.scene.layout;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
+
 
 
 public class FenetreAnalyste extends BorderPane{
@@ -58,8 +54,10 @@ public class FenetreAnalyste extends BorderPane{
     private TextArea commentaire;
 
     private BorderPane lesFleches;
+
+    private appliSondage app;
     
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -67,7 +65,11 @@ public class FenetreAnalyste extends BorderPane{
         this.boutonDonneeBrute = new Button("Données Brutes");
         this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
 
+<<<<<<< HEAD
+        this.app = app;
 
+=======
+>>>>>>> e435fb1839fcc4390931c01af83bad6b67e3a842
         this.comboAnalyse = new ComboBox<>();
         this.comboClasse = new ComboBox<>();
         this.comboQuestion = new ComboBox<>();
@@ -161,9 +163,11 @@ public class FenetreAnalyste extends BorderPane{
         //la partie graphique
         VBox vboxGraphique = new VBox();
 
+        PieChart tarte = new PieChart();
         Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
 
+<<<<<<< HEAD
         /* si c'est un diagramme circulaire
      _   _                                                           _                     _          _             
   __| | (_)  __ _   __ _   _ _   __ _   _ __    _ __    ___     __  (_)  _ _   __   _  _  | |  __ _  (_)  _ _   ___ 
@@ -181,7 +185,7 @@ public class FenetreAnalyste extends BorderPane{
             //pour chaque question du questionnaire
             for (Question quest : this.questionnaire.getListQ()){
                 //pour chaque réponse
-                for ( Reponse rep : BiblioSQL.getReponse() ){
+                for ( Reponse rep : BiblioSQL.getReponse(this.app.getConnexion(),this.questionnaire.getIdQ()) ){
                 //ajoute la clé , 1 valeur par défaut   ou  incrémente la valeur de la clé de 1 
                     dico.merge(rep.getValue(), 1, Integer::sum);
                     // autre possibilité si cela ne fonctionne pas :
@@ -220,10 +224,17 @@ public class FenetreAnalyste extends BorderPane{
 
             //à continuer
  
+=======
+        tarte.getData ().setAll (
+        new PieChart.Data ("Oui", 77) ,
+        new PieChart.Data ("Non", 8) ,
+        new PieChart.Data ("Ne sais pas", 11) ,
+        new PieChart.Data ("Autre", 4) ) ;
+        tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
+>>>>>>> e435fb1839fcc4390931c01af83bad6b67e3a842
 
 
-            vboxGraphique.getChildren().addAll(titreGraphique, barChart, this.lesFleches);
-        }
+        vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -260,15 +271,17 @@ public class FenetreAnalyste extends BorderPane{
 
         //on rempli les ComboBox
         this.comboAnalyse.getItems().addAll("Camembert", "Histogramme", "Pouet", "Machin");
-        this.comboAnalyse.getSelectionModel().select(0);;
+        this.comboAnalyse.getSelectionModel().select(0);
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
-        this.comboClasse.getSelectionModel().select(0);;
+        this.comboClasse.getSelectionModel().select(0);
 
 
         //on rempli la ComboBox avec les questions
         for (Question question : this.questionnaire.getListQ()){
             this.comboQuestion.getItems().add(question.getTextQ());
         }
+        this.comboQuestion.getSelectionModel().select(0);
+
 
         vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
         vboxHaute.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));

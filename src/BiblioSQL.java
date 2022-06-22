@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BiblioSQL {
 
@@ -251,20 +252,15 @@ public class BiblioSQL {
         }
         return valeurs;
     }
-    public static List<List<Object>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
+    public static List<Question> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
-      List<List<Object>> questionnaire = new ArrayList<List<Object>>();
+      List<Question> questionnaire = new ArrayList<Question>();
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
         while(rs.next()){
-          List<Object> question = new ArrayList<Object>();
-          int idQst = rs.getInt("numQ");
-          question.add(idQst);
-          question.add(rs.getString("texteQ"));
-          question.add(rs.getInt("MaxVal"));
-          question.add((rs.getString("idT").charAt(0)));
-          questionnaire.add(question);
+          Question ques = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(5).charAt(0),idQ);
+          questionnaire.add(ques);
         }
       }
       catch (SQLException e) {
@@ -275,16 +271,15 @@ public class BiblioSQL {
     public static Questionnaire getQuestionnaire(ConnexionMySQL laConnexion, int idQ){
       Statement st;
       Questionnaire q;
-      List<List<Object>> questions = getQuestionQuestionnaire(laConnexion, idQ);
+      List<Question> questions = getQuestionQuestionnaire(laConnexion, idQ);
       try{
         st = laConnexion.createStatement();
         ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
         rs.first();
         q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
         rs.close();
-        for(List<Object> question:questions){
-          Question ques = new Question((int)question.get(0),(String)question.get(1),(int)question.get(2),(char)question.get(3),idQ);
-          q.addQuestion(ques);
+        for(Question question:questions){
+          q.addQuestion(question);
       }
         return q;
     }
@@ -292,7 +287,7 @@ public class BiblioSQL {
         e.printStackTrace();;
       }
       return null;
-    } 
+    }
 
   public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
     Statement st;
@@ -309,22 +304,135 @@ public class BiblioSQL {
 
 
 
-  /**
-     public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){
-       Statement st;
-       List<String> reponses = new ArrayList<String>();
-       try {
-         st = laConnection.createStatement();
-         ResultSet rs = st.executeQuery("SELECT * FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
+    public static List<Reponse> getReponse(ConnexionMySQL laConnection, int idQ){
+      Statement st;
+      List<Reponse> reponses = new ArrayList<Reponse>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT idQ,numQ,idC,value FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
          while(rs.next()){
-           reponses.add(rs.getString("texteR"));
+           Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("idQ"), rs.getString("idC"), rs.getString("value"));
+           reponses.add(res);
          }
        }
-      String.valueOf(value); catch (SQLException e) {
+       catch (SQLException e) {
          e.getMessage();
        }
+       return reponses;
      }
-     */
+     
+
+
+
+
+    // get tout les panels de la bd donc Liste de panel
+    public static List<Panel> getToutLesPanels(ConnexionMySQL laConnection){
+      Statement st;
+      List<Panel> liste = new ArrayList<Panel>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM PANEL;");
+        while(rs.next()){
+          Panel pan = new Panel(rs.getInt("idP"), rs.getString("nomPan"));
+          liste.add(pan);
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+
+    // retourne une liste de tt les noms de panel
+    public static List<String> getNomDeToutLesPanels(ConnexionMySQL laConnection){
+      Statement st;
+      List<String> liste = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT nomPan FROM PANEL;");
+        while(rs.next()){
+          liste.add(rs.getString("nomPan"));
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+
+    // retourne la liste des questionnaires qui sont dans le panel donné
+    public static List<String> getNomDesQuestionnaireParRapportAUnPanel(ConnexionMySQL laConnection, String nomPan){
+      Statement st;
+      List<String> liste = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select idPan, nomPan, idQ, titre from PANEL natural join QUESTIONNAIRE where idPan ="+nomPan+";");
+        while(rs.next()){
+          liste.add(rs.getString("titre"));
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+
+    //donne tt les sondés qui sont dans le panel
+    public static List<Sonde> getSondeParRapportAuPanel(ConnexionMySQL laConnection, String nomPan){
+      Statement st;
+      List<Sonde> liste = new ArrayList<Sonde>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select numSond, nomSond, prenomSond, dateNaisSond, telephoneSond,idC from SONDE natural join PANEL natural join QUESTIONNAIRE where idPan ="+nomPan+";");
+        while(rs.next()){
+          Sonde personne = new Sonde(rs.getInt("numSond"), rs.getString("nomSond"), rs.getString("prenomSond"), rs.getDate("dateNaisSond"), rs.getString("telephoneSond"), rs.getString("idC"));
+          liste.add(personne);
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+    
+
+    // permet de savoir si le sondé a déja répondu au questionnaire
+    public static boolean voirSiLeSondeADejaRep(ConnexionMySQL laConnection, int idQ, int numSond){
+      String StringDeNumSond = String.valueOf(numSond);
+      Statement st;
+      List<String> listeDeNumSond = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select numSond from INTERROGER where idQ ="+idQ+";");
+        while(rs.next()){
+          listeDeNumSond.add(rs.getString("numSond"));
+        }        
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      if (listeDeNumSond.contains(StringDeNumSond)){
+          return true;
+      }
+      return false;
+        
+    }
+
+
+    //donne un sonde choisi au hasard dans le panel (et si il n'a pas déja répondu au Questionnaire)
+    public static Sonde getUnSondeAuHasardDansLePanel(ConnexionMySQL laConnection, int idQ, String nomPan){
+      List<Sonde> liste = getSondeParRapportAuPanel(laConnection, nomPan);
+      for (Sonde sond : liste){
+        if (!voirSiLeSondeADejaRep(laConnection,idQ,sond.getNumSond())) {
+          return sond;
+        }
+      }
+      Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
+      return sond;
+    }
 
 
   // a modif
@@ -358,4 +466,14 @@ public class BiblioSQL {
     //     }
     //     return reponses;
     //  }
+    public static void exit(ConnexionMySQL laConnexion){
+      Statement st;
+      try {
+        st = laConnexion.createStatement();
+        ResultSet rs = st.executeQuery("exit");
+    }
+      catch(SQLException e){
+
+      }
+}
 }
