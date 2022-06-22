@@ -236,8 +236,8 @@ public class FenetreSondeur extends BorderPane {
         Label ltitre = new Label("Sommaire: ");
         vDroite.getChildren().addAll(ltitre);
 
-        for(List<Object> elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
-            Button bouton =new Button((String) elem.get(1));
+        for(Question elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
+            Button bouton =new Button((String) elem.getTextQ());
             bouton.setStyle("-fx-background-color:transparent;");
             
             vDroite.getChildren().add(bouton);
