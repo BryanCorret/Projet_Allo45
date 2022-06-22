@@ -27,13 +27,17 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+
 import java.util.*;
 
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
-
 
 
 public class FenetreAnalyste extends BorderPane{
@@ -62,6 +66,7 @@ public class FenetreAnalyste extends BorderPane{
         this.boutonParametre = boutonParametre;
         this.boutonDonneeBrute = new Button("Données Brutes");
         this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
+
 
         this.comboAnalyse = new ComboBox<>();
         this.comboClasse = new ComboBox<>();
@@ -156,19 +161,69 @@ public class FenetreAnalyste extends BorderPane{
         //la partie graphique
         VBox vboxGraphique = new VBox();
 
-        PieChart tarte = new PieChart();
         Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
 
-        tarte.getData ().setAll (
-        new PieChart.Data ("Oui", 77) ,
-        new PieChart.Data ("Non", 8) ,
-        new PieChart.Data ("Ne sais pas", 11) ,
-        new PieChart.Data ("Autre", 4) ) ;
-        tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
+        /* si c'est un diagramme circulaire
+     _   _                                                           _                     _          _             
+  __| | (_)  __ _   __ _   _ _   __ _   _ __    _ __    ___     __  (_)  _ _   __   _  _  | |  __ _  (_)  _ _   ___ 
+ / _` | | | / _` | / _` | | '_| / _` | | '  \  | '  \  / -_)   / _| | | | '_| / _| | || | | | / _` | | | | '_| / -_)
+ \__,_| |_| \__,_| \__, | |_|   \__,_| |_|_|_| |_|_|_| \___|   \__| |_| |_|   \__|  \_,_| |_| \__,_| |_| |_|   \___|
+                   |___/                                                                                            
+
+        */
+        if (this.getComboBoxAnalyse().getValue().equals("PieChart")){
+            
+            PieChart tarte = new PieChart();
+
+            //on rempli le diagramme circulaire
+            Map<String, Integer> dico = new HashMap<>();
+            //pour chaque question du questionnaire
+            for (Question quest : this.questionnaire.getListQ()){
+                //pour chaque réponse
+                for ( Reponse rep : BiblioSQL.getReponse() ){
+                //ajoute la clé , 1 valeur par défaut   ou  incrémente la valeur de la clé de 1 
+                    dico.merge(rep.getValue(), 1, Integer::sum);
+                    // autre possibilité si cela ne fonctionne pas :
+                    // dico.merge(rep.getValue(), 1, (a, b) -> a + b);
+                }
+                //on ajoute la légende du diagramme circulaire
+                for (String reponse : dico.keySet()){
+                    tarte.getData ().setAll(new PieChart.Data ( reponse, dico.get(reponse) ) );
+                }   
+            }
+
+            tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
+
+            vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
+        }
+        
+        /* si c'est un diagramme à bandes
+     _   _                                                               _                       _            
+  __| | (_)  __ _   __ _   _ _   __ _   _ __    _ __    ___     __ _    | |__   __ _   _ _    __| |  ___   ___
+ / _` | | | / _` | / _` | | '_| / _` | | '  \  | '  \  / -_)   / _` |   | '_ \ / _` | | ' \  / _` | / -_) (_-<
+ \__,_| |_| \__,_| \__, | |_|   \__,_| |_|_|_| |_|_|_| \___|   \__,_|   |_.__/ \__,_| |_||_| \__,_| \___| /__/
+                   |___/                                                                                      
+
+         */
+        
+        else if (this.getComboBoxAnalyse().getValue().equals("BarChart")) {
+            //axe X
+            CategoryAxis xAxis = new CategoryAxis();
+            xAxis.setLabel("Couleur des lampadaires");
+            //axe Y
+            NumberAxis yAxis = new NumberAxis();
+            yAxis.setLabel("age sondé");
+    
+            // on créer le diagramme à bandes
+            BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis);
+
+            //à continuer
+ 
 
 
-        vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
+            vboxGraphique.getChildren().addAll(titreGraphique, barChart, this.lesFleches);
+        }
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -204,7 +259,7 @@ public class FenetreAnalyste extends BorderPane{
 
 
         //on rempli les ComboBox
-        this.comboAnalyse.getItems().addAll("Camembert", "Histogramme", "Pouet", "Machin");
+        this.comboAnalyse.getItems().addAll("PieChart", "Histogramme", "Pouet", "Machin");
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
 
         //on rempli la ComboBox avec les questions
