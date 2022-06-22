@@ -18,7 +18,6 @@ import javafx.scene.chart.Chart;
 
 public class appliSondage extends Application{
 
-    private RequetesSQL lesRequetes;
 
     private ConnexionMySQL ConnexionSQL;
 
@@ -53,7 +52,6 @@ public class appliSondage extends Application{
     @Override
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
-        this.lesRequetes = new RequetesSQL(this.ConnexionSQL);
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
@@ -157,9 +155,9 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
 
-     public void modeSondeur(){
+     public void modeSondeur(int id){
          this.fenetreActu = "Sondeur";
-         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.fleches,this.ConnexionSQL); //fenetre pas encore faite
+         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionnaire(this.ConnexionSQL, id),this.fleches,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
      }

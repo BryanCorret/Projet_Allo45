@@ -279,6 +279,7 @@ public class BiblioSQL {
       try{
         st = laConnexion.createStatement();
         ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        rs.first();
         q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
         rs.close();
         for(List<Object> question:questions){
@@ -288,7 +289,7 @@ public class BiblioSQL {
         return q;
     }
       catch(SQLException e){
-        e.getMessage();
+        e.printStackTrace();;
       }
       return null;
     } 

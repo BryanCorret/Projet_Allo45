@@ -133,11 +133,11 @@ public class FenetreSondeur extends BorderPane {
         vMid.getChildren().addAll(lquestion);
         
         switch(this.questionActuelle.getType()){
-            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons());
-            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());
-            case 'c' : vMid.getChildren().add(classementTile());
-            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());
-            case 'l' : vMid.getChildren().add(treponse);
+            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons()); break;
+            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple()); break;
+            case 'c' : vMid.getChildren().add(classementTile()); break;
+            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider()); break;
+            case 'l' : vMid.getChildren().add(treponse); break;
         }
         
         
@@ -146,7 +146,7 @@ public class FenetreSondeur extends BorderPane {
         vMid.setStyle("-fx-background-color:CORNSILK;");
         Insets arg3 = new Insets(20,20,20,20);
         vMid.setPadding(arg3);
-        vMid.setTop(lquestion);
+        //vMid.setTop(lquestion);
         BorderPane.setAlignment(lquestion, Pos.CENTER);
         vMid.setCenter(classementTile());
         vMid.setBottom(vBot);

@@ -87,6 +87,7 @@ public class FenetreHomeSondeur extends BorderPane {
         Button bouton1 = new Button("Editer le compte",Ilogo);
         Button bouton2 = new Button("Nouveau Formulaire",IFormul);
         Button bouton3 = new Button("Inspecter les Sondages",IEye);
+        bouton2.setOnAction(new ControleurNavSondeur(this.sondage));
         bouton3.setOnAction(new ControleurInspectSondage(this, sondage));
         
 
