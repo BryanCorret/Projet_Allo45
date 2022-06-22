@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BiblioSQL {
 
@@ -325,6 +326,118 @@ public class BiblioSQL {
        return reponses;
      }
      
+
+
+
+
+    // get tout les panels de la bd donc Liste de panel
+    public static List<Panel> getToutLesPanels(ConnexionMySQL laConnection){
+      Statement st;
+      List<Panel> liste = new ArrayList<Panel>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM PANEL;");
+        while(rs.next()){
+          Panel pan = new Panel(rs.getInt("idP"), rs.getString("nomPan"));
+          liste.add(pan);
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+
+    // retourne une liste de tt les noms de panel
+    public static List<String> getNomDeToutLesPanels(ConnexionMySQL laConnection){
+      Statement st;
+      List<String> liste = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT nomPan FROM PANEL;");
+        while(rs.next()){
+          liste.add(rs.getString("nomPan"));
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+
+    // retourne la liste des questionnaires qui sont dans le panel donné
+    public static List<String> getNomDesQuestionnaireParRapportAUnPanel(ConnexionMySQL laConnection, String nomPan){
+      Statement st;
+      List<String> liste = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select idPan, nomPan, idQ, titre from PANEL natural join QUESTIONNAIRE where idPan ="+nomPan+";");
+        while(rs.next()){
+          liste.add(rs.getString("titre"));
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+
+    //donne tt les sondés qui sont dans le panel
+    public static List<Sonde> getSondeParRapportAuPanel(ConnexionMySQL laConnection, String nomPan){
+      Statement st;
+      List<Sonde> liste = new ArrayList<Sonde>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select numSond, nomSond, prenomSond, dateNaisSond, telephoneSond,idC from SONDE natural join PANEL natural join QUESTIONNAIRE where idPan ="+nomPan+";");
+        while(rs.next()){
+          Sonde personne = new Sonde(rs.getInt("numSond"), rs.getString("nomSond"), rs.getString("prenomSond"), rs.getDate("dateNaisSond"), rs.getString("telephoneSond"), rs.getString("idC"));
+          liste.add(personne);
+        }
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+    
+
+    // permet de savoir si le sondé a déja répondu au questionnaire
+    public static boolean voirSiLeSondeADejaRep(ConnexionMySQL laConnection, int idQ, int numSond){
+      String StringDeNumSond = String.valueOf(numSond);
+      Statement st;
+      List<String> listeDeNumSond = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select numSond from INTERROGER where idQ ="+idQ+";");
+        while(rs.next()){
+          listeDeNumSond.add(rs.getString("numSond"));
+        }        
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      if (listeDeNumSond.contains(StringDeNumSond)){
+          return true;
+      }
+      return false;
+        
+    }
+
+
+    //donne un sonde choisi au hasard dans le panel (et si il n'a pas déja répondu au Questionnaire)
+    public static Sonde getUnSondeAuHasardDansLePanel(ConnexionMySQL laConnection, int idQ, String nomPan){
+      List<Sonde> liste = getSondeParRapportAuPanel(laConnection, nomPan);
+      for (Sonde sond : liste){
+        if (!voirSiLeSondeADejaRep(laConnection,idQ,sond.getNumSond())) {
+          return sond;
+        }
+      }
+      Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
+      return sond;
+    }
 
 
   // a modif
