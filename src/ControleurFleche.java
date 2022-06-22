@@ -210,18 +210,18 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     //on récupère les données correspondantes
                     if (this.sondeur.getTypeReponse() == 'u'){
                         bw.write(this.sondeur.getTextArea() + "/");
-                        bw.write(this.sondeur.getValeurBouton() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurBouton() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'm'){
                         bw.write(this.sondeur.getTextArea() + "/");
-                        bw.write(this.sondeur.getValeurCombo() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurCombo() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'c'){
                         //RIEN POUR L'INSTANT, IL FAUT FINIR L'IHM DU CLASSEMENT AVANT
 
                     }else if (this.sondeur.getTypeReponse() == 'n'){
                         bw.write(this.sondeur.getTextArea() + "/");
-                        bw.write(this.sondeur.getSlider() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getSlider() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'l'){
                         bw.write(this.sondeur.getTextArea() + "\n");
