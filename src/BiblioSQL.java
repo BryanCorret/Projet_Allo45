@@ -527,6 +527,7 @@ public class BiblioSQL {
       }
       return -1;
     }   
+    
 
   // a modif
     // public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){
