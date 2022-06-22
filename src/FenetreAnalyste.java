@@ -205,7 +205,10 @@ public class FenetreAnalyste extends BorderPane{
 
         //on rempli les ComboBox
         this.comboAnalyse.getItems().addAll("Camembert", "Histogramme", "Pouet", "Machin");
+        this.comboAnalyse.getSelectionModel().select(0);;
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
+        this.comboClasse.getSelectionModel().select(0);;
+
 
         //on rempli la ComboBox avec les questions
         for (Question question : this.questionnaire.getListQ()){
