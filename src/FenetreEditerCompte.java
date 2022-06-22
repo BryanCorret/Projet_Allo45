@@ -120,7 +120,7 @@ public class FenetreEditerCompte extends VBox{
         
 
        
-        VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, btn, HBox);
+        VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, btn);
         VBprincipal.getChildren().add(VBincription);
 
     }

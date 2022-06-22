@@ -8,7 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -47,7 +47,7 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboClasse;
     private ComboBox<String> comboQuestion;
 
-    //la lise des questions
+    //la liste des questions
     private Questionnaire questionnaire;
     private Question questionActuel;
 
@@ -65,11 +65,8 @@ public class FenetreAnalyste extends BorderPane{
         this.boutonDonneeBrute = new Button("Données Brutes");
         this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
 
-<<<<<<< HEAD
         this.app = app;
 
-=======
->>>>>>> e435fb1839fcc4390931c01af83bad6b67e3a842
         this.comboAnalyse = new ComboBox<>();
         this.comboClasse = new ComboBox<>();
         this.comboQuestion = new ComboBox<>();
@@ -167,7 +164,6 @@ public class FenetreAnalyste extends BorderPane{
         Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
 
-<<<<<<< HEAD
         /* si c'est un diagramme circulaire
      _   _                                                           _                     _          _             
   __| | (_)  __ _   __ _   _ _   __ _   _ __    _ __    ___     __  (_)  _ _   __   _  _  | |  __ _  (_)  _ _   ___ 
@@ -177,15 +173,13 @@ public class FenetreAnalyste extends BorderPane{
 
         */
         if (this.getComboBoxAnalyse().getValue().equals("PieChart")){
-            
-            PieChart tarte = new PieChart();
 
             //on rempli le diagramme circulaire
             Map<String, Integer> dico = new HashMap<>();
             //pour chaque question du questionnaire
             for (Question quest : this.questionnaire.getListQ()){
                 //pour chaque réponse
-                for ( Reponse rep : BiblioSQL.getReponse(this.app.getConnexion(),this.questionnaire.getIdQ()) ){
+                for ( Reponse rep : BiblioSQL.getLesReponses(this.app.getConnexion(),this.questionnaire.getIdQ()) ){
                 //ajoute la clé , 1 valeur par défaut   ou  incrémente la valeur de la clé de 1 
                     dico.merge(rep.getValue(), 1, Integer::sum);
                     // autre possibilité si cela ne fonctionne pas :
@@ -224,14 +218,6 @@ public class FenetreAnalyste extends BorderPane{
 
             //à continuer
  
-=======
-        tarte.getData ().setAll (
-        new PieChart.Data ("Oui", 77) ,
-        new PieChart.Data ("Non", 8) ,
-        new PieChart.Data ("Ne sais pas", 11) ,
-        new PieChart.Data ("Autre", 4) ) ;
-        tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
->>>>>>> e435fb1839fcc4390931c01af83bad6b67e3a842
 
 
         vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
@@ -248,10 +234,9 @@ public class FenetreAnalyste extends BorderPane{
         vbox.getChildren().addAll(vboxGraphique, titreCommentaire, commentaire);
 
         vbox.setPadding(new Insets(5,5,0,5));
-        
+        }
         return vbox;
     }
-
     public VBox leftVBox(){
 
         //une grande vbox contenant deux vbox
