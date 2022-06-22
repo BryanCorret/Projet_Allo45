@@ -36,21 +36,21 @@ public class FenetreSondeur extends BorderPane {
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonParametre;
-    private List<String> listeQuestions;
     private ComboBox<String> comboMultiple;
     private Slider slider;
     private TextArea area;
     private Questionnaire sondage;
     private Question questionActuelle;
     private String valeurBouton;
+    private BorderPane fleche;
+    private ConnexionMySQL connexionSQL;
     
   
-    public FenetreSondeur(Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage){
+    public FenetreSondeur(Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage, BorderPane fleche,ConnexionMySQL connexionSQL){
         super();
         this.boutonHome = boutonHome;
-
-        this.listeQuestions = listeQuestions;
-
+        this.connexionSQL=connexionSQL;
+        this.fleche = fleche;
         this.area= new TextArea();
 
         this.sondage = sondage;
@@ -64,7 +64,7 @@ public class FenetreSondeur extends BorderPane {
         this.boutonParametre = boutonParametre;
         this.valeurBouton = " ";
 
-        this.slider = new Slider(0, 10, 5);
+        this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);
 
         BorderPane borderTop = borderPaneTop();
         VBox vdroite = VBoxDroite();
@@ -120,25 +120,25 @@ public class FenetreSondeur extends BorderPane {
     private BorderPane VBoxMidTextArea(){
         BorderPane vMid = new BorderPane();
         VBox vBot = new VBox();
-        Label lquestion = new Label(""+"this.getTitreQuestion()");
+        Label lquestion = new Label(""+this.questionActuelle.getTextQ());
         lquestion.setFont(Font.font(" Arial ",FontWeight.BOLD,24));
        
 
         TextArea treponse = this.area;
         
-        BorderPane bot = FlecheBot();
+        BorderPane bot = this.fleche;
         BorderPane bottom = BorderPaneBot();
         treponse.setStyle("-fx-control-inner-background:#ffdab9;");
 
-        vMid.getChildren().addAll(lquestion,treponse,BorderBoutons());
+        vMid.getChildren().addAll(lquestion);
         
-        // switch(this){
-        //     case 'u' : vMid.getChildren().add(treponse,BorderBoutons());
-        //     case 'm' : vMid.getChildren().add(treponse,comboBoxMultiple());
-        //     case 'c' : vMid.getChildren().add(classementTile());
-        //     case 'n' : vMid.getChildren().add(treponse,SliderMidSlider());
-        //     case 'l' : vMid.getChildren().add(treponse)
-        // }
+        switch(this.questionActuelle.getType()){
+            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons());
+            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());
+            case 'c' : vMid.getChildren().add(classementTile());
+            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());
+            case 'l' : vMid.getChildren().add(treponse);
+        }
         
         
         
@@ -174,9 +174,9 @@ public class FenetreSondeur extends BorderPane {
         return boutons;
     }
     
-    private ComboBox comboBoxMultiple(){
-        ComboBox res = this.comboMultiple;
-        for(String reponsePossible : this.listeQuestions){
+    private ComboBox<String> comboBoxMultiple(){
+        ComboBox<String> res = this.comboMultiple;
+        for(String reponsePossible : this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ())){
             res.getItems().add(reponsePossible);
         }
         
@@ -186,11 +186,11 @@ public class FenetreSondeur extends BorderPane {
     private TilePane classementTile(){
         TilePane res = new TilePane(Orientation.VERTICAL) ;
         
-        for(int i=0;i<5;i++){
+        for(int i=0; i< this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).size();i++){
             HBox reponse = new HBox();  
             Label lreponse = new Label();
             TextField tfreponse = new TextField();
-            lreponse.setText("arg0");
+            lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
 
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
@@ -229,43 +229,21 @@ public class FenetreSondeur extends BorderPane {
     }
     
 
-    private BorderPane FlecheBot(){
-        BorderPane borderBot = new BorderPane();
-        ImageView flecheAvant = new ImageView("./fleche.png");
-        ImageView flecheApres = new ImageView("./fleche.png");
-        flecheAvant.setRotate(180.0);
-        flecheApres.setFitHeight(40);flecheApres.setFitWidth(40);
-        flecheAvant.setFitHeight(40);flecheAvant.setFitWidth(40);
-        
-        Button BflecheAvant = new Button("",flecheAvant);
-        Button BflecheApres = new Button("",flecheApres);
-        BflecheApres.setStyle("-fx-background-color:transparent;");
-        BflecheAvant.setStyle("-fx-background-color:transparent;");
-
-        BflecheApres.setId("flecheDroite");
-        BflecheAvant.setId("flecheGauche");
-
-        borderBot.setRight(flecheAvant);
-        borderBot.setLeft(flecheApres);
-        return borderBot;
-    }
-
+    
 
     private VBox VBoxDroite(){
         VBox vDroite = new VBox();
         Label ltitre = new Label("Sommaire: ");
         vDroite.getChildren().addAll(ltitre);
-        
-        for(String elem : this.listeQuestions){
-            Button bouton =new Button(elem);
+
+        for(List<Object> elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
+            Button bouton =new Button((String) elem.get(1));
             bouton.setStyle("-fx-background-color:transparent;");
-        
+            
             vDroite.getChildren().add(bouton);
         }
 
         vDroite.setStyle("-fx-background-color: pink;");
-        
-
         return vDroite;
     }
     
