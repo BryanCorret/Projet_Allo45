@@ -85,7 +85,7 @@ public class appliSondage extends Application{
 
         ControleurHome windowSwitcher = new ControleurHome(this);
 
-        this.boutonDeconnexion.setOnAction(windowSwitcher);
+        this.boutonDeconnexion.setOnAction(new ControleurDeconnexion(this));
         //this.boutonInscription.setOnAction(windowSwitcher);
         //this.boutonConnexion.setOnAction(windowSwitcher);
         //this.boutonAnalyste.setOnAction(windowSwitcher);
