@@ -70,7 +70,7 @@ public class FenetreHomeAnalyste extends BorderPane {
         hHome.setSpacing(-5);
 
 
-        Label ltitre = new Label("Bienvenue"+"this.getNom()");
+        Label ltitre = new Label("Bienvenue "+this.sondage.getUtilisateur().getPrenom());
         ltitre.setAlignment(Pos.CENTER);
 
         HBox hID = new HBox();

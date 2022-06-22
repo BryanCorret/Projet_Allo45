@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 
 public class FenetreSondeur extends BorderPane {
 
-    
+    private appliSondage main;
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonParametre;
@@ -44,18 +44,26 @@ public class FenetreSondeur extends BorderPane {
     private String valeurBouton;
     private BorderPane fleche;
     private ConnexionMySQL connexionSQL;
+    private String choice;
+    private int ide;
     
   
-    public FenetreSondeur(Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage, BorderPane fleche,ConnexionMySQL connexionSQL){
+    public FenetreSondeur(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
         super();
+        this.init(main,boutonHome,boutonRefresh,boutonParametre,sondage,connexionSQL);
+        this.maj(0);
+    }
+    public void init(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
+        this.main = main;
         this.boutonHome = boutonHome;
         this.connexionSQL=connexionSQL;
-        this.fleche = fleche;
+        this.fleche = this.lesFleches();
         this.area= new TextArea();
-
+        this.choice = "";
+        this.ide = 0;
         this.sondage = sondage;
 
-        this.questionActuelle = sondage.getListQ().get(0);
+        this.questionActuelle = sondage.getListQ().get(this.ide);
 
         this.comboMultiple = new ComboBox<>();
 
@@ -74,16 +82,34 @@ public class FenetreSondeur extends BorderPane {
         this.setTop(borderTop);
         this.setCenter(Bmid);
         this.setRight(vdroite);
-        
     }
-    
+    public void maj(int id){
+        this.fleche = this.lesFleches();
+        this.area= new TextArea();
+        this.questionActuelle = sondage.getListQ().get(id);
+        this.comboMultiple = new ComboBox<>();
+        this.valeurBouton = " ";
+        this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);
+        BorderPane borderTop = borderPaneTop();
+        VBox vdroite = VBoxDroite();
+        BorderPane Bmid = VBoxMidTextArea();
+        this.setTop(borderTop);
+        this.setCenter(Bmid);
+        this.setRight(vdroite);
+    }
+    public void setIde(int o){
+        this.ide = o;
+    }
+    public int getIde(){
+        return this.ide;
+    }
     private BorderPane borderPaneTop(){
         BorderPane border = new BorderPane();
         
         HBox hHome = new HBox();
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
-        Label ltitre = new Label("Titre sondage");
+        Label ltitre = new Label(this.sondage.getTitreQ());
 
         HBox hID = new HBox();
         
@@ -131,14 +157,15 @@ public class FenetreSondeur extends BorderPane {
         BorderPane bottom = BorderPaneBot();
         treponse.setStyle("-fx-control-inner-background:#ffdab9;");
     
-        vMid.getChildren().addAll(treponse,new Label("\n"),new Label("\n"),new Label("\n"));
+        vMid.getChildren().addAll(new Label("\n"),new Label("\n"),new Label("\n"));
             
+        System.out.println(this.questionActuelle.getType());
         switch(this.questionActuelle.getType()){
-            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons());
-            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());
-            case 'c' : vMid.getChildren().add(classementTile());
-            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());
-            case 'l' : vMid.getChildren().add(treponse);
+            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons()); break;
+            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());break;
+            case 'c' : vMid.getChildren().add(classementTile());break;
+            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());break;
+            case 'l' : vMid.getChildren().add(treponse);break;
         }
             
             
@@ -153,21 +180,29 @@ public class FenetreSondeur extends BorderPane {
         res.setBottom(vBot);
         return res;
     }
-    private BorderPane BorderBoutons(){
-        BorderPane boutons = new BorderPane();
+    private HBox BorderBoutons(){
+        HBox boutons = new HBox();
         
         // img.setFitHeight(35);img.setFitWidth(35);
+        for(String elem: this.questionActuelle.getValeursPossible(this.connexionSQL, this.sondage.getIdQ())){
+            Button b1 = new Button(elem);
+            b1.setOnAction(new ControleurReponseBouton(this));
+            b1.setStyle("-fx-background-color:#678466;-fx-text-fill: white;");
+            boutons.getChildren().add( b1);
+        }
+        boutons.getChildren().add(new Text(this.choice));
         
-        Button b1 = new Button("Oui");
-        Button b2 = new Button("Non");
-        Button b3 = new Button("Je ne sais pas");
-        b1.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
-        b2.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
-        b3.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
+        // Button b1 = new Button("Oui");
+        // Button b2 = new Button("Non");
+        // Button b3 = new Button("Je ne sais pas");
+        // b1.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
+        // b2.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
+        // b3.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
 
-        boutons.setLeft(b1);
-        boutons.setCenter(b2);
-        boutons.setRight(b3);
+        // boutons.setLeft(b1);
+        // boutons.setCenter(b2);
+        // boutons.setRight(b3);
+        boutons.setSpacing(20);
         Insets arg1 = new Insets(20,20,20,20);
         boutons.setPadding(arg1);
         return boutons;
@@ -250,6 +285,7 @@ public class FenetreSondeur extends BorderPane {
         BorderPane res = new BorderPane();
         Button resultats = new Button("Resultats");
         Button Valider = new Button("Valider");
+        Valider.setOnAction(new ControleurValiderReponse(this, this.main, this.main.getConnexion(), this.main.getSondeActu(), this.main.getUtilisateur()));
         res.setLeft(resultats);
         res.setRight(Valider);
         return res;
@@ -296,6 +332,34 @@ public class FenetreSondeur extends BorderPane {
     public void setValeurBouton(String val){this.valeurBouton=val;}
     public String getValeurBouton(){return this.valeurBouton;}
     
-    
+    public BorderPane lesFleches(){
+        //les flèches
+        BorderPane bpFleche = new BorderPane();
+        ImageView imgFlecheGauche = new ImageView("file:IMG/fleche.png");
+        ImageView imgFlecheDroite = new ImageView("file:IMG/fleche.png");
+        imgFlecheDroite.setRotate(180.0);
+        imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
+        imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
 
+        Button boutonFlecheGauche = new Button("", imgFlecheGauche);
+        Button boutonFlecheDroite = new Button("", imgFlecheDroite);
+        //cache la partie visible des boutons
+        // boutonFlecheGauche.setStyle("-fx-background-color:transparent;");
+        // boutonFlecheDroite.setStyle("-fx-background-color:transparent;");
+
+        //pour les différencier dans le Controlleur Fleche
+        boutonFlecheGauche.setId("flecheGauche");
+        boutonFlecheDroite.setId("flecheDroite");
+
+        boutonFlecheDroite.setOnAction(new ControleurFleche(this.main,this));
+        boutonFlecheGauche.setOnAction(new ControleurFleche(this.main,this));
+       
+        bpFleche.setRight(boutonFlecheDroite);
+        bpFleche.setLeft(boutonFlecheGauche);
+        return bpFleche;
+    }
+
+    public void setTexteChoice(String choix){
+        this.choice = choix;
+    }
 }

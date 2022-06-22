@@ -13,7 +13,9 @@ public class ControleurVerifLancement implements EventHandler<ActionEvent>{
     }
     @Override
     public void handle(ActionEvent event) {
-        this.main.modeSondeur(BiblioSQL.);
+        this.main.setSondageSelectionne(BiblioSQL.getQuestionnaire(this.main.getConnexion(), this.ctrl.getTxt2()));
+        this.main.modeSondeur();
+        this.ctrl.close();
     }
 
 }

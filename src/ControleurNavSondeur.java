@@ -59,7 +59,7 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
         Label Quest = new Label("Selectionnez un questionnaire");
         Button valider = new Button("Commencer le sondage");
         valider.setOnAction(new ControleurVerifLancement(sondage, this));
-        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        Scene dialogScene = new Scene(dialogVbox, 400, 400);
         this.txt1.setOnAction(new ControleurCBox2(this));
         dialogVbox.getChildren().addAll(new Text(String.valueOf(this.test)), Pan, this.txt1, Quest, this.txt2, valider);
         dialog.setScene(dialogScene);
@@ -80,4 +80,7 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
     public Stage getStage(){
         return this.dialog;
     } 
+    public void close(){
+        this.dialog.close();
+    }
 }

@@ -45,8 +45,8 @@ public class FenetreHomeSondeur extends BorderPane {
         
         HBox hHome = new HBox();
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
-        System.out.println(this.sondage.getutilisateur());
-        Label ltitre = new Label("Bienvenue "+ this.sondage.getutilisateur().getPrenom());
+        System.out.println(this.sondage.getUtilisateur());
+        Label ltitre = new Label("Bienvenue "+ this.sondage.getUtilisateur().getPrenom());
 
         HBox hID = new HBox();
         

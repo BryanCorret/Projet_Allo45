@@ -87,7 +87,7 @@ public class BiblioSQL {
       public static void register(FenetreInscription fenetre){
         Statement st;
         ConnexionMySQL laConnexion = BiblioSQL.connectRoot();
-        Utilisateur user = new Utilisateur(BiblioSQL.getMaxID(laConnexion), fenetre.getNomF(), fenetre.getNomP(), fenetre.getNomU(), fenetre.getMdp(), 2);
+        Utilisateur user = new Utilisateur(BiblioSQL.getMaxID(laConnexion), fenetre.getNomF(), fenetre.getNomP(), fenetre.getNomU(), fenetre.getMdp(), fenetre.getRole());
         String requette = "INSERT INTO UTILISATEUR VALUES(" + user.getId() + ",'" + user.getNom() + "','" + user.getPrenom() + "','" + user.getLogin() + "','" + user.getPassword() + "'," + user.getIdRole() +");";
         try{
           st = laConnexion.createStatement();
@@ -132,7 +132,7 @@ public class BiblioSQL {
             break;
           case 3:
             String requette3 = "CREATE USER " + user.getLogin() + " IDENTIFIED BY '" + user.getPassword() +"';";
-            String requette5 = "GRANT ANALYSTE TO " + user.getLogin() +";";
+            String requette5 = "GRANT ALL ON sondage.* TO " + user.getLogin() +";";
             try {
               laConnexion.close();
               st2 = laCoUser.createStatement();
@@ -257,7 +257,7 @@ public class BiblioSQL {
       List<Question> questionnaire = new ArrayList<Question>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
+        ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + " GROUP BY TEXTEQ;");
         while(rs.next()){
           Question ques = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(5).charAt(0),idQ);
           questionnaire.add(ques);
@@ -294,12 +294,15 @@ public class BiblioSQL {
       Questionnaire q;
       try{
         st = laConnexion.createStatement();
+        System.out.println("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE titre = '" + nomQ + "';");
         ResultSet rs1 = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE titre = '" + nomQ + "';");
-        rs1.next();
+        rs1.first();
         int idQ = rs1.getInt("idQ");
 
         List<Question> questions = getQuestionQuestionnaire(laConnexion, idQ);
+        System.out.println(questions);
         ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        rs.first();
         q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
         rs.close();
         for(Question question:questions){
@@ -308,7 +311,7 @@ public class BiblioSQL {
         return q;
     }
       catch(SQLException e){
-        e.getMessage();
+        e.printStackTrace();
       }
       return null;
     }
@@ -458,19 +461,6 @@ public class BiblioSQL {
       }
       Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
       return sond;
-    }
-
-    public static Questionnaire getQuestionDUQuestionnaire(ConnexionMySQL laConnection, String nomQuestionnaire){
-      Statement st;
-      try {
-        st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("select numSond from INTERROGER where idQ ="+idQ+";");
-        while(rs.next()){
-        }        
-      }
-      catch (SQLException e) {
-        e.getMessage();
-      }
     }
 
 
