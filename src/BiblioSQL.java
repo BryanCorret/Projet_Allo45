@@ -333,12 +333,12 @@ public class BiblioSQL {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM PANEL;");
         while(rs.next()){
-          Panel pan = new Panel(rs.getInt("idP"), rs.getString("nomPan"));
+          Panel pan = new Panel(rs.getInt("idPan"), rs.getString("nomPan"));
           liste.add(pan);
         }
       }
       catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return liste;
     }
@@ -368,7 +368,7 @@ public class BiblioSQL {
       List<String> liste = new ArrayList<String>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("select idPan, nomPan, idQ, titre from PANEL natural join QUESTIONNAIRE where idPan ="+nomPan+";");
+        ResultSet rs = st.executeQuery("select idPan, nomPan, idQ, titre from PANEL natural join QUESTIONNAIRE where nomPan='"+nomPan+"';");
         while(rs.next()){
           liste.add(rs.getString("titre"));
         }

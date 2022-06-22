@@ -68,11 +68,11 @@ public class FenetreSondeur extends BorderPane {
 
         BorderPane borderTop = borderPaneTop();
         VBox vdroite = VBoxDroite();
-        BorderPane vMid = VBoxMidTextArea();
+        BorderPane Bmid = VBoxMidTextArea();
         
         
         this.setTop(borderTop);
-        this.setCenter(vMid);
+        this.setCenter(Bmid);
         this.setRight(vdroite);
         
     }
@@ -116,44 +116,43 @@ public class FenetreSondeur extends BorderPane {
     }
     
     
-
     private BorderPane VBoxMidTextArea(){
-        BorderPane vMid = new BorderPane();
+        BorderPane res = new BorderPane();
+        VBox vMid = new VBox();
         VBox vBot = new VBox();
         Label lquestion = new Label(""+this.questionActuelle.getTextQ());
         lquestion.setFont(Font.font(" Arial ",FontWeight.BOLD,24));
-       
-
+            
+    
+            
         TextArea treponse = this.area;
-        
+            
         BorderPane bot = this.fleche;
         BorderPane bottom = BorderPaneBot();
         treponse.setStyle("-fx-control-inner-background:#ffdab9;");
-
-        vMid.getChildren().addAll(lquestion);
-        
+    
+        vMid.getChildren().addAll(treponse,new Label("\n"),new Label("\n"),new Label("\n"));
+            
         switch(this.questionActuelle.getType()){
-            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons()); break;
-            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple()); break;
-            case 'c' : vMid.getChildren().add(classementTile()); break;
-            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider()); break;
-            case 'l' : vMid.getChildren().add(treponse); break;
+            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons());
+            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());
+            case 'c' : vMid.getChildren().add(classementTile());
+            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());
+            case 'l' : vMid.getChildren().add(treponse);
         }
-        
-        
-        
+            
+            
+            
         vBot.getChildren().addAll(bot,new Label("\n"),bottom);
-        vMid.setStyle("-fx-background-color:CORNSILK;");
-        Insets arg3 = new Insets(20,20,20,20);
+        res.setStyle("-fx-background-color:CORNSILK;");
+        Insets arg3 = new Insets(40,20,20,20);
         vMid.setPadding(arg3);
-        //vMid.setTop(lquestion);
+        res.setTop(lquestion);
         BorderPane.setAlignment(lquestion, Pos.CENTER);
-        vMid.setCenter(classementTile());
-        vMid.setBottom(vBot);
-
-        return vMid;
+        res.setCenter(vMid);
+        res.setBottom(vBot);
+        return res;
     }
-
     private BorderPane BorderBoutons(){
         BorderPane boutons = new BorderPane();
         

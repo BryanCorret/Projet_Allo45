@@ -22,14 +22,19 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
     private appliSondage sondage;
     private ComboBox<String> txt1;
     private ComboBox<String> txt2;
+    private Stage dialog;
+    private int test;
 
     public ControleurNavSondeur(appliSondage sondage) {
         this.sondage = sondage;
         this.maConnexion = sondage.getConnexion();
         this.txt1 = new ComboBox<>();
         this.txt2 = new ComboBox<>();
-        this.txt1.getItems().add("");
+        for(Panel Pann : BiblioSQL.getToutLesPanels(this.sondage.getConnexion()))
+        this.txt1.getItems().add(Pann.getNomPan());
         this.txt2.getItems().add("");
+        this.dialog = new Stage();
+        this.test = 0;
     }
 
     @Override
@@ -45,25 +50,34 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
         Alert Listesondage = new Alert(Alert.AlertType.INFORMATION);
         Listesondage.setTitle("Liste des sondages");
         Listesondage.setHeaderText("Liste des sondages");
-        
+        this.maj();
         // VBox pour les boutons + group
-        final Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
+    }
+    public void maj(){
         VBox dialogVbox = new VBox(20);
         Label Pan = new Label("Selectionnez un Panel");
         Label Quest = new Label("Selectionnez un questionnaire");
         Button valider = new Button("Commencer le sondage");
         valider.setOnAction(new ControleurVerifLancement(sondage, this));
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
-        dialogVbox.getChildren().addAll(Pan, this.txt1, Quest, this.txt2, valider);
+        this.txt1.setOnAction(new ControleurCBox2(this));
+        dialogVbox.getChildren().addAll(new Text(String.valueOf(this.test)), Pan, this.txt1, Quest, this.txt2, valider);
         dialog.setScene(dialogScene);
+        this.test+=1;
+        valider.setOnAction(new ControleurVerifLancement(this.sondage, this));
         dialog.show();
     }
-
     public String getTxt1(){
         return this.txt1.getValue();
     }
     public String getTxt2(){
         return this.txt2.getValue();
     }
+    public void setText2(){
+        this.txt2.getItems().addAll(BiblioSQL.getNomDesQuestionnaireParRapportAUnPanel(this.sondage.getConnexion(), this.txt1.getValue()));
+        System.out.println(this.txt2.getItems());
+    }
+    public Stage getStage(){
+        return this.dialog;
+    } 
 }

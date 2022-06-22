@@ -124,7 +124,7 @@ public class appliSondage extends Application{
 
     @Override
     public void start(Stage stage){
-        Pane root = new FenetreHomeAnalyste(this.boutonHome, this.boutonRefresh, this.boutonDeconnexion,this.boutonParam, this);
+        Pane root = new FenetreConnexion(this);
         this.scene = new Scene(root);
         this.fenetreActu = "Connexion";
         stage.setScene(scene);
@@ -229,10 +229,6 @@ public class appliSondage extends Application{
     public List<String> rechercherSondage(String StrRecherche){
         List<String> listeDesSondages = new ArrayList<String>();
         return listeDesSondages;
-    }
-
-    public void setSondageSelectionne(Questionnaire sondageSelectionne) {
-        this.sondageSelectionne = sondageSelectionne;
     }
     
     public ConnexionMySQL getConnexion(){

@@ -13,33 +13,7 @@ public class ControleurVerifLancement implements EventHandler<ActionEvent>{
     }
     @Override
     public void handle(ActionEvent event) {
-        if(!(ctrl.getTxt1().equals(""))){
-        String inn = "";
-        for(int i=0; i<ctrl.getTxt2().length(); i++){
-            try{
-                Double.parseDouble(String.valueOf(ctrl.getTxt2().charAt(i)));
-                inn += String.valueOf(ctrl.getTxt2().charAt(i));
-
-            }
-            catch(NumberFormatException ex){
-                break;
-            }
-        if(!(inn == ""))
-        this.main.modeSondeur(Integer.valueOf(inn));
-        else{
-        Alert Listesondage = new Alert(Alert.AlertType.ERROR);
-        Listesondage.setTitle("Attention");
-        Listesondage.setHeaderText("Veuillez sélectionner un questionnaire !");
-        }
-    }
-}
-        else{
-        Alert Listesondage = new Alert(Alert.AlertType.ERROR);
-        Listesondage.setTitle("Attention");
-        Listesondage.setHeaderText("Veuillez sélectionner un Panel !");
-        }
-
-        
+        this.main.modeSondeur(BiblioSQL.);
     }
 
 }
