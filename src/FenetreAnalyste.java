@@ -139,7 +139,7 @@ public class FenetreAnalyste extends BorderPane{
 
         HBox hboxAvatar = new HBox();
 
-        ImageView profil = new ImageView("./user.jpg");
+        ImageView profil = new ImageView("file:IMG/user.jpg");
         profil.setFitHeight(50);profil.setFitWidth(50);
 
         hboxAvatar.getChildren().addAll(profil, this.boutonParametre, new Label(""));
@@ -176,8 +176,8 @@ public class FenetreAnalyste extends BorderPane{
 
         //les flèches
         BorderPane bpFleche = new BorderPane();
-        ImageView imgFlecheGauche = new ImageView("./fleche.png");
-        ImageView imgFlecheDroite = new ImageView("./fleche.png");
+        ImageView imgFlecheGauche = new ImageView("file:IMG/fleche.png");
+        ImageView imgFlecheDroite = new ImageView("file:IMG/fleche.png");
         imgFlecheDroite.setRotate(180.0);
         imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
         imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
@@ -234,7 +234,10 @@ public class FenetreAnalyste extends BorderPane{
 
         //on rempli les ComboBox
         this.comboAnalyse.getItems().addAll("Camembert", "Histogramme", "Pouet", "Machin");
+        this.comboAnalyse.getSelectionModel().select(0);;
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
+        this.comboClasse.getSelectionModel().select(0);;
+
 
         //on rempli la ComboBox avec les questions
         for (String question : this.lesQuestions){
