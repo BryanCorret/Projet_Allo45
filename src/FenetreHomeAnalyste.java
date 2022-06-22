@@ -153,6 +153,9 @@ public class FenetreHomeAnalyste extends BorderPane {
     public void setSondageId(String id){
         this.sondageid = id;
     }
+    public String getSondageid() {
+        return sondageid;
+    }
 
     public void setSondageNom(String sondageNom) {
         SondageNom = sondageNom;
