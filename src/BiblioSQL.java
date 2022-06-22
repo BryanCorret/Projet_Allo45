@@ -12,10 +12,11 @@ public class BiblioSQL {
       Statement st;
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT MAX(IDU) FROM UTILISATEUR;");    
-        return rs.getInt("IDU");
+        ResultSet rs = st.executeQuery("SELECT MAX(IDU) IDU FROM UTILISATEUR;");  
+        rs.first();  
+        return rs.getInt("IDU") +1;
       } catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return -1;
     }
@@ -92,7 +93,7 @@ public class BiblioSQL {
           st.executeUpdate(requette);
           System.out.println("Le compte a bien été créé.");
         } catch (SQLException e) {
-          e.getMessage();
+          e.printStackTrace();
           System.out.println("Le compte n'a pas été créé.");
         }
         Statement st2;
@@ -235,6 +236,21 @@ public class BiblioSQL {
     idT = type de question (entier, caractère, etc.)
     Valeur = valeur possible de la question (quand la question est à choix fermé)  
 */
+ public static List<String> getListQuestionnaires(ConnexionMySQL laConnection){
+        Statement st;
+        List<String> valeurs = new ArrayList<>();
+        try{
+            st = laConnection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT IDQ, TITRE FROM QUESTIONNAIRE;");
+            while(rs.next()){
+              valeurs.add(rs.getString("IDQ") + " - " + rs.getString("TITRE"));
+            }
+        }
+        catch(Exception ex){
+          ex.getMessage();
+        }
+        return valeurs;
+    }
     public static List<List<Object>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
       List<List<Object>> questionnaire = new ArrayList<List<Object>>();
