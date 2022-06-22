@@ -303,14 +303,14 @@ public class BiblioSQL {
 
 
 
-    public static List<Reponse> getReponse(ConnexionMySQL laConnection, int idQ){
+    public static List<Reponse> getLesReponses(ConnexionMySQL laConnection, int idQ){
       Statement st;
       List<Reponse> reponses = new ArrayList<Reponse>();
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT idQ,numQ,idC,value FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
          while(rs.next()){
-           Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("idQ"), rs.getString("idC"), rs.getString("value"));
+           Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString("idC"), rs.getString("value"));
            reponses.add(res);
          }
        }
