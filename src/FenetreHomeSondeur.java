@@ -24,17 +24,18 @@ public class FenetreHomeSondeur extends BorderPane {
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonDeco;
+    private appliSondage sondage;
     
     
   
-    public FenetreHomeSondeur(Button boutonHome,Button boutonRefresh,Button boutonDeco){
+    public FenetreHomeSondeur(appliSondage sondage,Button boutonHome,Button boutonRefresh,Button boutonDeco){
         super();
+        this.sondage = sondage;
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonDeco = boutonDeco;
         BorderPane borderTop = borderPaneTop();
         HBox hBox = HBoxMid();
-        
         this.setTop(borderTop);
         this.setCenter(hBox);
     }
@@ -44,12 +45,12 @@ public class FenetreHomeSondeur extends BorderPane {
         
         HBox hHome = new HBox();
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
-
-        Label ltitre = new Label("Bienvenue"+"this.getNom()");
+        System.out.println(this.sondage.getutilisateur());
+        Label ltitre = new Label("Bienvenue "+ this.sondage.getutilisateur().getPrenom());
 
         HBox hID = new HBox();
         
-        ImageView profil = new ImageView("./user.jpg");
+        ImageView profil = new ImageView("file:IMG/user.jpg");
         profil.setFitHeight(50);profil.setFitWidth(50);
        
         Button Deco = this.boutonDeco;  
@@ -74,9 +75,9 @@ public class FenetreHomeSondeur extends BorderPane {
     private HBox HBoxMid(){
         HBox hBox = new HBox();
 
-        ImageView Ilogo = new ImageView("./User.png");
-        ImageView IFormul =new ImageView("./Formulaire.png");
-        ImageView IEye =new ImageView("./Eye.png");
+        ImageView Ilogo = new ImageView("file:IMG/User.png");
+        ImageView IFormul =new ImageView("file:IMG/Formulaire.png");
+        ImageView IEye =new ImageView("file:IMG/Eye.png");
         
         Ilogo.setFitHeight(80);Ilogo.setFitWidth(80);
         IFormul.setFitHeight(80);IFormul.setFitWidth(80);
