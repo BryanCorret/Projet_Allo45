@@ -136,21 +136,21 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches,this.connexionSQL);
+         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches,this.ConnexionSQL);
          this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
     
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
-        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this.fleches);
+        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
-        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -164,7 +164,7 @@ public class appliSondage extends Application{
 
      public void modeSondeur(){
          this.fenetreActu = "Sondeur";
-         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.ConnexionSQL); //fenetre pas encore faite
+         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.fleches,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
      }
@@ -212,6 +212,10 @@ public class appliSondage extends Application{
     }
     public void setUtilisateur(Utilisateur u){
         this.utilisateurActu = u;
+    }
+    
+    public Utilisateur getUtilisateur(){
+        return this.utilisateurActu;
     }
     
     public List<String> rechercherSondage(String StrRecherche){
