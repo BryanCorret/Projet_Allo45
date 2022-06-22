@@ -121,6 +121,7 @@ public class FenetreHomeAnalyste extends BorderPane {
         bouton2.setOnAction(new ControleurNavAnalyste(this, this.sondage));
         Button bouton3 = new Button("Rechercher une question",ISearch);
         Button bouton4 = new Button("Inspecter le Sondage",ISave);
+        bouton4.setOnAction(new ControleurInpecterElement(this.sondage, this));
 
         bouton1.setContentDisplay(ContentDisplay.TOP);
         bouton2.setContentDisplay(ContentDisplay.TOP);
