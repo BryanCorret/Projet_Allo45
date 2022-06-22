@@ -97,8 +97,8 @@ public class appliSondage extends Application{
     private BorderPane lesFleches(){
         //les flèches
         BorderPane bpFleche = new BorderPane();
-        ImageView imgFlecheGauche = new ImageView("./fleche.png");
-        ImageView imgFlecheDroite = new ImageView("./fleche.png");
+        ImageView imgFlecheGauche = new ImageView("file:IMG/fleche.png");
+        ImageView imgFlecheDroite = new ImageView("file:IMG/fleche.png");
         imgFlecheDroite.setRotate(180.0);
         imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
         imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
@@ -131,21 +131,21 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches,this.connexionSQL);
+         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches);
          this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
     
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
-        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this.fleches);
+        Pane root = new FenetreHomeSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
-        Pane root = new FenetreHomeAnalyste(this,this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        Pane root = new FenetreHomeAnalyste(this.boutonDeconnexion,this.boutonHome,this.boutonRefresh,this);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -226,11 +226,8 @@ public class appliSondage extends Application{
 
     // public Chart Diagrammes(){
     
-    public void setUtilisateur(Utilisateur user){
-        this.userActu = user;
-    }
     public Utilisateur getutilisateur(){
-        return this.userActu;
+        return this.utilisateurActu;
     }
     // }
     public static void main(String[] args){
