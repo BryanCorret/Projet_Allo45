@@ -51,9 +51,17 @@ public class appliSondage extends Application{
 
     private Sonde sondeActu;
 
+    private ComboBox<String> cbTypediag;
+
+    private ComboBox<String> cbTri;
+
     @Override
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
+        this.cbTypediag = new ComboBox<>();
+        this.cbTypediag.getItems().addAll("Circulaire","Courbes","Bâtons");
+        this.cbTri = new ComboBox<>();
+        this.cbTri.getItems().addAll("Femmes","Hommes","Tous");
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
@@ -74,7 +82,6 @@ public class appliSondage extends Application{
         param.setFitHeight(40);param.setFitWidth(40);
         boutonRefresh.setPrefHeight(45); boutonRefresh.setPrefWidth(55);
         boutonHome.setPrefHeight(45); boutonHome.setPrefWidth(55);
-        
 
         this.boutonHome.setGraphic(home);
         this.boutonRefresh.setGraphic(refresh);
@@ -135,7 +142,7 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this);
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -211,13 +218,15 @@ public class appliSondage extends Application{
 
     }
 
-    public void EnregistrerReponses(){
-
+    public void EnregistrerReponses(Reponse r){
+        BiblioSQL.setReponse(this.ConnexionSQL, r, this.sondeActu, this.utilisateurActu);
     }
 
     public void majAffichageSondeur(){
 
     }
+
+    
     public void setUtilisateur(Utilisateur u){
         this.utilisateurActu = u;
     }
@@ -243,10 +252,6 @@ public class appliSondage extends Application{
     
     public Utilisateur getutilisateur(){
         return this.utilisateurActu;
-    }
-
-    public void setSondageSelectionne(Questionnaire sondageSelectionne) {
-        this.sondageSelectionne = sondageSelectionne;
     }
     // }
     public static void main(String[] args){
