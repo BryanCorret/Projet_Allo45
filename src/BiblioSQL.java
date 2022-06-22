@@ -251,20 +251,15 @@ public class BiblioSQL {
         }
         return valeurs;
     }
-    public static List<List<Object>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
+    public static List<Question> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
-      List<List<Object>> questionnaire = new ArrayList<List<Object>>();
+      List<Question> questionnaire = new ArrayList<Question>();
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
         while(rs.next()){
-          List<Object> question = new ArrayList<Object>();
-          int idQst = rs.getInt("numQ");
-          question.add(idQst);
-          question.add(rs.getString("texteQ"));
-          question.add(rs.getInt("MaxVal"));
-          question.add((rs.getString("idT").charAt(0)));
-          questionnaire.add(question);
+          Question ques = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(5).charAt(0),idQ);
+          questionnaire.add(ques);
         }
       }
       catch (SQLException e) {
@@ -275,15 +270,14 @@ public class BiblioSQL {
     public static Questionnaire getQuestionnaire(ConnexionMySQL laConnexion, int idQ){
       Statement st;
       Questionnaire q;
-      List<List<Object>> questions = getQuestionQuestionnaire(laConnexion, idQ);
+      List<Question> questions = getQuestionQuestionnaire(laConnexion, idQ);
       try{
         st = laConnexion.createStatement();
         ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
         q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
         rs.close();
-        for(List<Object> question:questions){
-          Question ques = new Question((int)question.get(0),(String)question.get(1),(int)question.get(2),(char)question.get(3),idQ);
-          q.addQuestion(ques);
+        for(Question question:questions){
+          q.addQuestion(question);
       }
         return q;
     }
