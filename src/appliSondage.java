@@ -50,6 +50,8 @@ public class appliSondage extends Application{
 
     private Utilisateur utilisateurActu;
 
+    private Sonde sondeActu;
+
     @Override
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
@@ -81,24 +83,24 @@ public class appliSondage extends Application{
         this.boutonDeconnexion.setStyle("-fx-background-color:transparent;");
         this.boutonRefresh.setStyle("-fx-background-color:transparent;");
 
-        ControleurChangementFenetre windowSwitcher = new ControleurChangementFenetre(this);
+        ControleurHome windowSwitcher = new ControleurHome(this);
 
         this.boutonDeconnexion.setOnAction(windowSwitcher);
-        this.boutonInscription.setOnAction(windowSwitcher);
-        this.boutonConnexion.setOnAction(windowSwitcher);
-        this.boutonAnalyste.setOnAction(windowSwitcher);
-        this.boutonSondeur.setOnAction(windowSwitcher);
-        this.boutonDonneesBrutes.setOnAction(windowSwitcher);
+        //this.boutonInscription.setOnAction(windowSwitcher);
+        //this.boutonConnexion.setOnAction(windowSwitcher);
+        //this.boutonAnalyste.setOnAction(windowSwitcher);
+        //this.boutonSondeur.setOnAction(windowSwitcher);
+        //this.boutonDonneesBrutes.setOnAction(windowSwitcher);
         this.boutonHome.setOnAction(windowSwitcher);
-        this.boutonParam.setOnAction(windowSwitcher);
+        //this.boutonParam.setOnAction(windowSwitcher);
         this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
     private BorderPane lesFleches(){
         //les flèches
         BorderPane bpFleche = new BorderPane();
-        ImageView imgFlecheGauche = new ImageView("./fleche.png");
-        ImageView imgFlecheDroite = new ImageView("./fleche.png");
+        ImageView imgFlecheGauche = new ImageView("file:IMG/fleche.png");
+        ImageView imgFlecheDroite = new ImageView("file:IMG/fleche.png");
         imgFlecheDroite.setRotate(180.0);
         imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
         imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
@@ -131,21 +133,21 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches,this.connexionSQL);
-         this.scene.setRoot(root);
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches);
+        this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
     
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
-        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this.fleches);
+        Pane root = new FenetreHomeSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
-        Pane root = new FenetreHomeAnalyste(this,this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
+        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -159,7 +161,7 @@ public class appliSondage extends Application{
 
      public void modeSondeur(){
          this.fenetreActu = "Sondeur";
-         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.ConnexionSQL); //fenetre pas encore faite
+         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.fleches,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
      }
@@ -194,6 +196,13 @@ public class appliSondage extends Application{
         return this.fenetreActu;
     }
 
+    public void setSondeActu(Sonde sonde){
+        this.sondeActu = sonde;
+    }
+    public Sonde getSondeActu(){
+        return this.sondeActu;
+    }
+
     public void majAffichageAnalyste(){
 
     }
@@ -209,10 +218,19 @@ public class appliSondage extends Application{
         this.utilisateurActu = u;
     }
     
+    public Utilisateur getUtilisateur(){
+        return this.utilisateurActu;
+    }
+    
     public List<String> rechercherSondage(String StrRecherche){
         List<String> listeDesSondages = new ArrayList<String>();
         return listeDesSondages;
     }
+
+    public void setSondageSelectionne(Questionnaire sondageSelectionne) {
+        this.sondageSelectionne = sondageSelectionne;
+    }
+    
     public ConnexionMySQL getConnexion(){
         return this.ConnexionSQL;
     }
@@ -223,14 +241,9 @@ public class appliSondage extends Application{
     public void quitter(){
         Platform.exit();
     }
-
-    // public Chart Diagrammes(){
     
-    public void setUtilisateur(Utilisateur user){
-        this.userActu = user;
-    }
     public Utilisateur getutilisateur(){
-        return this.userActu;
+        return this.utilisateurActu;
     }
     // }
     public static void main(String[] args){

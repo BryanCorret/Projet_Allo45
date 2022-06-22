@@ -12,10 +12,11 @@ public class BiblioSQL {
       Statement st;
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT MAX(IDU) FROM UTILISATEUR;");    
-        return rs.getInt("IDU");
+        ResultSet rs = st.executeQuery("SELECT MAX(IDU) IDU FROM UTILISATEUR;");  
+        rs.first();  
+        return rs.getInt("IDU") +1;
       } catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return -1;
     }
@@ -92,7 +93,7 @@ public class BiblioSQL {
           st.executeUpdate(requette);
           System.out.println("Le compte a bien été créé.");
         } catch (SQLException e) {
-          e.getMessage();
+          e.printStackTrace();
           System.out.println("Le compte n'a pas été créé.");
         }
         Statement st2;
@@ -183,31 +184,29 @@ public class BiblioSQL {
     }
 
     //dans la bd, il cherche la question contenant le mot recherché
-    public static List<List<String>> getQuestion(ConnexionMySQL laConnection, String mot){
-        Statement st;
-        List<List<String>> questionsSondage = new ArrayList<>();
-        try{
-            st = laConnection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM QUESTIONNAIRE;");
-            while(rs.next()){
-              for(List<String> questions: BiblioSQL.getQuestionQuestionnaire(laConnection, rs.getInt("IDQ"))){
-                List<String> temp = new ArrayList<>();
-                for(String quest: questions){
-                  if(quest.contains(mot))
-                  temp.add(quest);
-                }
-                questionsSondage.add(temp);
-              }
-            }
-        }
-        catch(Exception ex){
-          ex.getMessage();
-        }
-        return questionsSondage;
-
-
-    }
- */
+    // public static List<List<String>> getQuestion(ConnexionMySQL laConnection, String mot){
+    //     Statement st;
+    //     List<List<String>> questionsSondage = new ArrayList<>();
+    //     try{
+    //         st = laConnection.createStatement();
+    //         ResultSet rs = st.executeQuery("SELECT * FROM QUESTIONNAIRE;");
+    //         while(rs.next()){
+    //           for(List<String> questions: BiblioSQL.getQuestionQuestionnaire(laConnection, rs.getInt("IDQ"))){
+    //             List<String> temp = new ArrayList<>();
+    //             for(String quest: questions){
+    //               if(quest.contains(mot))
+    //               temp.add(quest);
+    //             }
+    //             questionsSondage.add(temp);
+    //           }
+    //         }
+    //     }
+    //     catch(Exception ex){
+    //       ex.getMessage();
+    //     }
+    //     return questionsSondage;
+    // }
+ 
 
 
     //récupérer les valeurs possibles d'une question
@@ -237,20 +236,34 @@ public class BiblioSQL {
     idT = type de question (entier, caractère, etc.)
     Valeur = valeur possible de la question (quand la question est à choix fermé)  
 */
-    public static List<List<String>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
+ public static List<String> getListQuestionnaires(ConnexionMySQL laConnection){
+        Statement st;
+        List<String> valeurs = new ArrayList<>();
+        try{
+            st = laConnection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT IDQ, TITRE FROM QUESTIONNAIRE;");
+            while(rs.next()){
+              valeurs.add(rs.getString("IDQ") + " - " + rs.getString("TITRE"));
+            }
+        }
+        catch(Exception ex){
+          ex.getMessage();
+        }
+        return valeurs;
+    }
+    public static List<List<Object>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
-      List<List<String>> questionnaire = new ArrayList<List<String>>();
+      List<List<Object>> questionnaire = new ArrayList<List<Object>>();
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
         while(rs.next()){
-          List<String> question = new ArrayList<String>();
+          List<Object> question = new ArrayList<Object>();
           int idQst = rs.getInt("numQ");
-          String idQstS = String.valueOf(idQst);
-          question.add(idQstS);
+          question.add(idQst);
           question.add(rs.getString("texteQ"));
-          question.add(rs.getString("MaxVal"));
-          question.add(rs.getString("idT"));
+          question.add(rs.getInt("MaxVal"));
+          question.add((rs.getString("idT").charAt(0)));
           questionnaire.add(question);
         }
       }
@@ -258,7 +271,27 @@ public class BiblioSQL {
         e.getMessage();
       }
       return questionnaire;
-    } 
+    }
+    public static Questionnaire getQuestionnaire(ConnexionMySQL laConnexion, int idQ){
+      Statement st;
+      Questionnaire q;
+      List<List<Object>> questions = getQuestionQuestionnaire(laConnexion, idQ);
+      try{
+        st = laConnexion.createStatement();
+        ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
+        rs.close();
+        for(List<Object> question:questions){
+          Question ques = new Question((int)question.get(0),(String)question.get(1),(int)question.get(2),(char)question.get(3),idQ);
+          q.addQuestion(ques);
+      }
+        return q;
+    }
+      catch(SQLException e){
+        e.getMessage();
+      }
+      return null;
+    }
 
   public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
     Statement st;
@@ -275,7 +308,7 @@ public class BiblioSQL {
 
 
 
-  /**
+  
      public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){
        Statement st;
        List<String> reponses = new ArrayList<String>();
@@ -286,11 +319,12 @@ public class BiblioSQL {
            reponses.add(rs.getString("texteR"));
          }
        }
-      String.valueOf(value); catch (SQLException e) {
+       catch (SQLException e) {
          e.getMessage();
        }
+       return reponses;
      }
-     */
+     
 
 
   // a modif
@@ -324,4 +358,14 @@ public class BiblioSQL {
     //     }
     //     return reponses;
     //  }
+    public static void exit(ConnexionMySQL laConnexion){
+      Statement st;
+      try {
+        st = laConnexion.createStatement();
+        ResultSet rs = st.executeQuery("exit");
+    }
+      catch(SQLException e){
+
+      }
+}
 }
