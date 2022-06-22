@@ -12,10 +12,11 @@ public class BiblioSQL {
       Statement st;
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT MAX(IDU) FROM UTILISATEUR;");    
-        return rs.getInt("IDU");
+        ResultSet rs = st.executeQuery("SELECT MAX(IDU) IDU FROM UTILISATEUR;");  
+        rs.first();  
+        return rs.getInt("IDU") +1;
       } catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return -1;
     }
@@ -92,7 +93,7 @@ public class BiblioSQL {
           st.executeUpdate(requette);
           System.out.println("Le compte a bien été créé.");
         } catch (SQLException e) {
-          e.getMessage();
+          e.printStackTrace();
           System.out.println("Le compte n'a pas été créé.");
         }
         Statement st2;
@@ -235,20 +236,30 @@ public class BiblioSQL {
     idT = type de question (entier, caractère, etc.)
     Valeur = valeur possible de la question (quand la question est à choix fermé)  
 */
-    public static List<List<Object>> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
+ public static List<String> getListQuestionnaires(ConnexionMySQL laConnection){
+        Statement st;
+        List<String> valeurs = new ArrayList<>();
+        try{
+            st = laConnection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT IDQ, TITRE FROM QUESTIONNAIRE;");
+            while(rs.next()){
+              valeurs.add(rs.getString("IDQ") + " - " + rs.getString("TITRE"));
+            }
+        }
+        catch(Exception ex){
+          ex.getMessage();
+        }
+        return valeurs;
+    }
+    public static List<Question> getQuestionQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
-      List<List<Object>> questionnaire = new ArrayList<List<Object>>();
+      List<Question> questionnaire = new ArrayList<Question>();
       try {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + ";");
         while(rs.next()){
-          List<Object> question = new ArrayList<Object>();
-          int idQst = rs.getInt("numQ");
-          question.add(idQst);
-          question.add(rs.getString("texteQ"));
-          question.add(rs.getInt("MaxVal"));
-          question.add((rs.getString("idT").charAt(0)));
-          questionnaire.add(question);
+          Question ques = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(5).charAt(0),idQ);
+          questionnaire.add(ques);
         }
       }
       catch (SQLException e) {
@@ -259,15 +270,14 @@ public class BiblioSQL {
     public static Questionnaire getQuestionnaire(ConnexionMySQL laConnexion, int idQ){
       Statement st;
       Questionnaire q;
-      List<List<Object>> questions = getQuestionQuestionnaire(laConnexion, idQ);
+      List<Question> questions = getQuestionQuestionnaire(laConnexion, idQ);
       try{
         st = laConnexion.createStatement();
         ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
         q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
         rs.close();
-        for(List<Object> question:questions){
-          Question ques = new Question((int)question.get(0),(String)question.get(1),(int)question.get(2),(char)question.get(3),idQ);
-          q.addQuestion(ques);
+        for(Question question:questions){
+          q.addQuestion(question);
       }
         return q;
     }
@@ -275,7 +285,7 @@ public class BiblioSQL {
         e.getMessage();
       }
       return null;
-    } 
+    }
 
   public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
     Statement st;
@@ -303,7 +313,7 @@ public class BiblioSQL {
            reponses.add(res);
          }
        }
-      catch (SQLException e) {
+       catch (SQLException e) {
          e.getMessage();
        }
        return reponses;
@@ -342,4 +352,14 @@ public class BiblioSQL {
     //     }
     //     return reponses;
     //  }
+    public static void exit(ConnexionMySQL laConnexion){
+      Statement st;
+      try {
+        st = laConnexion.createStatement();
+        ResultSet rs = st.executeQuery("exit");
+    }
+      catch(SQLException e){
+
+      }
+}
 }
