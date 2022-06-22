@@ -292,7 +292,7 @@ public class BiblioSQL {
 
 
 
-  /**
+  
      public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){
        Statement st;
        List<String> reponses = new ArrayList<String>();
@@ -303,11 +303,12 @@ public class BiblioSQL {
            reponses.add(rs.getString("texteR"));
          }
        }
-      String.valueOf(value); catch (SQLException e) {
+       catch (SQLException e) {
          e.getMessage();
        }
+       return reponses;
      }
-     */
+     
 
 
   // a modif
@@ -341,4 +342,14 @@ public class BiblioSQL {
     //     }
     //     return reponses;
     //  }
+    public static void exit(ConnexionMySQL laConnexion){
+      Statement st;
+      try {
+        st = laConnexion.createStatement();
+        ResultSet rs = st.executeQuery("exit");
+    }
+      catch(SQLException e){
+
+      }
+}
 }
