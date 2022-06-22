@@ -163,7 +163,7 @@ public class appliSondage extends Application{
 
     public void modeDonneesBrutes(){
         this.fenetreActu = "Donnees";
-        Pane root = new FenetreDonneesBrutes(); //fenetre pas encore faite
+        Pane root = new FenetreDonneesBrutes(this.boutonHome, this.boutonRefresh, this.boutonDeconnexion,this.boutonParam, this); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -253,7 +253,36 @@ public class appliSondage extends Application{
     public Utilisateur getutilisateur(){
         return this.utilisateurActu;
     }
-    // }
+
+    public void setSondageSelectionne(Questionnaire sondageSelectionne) {
+        this.sondageSelectionne = sondageSelectionne;
+    }
+    
+    public PieChart createPieChart(int id, List<Reponse> lReponses){ // id de la question
+        int sommetotReponse = 0;
+        PieChart Circulaire = new PieChart();
+        for (Reponse r : lReponses) { // somme de toute les reponses
+            // sommetotReponse += BiblioSQL.getNbReponse(id,r.toString());
+        }
+
+        for (Reponse r : lReponses) { // somme de toute les reponses
+            Circulaire.getData().setAll (
+            // new PieChart.Data (r.toString(), BiblioSQL.getNbReponse(id,r.toString())/sommetotReponse)
+            );
+        }
+
+        return Circulaire;
+
+    }
+
+    
+    public PieChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
+    
+
+    }
+
+
+
     public static void main(String[] args){
         Application.launch(args);
     }
