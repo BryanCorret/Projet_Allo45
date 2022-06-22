@@ -35,6 +35,7 @@ public class FenetreHomeAnalyste extends BorderPane {
   
     public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, appliSondage s){
         super();
+        this.sondage = sondage;
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonDeco = boutonDeco;
