@@ -288,6 +288,32 @@ public class BiblioSQL {
       return null;
     }
 
+    public static Questionnaire getQuestionnaire(ConnexionMySQL laConnexion, String nomQ){
+      Statement st;
+      Questionnaire q;
+      try{
+        st = laConnexion.createStatement();
+        ResultSet rs1 = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE titre = '" + nomQ + "';");
+        rs1.next();
+        int idQ = rs1.getInt("idQ");
+
+        List<Question> questions = getQuestionQuestionnaire(laConnexion, idQ);
+        ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
+        rs.close();
+        for(Question question:questions){
+          q.addQuestion(question);
+      }
+        return q;
+    }
+      catch(SQLException e){
+        e.getMessage();
+      }
+      return null;
+    }
+
+
+
   public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
     Statement st;
     try {
@@ -310,7 +336,7 @@ public class BiblioSQL {
         st = laConnection.createStatement();
         ResultSet rs = st.executeQuery("SELECT idQ,numQ,idC,value FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
          while(rs.next()){
-           Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("idQ"), rs.getString("idC"), rs.getString("value"));
+           Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString("idC"), rs.getString("value"));
            reponses.add(res);
          }
        }
@@ -432,6 +458,20 @@ public class BiblioSQL {
       Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
       return sond;
     }
+
+    public static Questionnaire getQuestionDUQuestionnaire(ConnexionMySQL laConnection, String nomQuestionnaire){
+      Statement st;
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select numSond from INTERROGER where idQ ="+idQ+";");
+        while(rs.next()){
+        }        
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+    }
+
 
 
   // a modif
