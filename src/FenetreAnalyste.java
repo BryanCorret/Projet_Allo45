@@ -8,11 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -51,7 +47,7 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboClasse;
     private ComboBox<String> comboQuestion;
 
-    //la lise des questions
+    //la liste des questions
     private Questionnaire questionnaire;
     private Question questionActuel;
 
@@ -68,7 +64,9 @@ public class FenetreAnalyste extends BorderPane{
         this.boutonParametre = boutonParametre;
         this.boutonDonneeBrute = new Button("Données Brutes");
         this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
-        this.Sondageactu = "Circulaire";
+
+        this.app = app;
+
         this.comboAnalyse = new ComboBox<>();
         this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
         this.comboClasse = new ComboBox<>();
@@ -203,9 +201,6 @@ public class FenetreAnalyste extends BorderPane{
         series3.getData().add(new XYChart.Data("Ne sais pas", 3));      
 
  
-        bc.getData().addAll(series1, series2 ,series3);
-        vbox.getChildren().add(bc);
-        // vbox.getChildren().add(this.sondage.createBarChart());
 
         System.out.println("Histograme");
         
@@ -226,10 +221,9 @@ public class FenetreAnalyste extends BorderPane{
         vbox.getChildren().addAll(vboxGraphique, titreCommentaire, commentaire);
 
         vbox.setPadding(new Insets(5,5,0,5));
-        
+        }
         return vbox;
     }
-
     public VBox leftVBox(){
 
         //une grande vbox contenant deux vbox

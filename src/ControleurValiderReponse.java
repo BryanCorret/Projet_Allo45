@@ -15,9 +15,9 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
     private Utilisateur utilisateur;
 
 
-    public ControleurValiderReponse(FenetreSondeur sondeur, ConnexionMySQL laConnexionMySQL, Sonde sonde, Utilisateur utilisateur){
+    public ControleurValiderReponse(FenetreSondeur sondeur, appliSondage appli, ConnexionMySQL laConnexionMySQL, Sonde sonde, Utilisateur utilisateur){
         this.sondeur = sondeur;
-        this.appli = appli; //c'est en jaune car on ne l'utilise que dans un try
+        this.appli = appli;
 
         this.laConnexionMySQL = laConnexionMySQL;
         this.sonde = sonde;
@@ -55,12 +55,11 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
                 for (int i=0;i<question.length;i++){
                     //on prends chaque donnée
                     String donnee[] = question[i].split("/");
-                    //pour le numéros des réponses
-                    int numReponse = 0;
 
                     //pour chaque donnée de la réponse (sauf le premier, i.e. le TextArea, le texte et le numéro de la question)
                     for (int j=3;j<donnee[i].length();j++){
-                        Reponse rep = new Reponse(this.sondeur.getSondage().getIdQ(), Integer.valueOf(donnee[0]), numReponse, donnee[j]);
+                        //on modélise une réponse avec les données du fichier
+                        Reponse rep = new Reponse(this.sondeur.getSondage().getIdQ(), Integer.valueOf(donnee[0]), this.sonde.getCaracteristique(), donnee[j]);
                         BiblioSQL.setReponse(this.laConnexionMySQL, rep, this.sonde, this.utilisateur);
                     }
                 }
@@ -79,7 +78,7 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
             }catch (IOException e){System.out.println("ERREUR 405");}
 
         }
-        //on ferme simplement la feneêtre pop-up si la réponse est non
+        //on ferme simplement la fenêtre pop-up si la réponse est non
         
     } 
 
