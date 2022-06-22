@@ -131,33 +131,21 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-<<<<<<< HEAD
-         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches,this.ConnexionSQL);
-=======
-         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonParam,this.boutonRefresh,this.sondageSelectionne,this.fleches);
->>>>>>> 6ad453b0c28e11d6add2e7ad3c6bf64c8ee0eb8a
-         this.scene.setRoot(root);
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches);
+        this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
     
     public void modeHomeSondeur(){
         this.fenetreActu = "HomeSondeur";
-<<<<<<< HEAD
-        Pane root = new FenetreHomeSondeur(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
-=======
         Pane root = new FenetreHomeSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonDeconnexion);
->>>>>>> 6ad453b0c28e11d6add2e7ad3c6bf64c8ee0eb8a
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
 
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
-<<<<<<< HEAD
         Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this);
-=======
-        Pane root = new FenetreHomeAnalyste(this.boutonDeconnexion,this.boutonHome,this.boutonRefresh,this);
->>>>>>> 6ad453b0c28e11d6add2e7ad3c6bf64c8ee0eb8a
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -171,7 +159,7 @@ public class appliSondage extends Application{
 
      public void modeSondeur(){
          this.fenetreActu = "Sondeur";
-         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.fleches,this.ConnexionSQL); //fenetre pas encore faite
+         Pane root = new FenetreSondeur(this.boutonHome,this.boutonRefresh,this.boutonParam,BiblioSQL.getQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ()),this.fleches,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
      }

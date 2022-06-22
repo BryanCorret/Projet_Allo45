@@ -183,7 +183,6 @@ public class BiblioSQL {
     }
 
     //dans la bd, il cherche la question contenant le mot recherché
-<<<<<<< HEAD
     // public static List<List<String>> getQuestion(ConnexionMySQL laConnection, String mot){
     //     Statement st;
     //     List<List<String>> questionsSondage = new ArrayList<>();
@@ -207,33 +206,6 @@ public class BiblioSQL {
     //     return questionsSondage;
     // }
  
-=======
-    public static List<List<String>> getQuestion(ConnexionMySQL laConnection, String mot){
-        Statement st;
-        List<List<String>> questionsSondage = new ArrayList<>();
-        try{
-            st = laConnection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM QUESTIONNAIRE;");
-            while(rs.next()){
-              for(List<String> questions: BiblioSQL.getQuestionQuestionnaire(laConnection, rs.getInt("IDQ"))){
-                List<String> temp = new ArrayList<>();
-                for(String quest: questions){
-                  if(quest.contains(mot))
-                  temp.add(quest);
-                }
-                questionsSondage.add(temp);
-              }
-            }
-        }
-        catch(Exception ex){
-          ex.getMessage();
-        }
-        return questionsSondage;
-
-
-    }
- */
->>>>>>> 6ad453b0c28e11d6add2e7ad3c6bf64c8ee0eb8a
 
 
     //récupérer les valeurs possibles d'une question
