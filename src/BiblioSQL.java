@@ -275,7 +275,7 @@ public class BiblioSQL {
         e.getMessage();
       }
       return null;
-    } 
+    }
 
   public static void setReponse(ConnexionMySQL laConnexion, Reponse rep, Sonde sonde, Utilisateur utilisateur){
     Statement st;

@@ -50,6 +50,8 @@ public class appliSondage extends Application{
 
     private Utilisateur utilisateurActu;
 
+    private Sonde sondeActu;
+
     @Override
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
@@ -194,6 +196,13 @@ public class appliSondage extends Application{
         return this.fenetreActu;
     }
 
+    public void setSondeActu(Sonde sonde){
+        this.sondeActu = sonde;
+    }
+    public Sonde getSondeActu(){
+        return this.sondeActu;
+    }
+
     public void majAffichageAnalyste(){
 
     }
@@ -232,8 +241,6 @@ public class appliSondage extends Application{
     public void quitter(){
         Platform.exit();
     }
-
-    // public Chart Diagrammes(){
     
     public Utilisateur getutilisateur(){
         return this.utilisateurActu;
