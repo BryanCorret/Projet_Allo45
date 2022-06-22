@@ -236,12 +236,12 @@ public class FenetreSondeur extends BorderPane {
         Label ltitre = new Label("Sommaire: ");
         vDroite.getChildren().addAll(ltitre);
 
-        for(List<Object> elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
-            Button bouton =new Button((String) elem.get(1));
-            bouton.setStyle("-fx-background-color:transparent;");
+        // for(List<Object> elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
+            // Button bouton =new Button((String) elem.get(1));
+            // bouton.setStyle("-fx-background-color:transparent;");
             
-            vDroite.getChildren().add(bouton);
-        }
+            // vDroite.getChildren().add(bouton);
+        // }
 
         vDroite.setStyle("-fx-background-color: pink;");
         return vDroite;
