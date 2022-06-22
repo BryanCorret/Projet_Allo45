@@ -292,22 +292,23 @@ public class BiblioSQL {
 
 
 
-  /**
-     public static List<String> getReponse(ConnexionMySQL laConnection, int idQ){
-       Statement st;
-       List<String> reponses = new ArrayList<String>();
-       try {
-         st = laConnection.createStatement();
-         ResultSet rs = st.executeQuery("SELECT * FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
+    public static List<Reponse> getReponse(ConnexionMySQL laConnection, int idQ){
+      Statement st;
+      List<Reponse> reponses = new ArrayList<Reponse>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT idQ,numQ,idC,value FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
          while(rs.next()){
-           reponses.add(rs.getString("texteR"));
+           Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("idQ"), rs.getString("idC"), rs.getString("value"));
+           reponses.add(res);
          }
        }
-      String.valueOf(value); catch (SQLException e) {
+      catch (SQLException e) {
          e.getMessage();
        }
+       return reponses;
      }
-     */
+     
 
 
   // a modif
