@@ -50,6 +50,8 @@ public class appliSondage extends Application{
 
     private Utilisateur utilisateurActu;
 
+    private Sonde sondeActu;
+
     @Override
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
@@ -85,16 +87,16 @@ public class appliSondage extends Application{
         this.boutonDeconnexion.setStyle("-fx-background-color:transparent;");
         this.boutonRefresh.setStyle("-fx-background-color:transparent;");
 
-        ControleurChangementFenetre windowSwitcher = new ControleurChangementFenetre(this);
+        ControleurHome windowSwitcher = new ControleurHome(this);
 
         this.boutonDeconnexion.setOnAction(windowSwitcher);
-        this.boutonInscription.setOnAction(windowSwitcher);
-        this.boutonConnexion.setOnAction(windowSwitcher);
-        this.boutonAnalyste.setOnAction(windowSwitcher);
-        this.boutonSondeur.setOnAction(windowSwitcher);
-        this.boutonDonneesBrutes.setOnAction(windowSwitcher);
+        //this.boutonInscription.setOnAction(windowSwitcher);
+        //this.boutonConnexion.setOnAction(windowSwitcher);
+        //this.boutonAnalyste.setOnAction(windowSwitcher);
+        //this.boutonSondeur.setOnAction(windowSwitcher);
+        //this.boutonDonneesBrutes.setOnAction(windowSwitcher);
         this.boutonHome.setOnAction(windowSwitcher);
-        this.boutonParam.setOnAction(windowSwitcher);
+        //this.boutonParam.setOnAction(windowSwitcher);
         this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
@@ -198,6 +200,13 @@ public class appliSondage extends Application{
         return this.fenetreActu;
     }
 
+    public void setSondeActu(Sonde sonde){
+        this.sondeActu = sonde;
+    }
+    public Sonde getSondeActu(){
+        return this.sondeActu;
+    }
+
     public void majAffichageAnalyste(){
 
     }
@@ -221,6 +230,11 @@ public class appliSondage extends Application{
         List<String> listeDesSondages = new ArrayList<String>();
         return listeDesSondages;
     }
+
+    public void setSondageSelectionne(Questionnaire sondageSelectionne) {
+        this.sondageSelectionne = sondageSelectionne;
+    }
+    
     public ConnexionMySQL getConnexion(){
         return this.ConnexionSQL;
     }
@@ -231,8 +245,6 @@ public class appliSondage extends Application{
     public void quitter(){
         Platform.exit();
     }
-
-    // public Chart Diagrammes(){
     
     public Utilisateur getutilisateur(){
         return this.utilisateurActu;

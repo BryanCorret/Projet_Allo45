@@ -29,7 +29,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.*;
 
-import javafx.scene.layout.*;
+import javafx.scene.layout;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
