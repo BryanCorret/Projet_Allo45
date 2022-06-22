@@ -69,11 +69,15 @@ public class appliSondage extends Application{
         ImageView home = new ImageView("file:IMG/home.png");
         ImageView refresh = new ImageView("file:IMG/reload.png");
         ImageView deco = new ImageView("file:IMG/Disconnect.png");
-        ImageView param = new ImageView("file:IMG/menu.jpg");
+        ImageView param = new ImageView("file:IMG/parametre.png");
         home.setFitHeight(30);home.setFitWidth(30);
         refresh.setFitHeight(30);refresh.setFitWidth(30);
-        deco.setFitHeight(30);deco.setFitWidth(30);
-        param.setFitHeight(30);deco.setFitWidth(30);
+        deco.setFitHeight(40);deco.setFitWidth(50);
+        param.setFitHeight(40);param.setFitWidth(40);
+        boutonRefresh.setPrefHeight(45); boutonRefresh.setPrefWidth(55);
+        boutonHome.setPrefHeight(45); boutonHome.setPrefWidth(55);
+        
+
         this.boutonHome.setGraphic(home);
         this.boutonRefresh.setGraphic(refresh);
         this.boutonDeconnexion.setGraphic(deco);
@@ -122,7 +126,7 @@ public class appliSondage extends Application{
 
     @Override
     public void start(Stage stage){
-        Pane root = new FenetreConnexion(this);
+        Pane root = new FenetreHomeAnalyste(this.boutonHome, this.boutonRefresh, this.boutonDeconnexion,this.boutonParam, this);
         this.scene = new Scene(root);
         this.fenetreActu = "Connexion";
         stage.setScene(scene);
@@ -147,7 +151,7 @@ public class appliSondage extends Application{
 
     public void modeHomeAnalyste(){
         this.fenetreActu = "HomeAnalyste";
-        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this);
+        Pane root = new FenetreHomeAnalyste(this.boutonHome,this.boutonRefresh,this.boutonDeconnexion,this.boutonParam,this);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -245,6 +249,10 @@ public class appliSondage extends Application{
     
     public Utilisateur getutilisateur(){
         return this.utilisateurActu;
+    }
+
+    public void setSondageSelectionne(Questionnaire sondageSelectionne) {
+        this.sondageSelectionne = sondageSelectionne;
     }
     // }
     public static void main(String[] args){
