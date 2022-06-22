@@ -214,6 +214,8 @@ public class FenetreAnalyste extends BorderPane{
         for (Question question : this.questionnaire.getListQ()){
             this.comboQuestion.getItems().add(question.getTextQ());
         }
+        this.comboQuestion.getSelectionModel().select(0);
+
 
         vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
         vboxHaute.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
