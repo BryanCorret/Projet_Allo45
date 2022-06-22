@@ -1,6 +1,3 @@
-import javax.imageio.plugins.tiff.TIFFDirectory;
-import javax.management.loading.PrivateClassLoader;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 // import javafx.beans.binding.Bindings;
@@ -36,7 +33,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
-import javafx.scene.shape.Circle;
 
 
 
@@ -52,11 +48,14 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboQuestion;
 
     //la lise des questions
-    private String sondage;
-    private List<String> lesQuestions;
-    private String questionActuel;
+    private Questionnaire questionnaire;
+    private Question questionActuel;
+
+    private TextArea commentaire;
+
+    private BorderPane lesFleches;
     
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, String sondage){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -68,9 +67,12 @@ public class FenetreAnalyste extends BorderPane{
         this.comboClasse = new ComboBox<>();
         this.comboQuestion = new ComboBox<>();
 
-        this.sondage = sondage;
-        this.lesQuestions = new ArrayList<>();
-        this.questionActuel = "";
+        this.questionnaire = questionnaire;
+        this.questionActuel = this.questionnaire.getListQ().get(0); //la première question
+
+        this.commentaire = new TextArea();
+
+        this.lesFleches = lesFleches;
 
 
         //on créer notre fenêtre
@@ -87,42 +89,34 @@ public class FenetreAnalyste extends BorderPane{
     }
 
     //les getteurs
-    public String getQuestionActuel(){
+    public Question getQuestionActuel(){
         return this.questionActuel;
     }
-    public String getSondage(){
-        return this.sondage;
+    public Questionnaire getQuesionnaire(){
+        return this.questionnaire;
     }
-    public List<String> getLesQuestions(){
-        return this.lesQuestions;
+    public TextArea getCommentaire(){
+        return this.commentaire;
     }
     
-    public String getTextComboBoxAnalyse() throws NullPointerException{
-        try{
-            return this.comboAnalyse.getValue();
-        }catch (NullPointerException e){
-            throw new NullPointerException();
-        }
+    public ComboBox<String>  getComboBoxAnalyse() {
+        return this.comboAnalyse;
+
     }
-    public String getTextComboBoxClasse() throws NullPointerException{
-        try{
-            return this.comboClasse.getValue();
-        }catch (NullPointerException e){
-            throw new NullPointerException();
-        }
+    public ComboBox<String>  getComboBoxClasse() {
+        return this.comboClasse;
     }
-    public String getTextComboBoxQuestion() throws NullPointerException{
-        try{
-            return this.comboQuestion.getValue();
-        }catch (NullPointerException e){
-            throw new NullPointerException();
-        }
+    public ComboBox<String> getComboBoxQuestion() {
+        return this.comboQuestion;
     }
 
 
     //les setteurs
-    public void setQuestionActuel(String question){
+    public void setQuestionActuel(Question question){
         this.questionActuel = question;
+    }
+    public void setCommentaire(String comment){
+        this.commentaire.setText(comment);
     }
 
 
@@ -134,12 +128,12 @@ public class FenetreAnalyste extends BorderPane{
         HBox hboxBoutons = new HBox();
         hboxBoutons.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
-        Label titreSondage = new Label(this.sondage);
+        Label titreSondage = new Label(this.questionnaire.getTitreQ());
         titreSondage.setFont(Font.font(" Arial ",FontWeight.BOLD,15));
 
         HBox hboxAvatar = new HBox();
 
-        ImageView profil = new ImageView("./user.jpg");
+        ImageView profil = new ImageView("file:IMG/user.jpg");
         profil.setFitHeight(50);profil.setFitWidth(50);
 
         hboxAvatar.getChildren().addAll(profil, this.boutonParametre, new Label(""));
@@ -163,7 +157,7 @@ public class FenetreAnalyste extends BorderPane{
         VBox vboxGraphique = new VBox();
 
         PieChart tarte = new PieChart();
-        Label titreGraphique = new Label("\n    " + this.questionActuel);
+        Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
 
         tarte.getData ().setAll (
@@ -174,38 +168,15 @@ public class FenetreAnalyste extends BorderPane{
         tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
 
 
-        //les flèches
-        BorderPane bpFleche = new BorderPane();
-        ImageView imgFlecheGauche = new ImageView("./fleche.png");
-        ImageView imgFlecheDroite = new ImageView("./fleche.png");
-        imgFlecheDroite.setRotate(180.0);
-        imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
-        imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
-
-        Button boutonFlecheGauche = new Button("", imgFlecheGauche);
-        Button boutonFlecheDroite = new Button("", imgFlecheDroite);
-        //cache la partie visible des boutons
-        boutonFlecheGauche.setStyle("-fx-background-color:transparent;");
-        boutonFlecheDroite.setStyle("-fx-background-color:transparent;");
-
-        //pour les différencier dans le Controlleur Fleche
-        boutonFlecheGauche.setId("flecheGauche");
-        boutonFlecheDroite.setId("flecheDroite");
-
-        bpFleche.setRight(boutonFlecheDroite);
-        bpFleche.setLeft(boutonFlecheGauche);
-
-
-        vboxGraphique.getChildren().addAll(titreGraphique, tarte, bpFleche);
+        vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
 
         //la partie commentaire
         Label titreCommentaire = new Label("        Commentaire");
-        TextArea commentaire = new TextArea("Lorem ipsum t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).");
-        commentaire.setWrapText(true);
-        commentaire.setPrefHeight(100.0); // taille maximal
+        this.commentaire.setWrapText(true);
+        this.commentaire.setPrefHeight(100.0); // taille maximal
 
         //on ajoute tout
         vbox.getChildren().addAll(vboxGraphique, titreCommentaire, commentaire);
@@ -237,8 +208,8 @@ public class FenetreAnalyste extends BorderPane{
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
 
         //on rempli la ComboBox avec les questions
-        for (String question : this.lesQuestions){
-            this.comboQuestion.getItems().add(question);
+        for (Question question : this.questionnaire.getListQ()){
+            this.comboQuestion.getItems().add(question.getTextQ());
         }
 
         vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
