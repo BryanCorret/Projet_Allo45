@@ -38,11 +38,8 @@ public class ControleurConnexion implements EventHandler<ActionEvent> {
         }
         catch(Exception ex){
             System.out.println("Connexion échouée");
-            Alert AlertErreur = new Alert(Alert.AlertType.INFORMATION);
-            AlertErreur.setTitle("Connexion échouée");
-            AlertErreur.setHeaderText("Erreur");
-            AlertErreur.setContentText("Votre nom d'utilisateur ou votre mot de passe est incorrect");
-            AlertErreur.showAndWait();
+            this.fenConnexion.setErreur(true);
+            this.fenConnexion.majVue();
         }  
     } 
 
