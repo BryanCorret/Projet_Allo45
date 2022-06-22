@@ -28,12 +28,12 @@ public class FenetreHomeSondeur extends BorderPane {
     
     
   
-    public FenetreHomeSondeur(appliSondage sondage,Button boutonHome,Button boutonRefresh,Button boutonDeco){
+    public FenetreHomeSondeur(appliSondage sondage, Button boutonHome2,Button boutonRefresh,Button boutonDeconnexion){
         super();
         this.sondage = sondage;
-        this.boutonHome = boutonHome;
+        this.boutonHome = boutonHome2;
         this.boutonRefresh = boutonRefresh;
-        this.boutonDeco = boutonDeco;
+        this.boutonDeco = boutonDeconnexion;
         BorderPane borderTop = borderPaneTop();
         HBox hBox = HBoxMid();
         this.setTop(borderTop);
@@ -87,6 +87,7 @@ public class FenetreHomeSondeur extends BorderPane {
         Button bouton1 = new Button("Editer le compte",Ilogo);
         Button bouton2 = new Button("Nouveau Formulaire",IFormul);
         Button bouton3 = new Button("Inspecter les Sondages",IEye);
+        bouton3.setOnAction(new ControleurInspectSondage(this, sondage));
         
 
         bouton1.setContentDisplay(ContentDisplay.TOP);
