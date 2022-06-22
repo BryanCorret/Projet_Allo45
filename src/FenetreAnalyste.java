@@ -34,7 +34,7 @@ import javafx.scene.chart.XYChart;
 
 import java.util.*;
 
-import javafx.scene.layout;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*; 
 import javafx.geometry.*;
@@ -58,8 +58,10 @@ public class FenetreAnalyste extends BorderPane{
     private TextArea commentaire;
 
     private BorderPane lesFleches;
+
+    private appliSondage app;
     
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -67,6 +69,7 @@ public class FenetreAnalyste extends BorderPane{
         this.boutonDonneeBrute = new Button("Données Brutes");
         this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
 
+        this.app = app;
 
         this.comboAnalyse = new ComboBox<>();
         this.comboClasse = new ComboBox<>();
@@ -181,7 +184,7 @@ public class FenetreAnalyste extends BorderPane{
             //pour chaque question du questionnaire
             for (Question quest : this.questionnaire.getListQ()){
                 //pour chaque réponse
-                for ( Reponse rep : BiblioSQL.getReponse() ){
+                for ( Reponse rep : BiblioSQL.getReponse(this.app.getConnexion(),this.questionnaire.getIdQ()) ){
                 //ajoute la clé , 1 valeur par défaut   ou  incrémente la valeur de la clé de 1 
                     dico.merge(rep.getValue(), 1, Integer::sum);
                     // autre possibilité si cela ne fonctionne pas :

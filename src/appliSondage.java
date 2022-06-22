@@ -133,7 +133,7 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches);
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -195,7 +195,9 @@ public class appliSondage extends Application{
     public String getFenetreActu(){
         return this.fenetreActu;
     }
-
+    public Questionnaire getSondage(){
+        return this.sondageSelectionne;
+    }
     public void setSondeActu(Sonde sonde){
         this.sondeActu = sonde;
     }
@@ -237,7 +239,6 @@ public class appliSondage extends Application{
     public int getUserRole(){
         return this.utilisateurActu.getIdRole();
     }
-
     public void quitter(){
         Platform.exit();
     }
