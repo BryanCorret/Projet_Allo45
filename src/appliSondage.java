@@ -303,9 +303,11 @@ public class appliSondage extends Application{
             // appratientcategorite(r.getIdC) renvoie un STRING avec le nom de la cattegorie 
             // BiblioSQL.getNbReponse(id,rtype.toString()) renvoie le nombre de réponse corrspondante
             bc.getData().addAll(series1); }
-           
         }
-        return bc;
+            return bc;
+    }
+           
+        
 
     }
 

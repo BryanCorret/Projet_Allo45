@@ -62,14 +62,15 @@ public class FenetreSondeur extends BorderPane {
         this.choice = "";
         this.ide = 0;
         this.sondage = sondage;
-
         this.questionActuelle = sondage.getListQ().get(this.ide);
+        
 
         this.comboMultiple = new ComboBox<>();
 
         this.boutonRefresh = boutonRefresh;
 
         this.boutonParametre = boutonParametre;
+        //this.boutonParametre.setOnAction(new ControleurParam());
         this.valeurBouton = " ";
 
         this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);
@@ -82,6 +83,7 @@ public class FenetreSondeur extends BorderPane {
         this.setTop(borderTop);
         this.setCenter(Bmid);
         this.setRight(vdroite);
+    
     }
     public void maj(int id){
         this.fleche = this.lesFleches();
@@ -225,6 +227,7 @@ public class FenetreSondeur extends BorderPane {
             Label lreponse = new Label();
             TextField tfreponse = new TextField();
             lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
+            this.setValeurBouton(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
 
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
@@ -321,7 +324,13 @@ public class FenetreSondeur extends BorderPane {
     public void setQuestion(Question que){this.questionActuelle=que;}
 
     // Reponse
-    public char getTypeReponse(){return this.questionActuelle.getType();}
+    public char getTypeReponse(){
+        switch(this.ide){
+            case 0:
+            return sondage.getListQ().get(this.ide).getType();
+        }
+            return sondage.getListQ().get(this.ide-1).getType();
+    }
 
     //ComboBox 
     public String getValeurCombo(){return this.comboMultiple.getValue();}
@@ -330,7 +339,8 @@ public class FenetreSondeur extends BorderPane {
     // Le controleur set une valeur a cette variable
     // Bouton
     public void setValeurBouton(String val){this.valeurBouton=val;}
-    public String getValeurBouton(){return this.valeurBouton;}
+    public String getValeurBouton(){
+        return this.valeurBouton;}
     
     public BorderPane lesFleches(){
         //les flèches

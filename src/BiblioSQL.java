@@ -344,12 +344,12 @@ public class BiblioSQL {
     Statement st;
     try {
       st = laConnexion.createStatement();
-      st.executeUpdate("INSERT INTO REPONDRE VALUES(" + rep.getIdQ() + "," + rep.getNumQ() + "," + sonde.getCaracteristique() + "," + rep.getValue() + ");");
+      st.executeUpdate("INSERT INTO REPONDRE VALUES(" + rep.getIdQ() + "," + rep.getNumQ() + ",'" + sonde.getCaracteristique() + "','" + rep.getValue() + "');");
 
       st.executeUpdate("INSERT INTO INTERROGER VALUES("+utilisateur.getId()+","+sonde.getNumSond()+","+rep.getIdQ()+");");
     }
     catch (SQLException e) {
-      e.getMessage();
+      e.printStackTrace();
     }
   }
 
@@ -533,7 +533,7 @@ public class BiblioSQL {
         return liste;
       }
       catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return liste;
     }
@@ -552,7 +552,7 @@ public class BiblioSQL {
         }        
       }
       catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       if (listeDeNumSond.contains(StringDeNumSond)){
           return true;
@@ -570,7 +570,7 @@ public class BiblioSQL {
           return sond;
         }
       }
-      Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
+      Sonde sond = liste.get((int)Math.random()*liste.size());
       return sond;
     }
     
@@ -695,7 +695,7 @@ public class BiblioSQL {
       Statement st;
       try {
         st = laConnexion.createStatement();
-        ResultSet rs = st.executeQuery("exit");
+        st.executeQuery("exit");
     }
       catch(SQLException e){
 
