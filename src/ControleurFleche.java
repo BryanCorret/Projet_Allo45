@@ -46,11 +46,10 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 List<Question> questionnaire = this.analyste.getQuesionnaire().getListQ();
 
                 //la question d'après si possible, la toute première le cas contraire
-                int index = questionnaire.indexOf(this.analyste.getQuestionActuel());
+                int index = questionnaire.indexOf(this.appli.getQuestion());
                 if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
 
-                this.analyste.setQuestionActuel(questionnaire.get(index));
-
+                this.analyste.getComboBoxQuestion().getSelectionModel().select(questionnaire.get(index).getTextQ());
                 
                 //                  PARTIE FICHIER
                 
@@ -83,7 +82,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     FileWriter fw = new FileWriter(fic.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(prec);                                             //les infos précédentes
-                    bw.write(this.analyste.getQuestionActuel() + "/");              //"Question
+                    bw.write(this.appli.getQuestion() + "/");              //"Question
                     bw.write(this.analyste.getComboBoxAnalyse().getValue() + "/");  //"ComboBox analyse
                     bw.write(this.analyste.getComboBoxClasse().getValue()+ "/");    //"ComboBox classe
                     bw.write(this.analyste.getComboBoxQuestion().getValue()+ "/");  //"ComboBox question
@@ -100,10 +99,10 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 
                 List<Question> questionnaire = this.analyste.getQuesionnaire().getListQ();
 
-                int index = questionnaire.indexOf(this.analyste.getQuestionActuel());
+                int index = questionnaire.indexOf(this.appli.getQuestion());
                 if (index-1 < 0){index = questionnaire.size()-1;}else{index--;}
                 
-                this.analyste.setQuestionActuel(questionnaire.get(index));
+                this.analyste.getComboBoxQuestion().getSelectionModel().select(questionnaire.get(index).getTextQ());
 
 
                 //                  PARTIE FICHIER
@@ -134,7 +133,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                         String donnee[] = question[i].split("/");
 
                         //si on a trouvé la question qu'on veut charger
-                        if (donnee[0].equals(this.analyste.getQuestionActuel().getTextQ())){
+                        if (donnee[0].equals(this.analyste.getComboBoxQuestion().getValue())){
                             this.analyste.getComboBoxAnalyse().setValue(donnee[1]);  //"ComboBox analyse
                             this.analyste.getComboBoxClasse().setValue(donnee[2]);    //"ComboBox classe
                             this.analyste.getComboBoxQuestion().setValue(donnee[3]);  //"ComboBox question

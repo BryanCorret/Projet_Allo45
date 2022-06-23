@@ -734,9 +734,9 @@ public class BiblioSQL {
       List<String> liste = new ArrayList<>();
       try{
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("select valDebut,valFin from TRANCHE;");
+        ResultSet rs = st.executeQuery("select valDebut AS d,valFin AS f from TRANCHE;");
         while(rs.next()){
-          liste.add(rs.getString("valDebut")+" - "+rs.getString("valFin"));
+          liste.add(rs.getString("d")+" - "+rs.getString("f"));
       }
     }
       catch(SQLException e){
@@ -760,12 +760,39 @@ public class BiblioSQL {
       return nbQuestion;
     }
 
-    public static Map<String,List<Reponse>> recupererReponses(ConnexionMySQL laCo,String tri){
+    public static Map<String,List<Reponse>> recupererReponses(ConnexionMySQL laCo,String tri,int idQ,int numQ){
       Map<String,List<Reponse>> res = new HashMap<>();
+      List<List<Reponse>> rep = new ArrayList<>();
       Statement st;
+      String requete;
+      String valActu ="1";
+      boolean premiereBoucle = true;
       try{
         st = laCo.createStatement();
-        ResultSet rs = st.executeQuery("");
+        if (tri=="idTr"){
+          requete = "SELECT idTr,idQ,numQ,valeur FROM QUESTIONNAIRE NATURAL JOIN QUESTION NATURAL JOIN REPONDRE NATURAL JOIN CARACTERISTIQUE WHERE IDQ = " + idQ +" AND NUMQ = "+numQ+ " ORDER BY"+" idTr"+";";
+        }
+        else{
+          requete = "SELECT idCat,idQ,numQ,valeur FROM QUESTIONNAIRE NATURAL JOIN QUESTION NATURAL JOIN REPONDRE NATURAL JOIN CARACTERISTIQUE WHERE IDQ = " + idQ +" AND NUMQ = "+numQ+ " ORDER BY"+" idCat"+";";
+        }
+        ResultSet rs = st.executeQuery(requete);
+        while(rs.next()){
+          if (premiereBoucle){
+            rep.add(new ArrayList<Reponse>());
+            premiereBoucle = false;
+          }
+          if (rs.getString(tri)==valActu){
+          Reponse reponse = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString(tri), rs.getString("valeur"));
+          rep.get(Integer.valueOf(valActu)-1).add(reponse);
+          }
+          else{
+            res.put(valActu,rep.get(Integer.valueOf(valActu)-1));
+            rep.add(new ArrayList<Reponse>());
+            valActu = String.valueOf(Integer.valueOf((valActu)+1));
+            Reponse reponse = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString(tri), rs.getString("valeur"));
+            rep.get(Integer.valueOf(valActu)-1).add(reponse);
+          }
+        }
       }
       catch(SQLException e){
         e.getMessage();

@@ -3,7 +3,6 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
@@ -56,7 +55,7 @@ public class appliSondage extends Application{
 
     private Sonde sondeActu;
 
-    private ComboBox<String> cbTriCat;
+    private ComboBox<String> cbQuestion;
 
     private ComboBox<String> cbTypediag;
 
@@ -64,13 +63,22 @@ public class appliSondage extends Application{
 
     private ComboBox<String> cbTriTypeRep;
 
+    private Question questionActu;
+
+    private PieChart leChart;
+
+    private BarChart bar;
+
     @Override
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
+        this.cbQuestion = new ComboBox<>();
         this.cbTypediag = new ComboBox<>();
         this.cbTypediag.getItems().addAll("Circulaire","Courbes","Bâtons");
+        this.cbTypediag.getSelectionModel().selectFirst();
         this.cbTri = new ComboBox<>();
         this.cbTri.getItems().addAll("Tranche d'âge","Catégorie");
+        this.cbTri.getSelectionModel().selectFirst();
         this.cbTriTypeRep = new ComboBox<>();
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
@@ -161,7 +169,7 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri);
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri,this.cbTriTypeRep,this.cbQuestion);
         // ,this.cbTypediag,this.cbTri
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
@@ -274,20 +282,34 @@ public class appliSondage extends Application{
 
     public void setSondageSelectionne(Questionnaire sondageSelectionne) {
         this.sondageSelectionne = sondageSelectionne;
+        for(Question q:BiblioSQL.getQuestionQuestionnaire(this.ConnexionSQL, this.sondageSelectionne.getIdQ())){
+            this.cbQuestion.getItems().add(q.getTextQ());
+        }
+        this.cbQuestion.getSelectionModel().selectFirst();
+        this.questionActu = this.sondageSelectionne.getListQ().get(0);
+    }
+
+    public void setQuestion(Question q){
+        this.questionActu = q;
     }
 
     public void remplirComboBoxTr(){
         for(String nomTr:BiblioSQL.getLesTr(this.ConnexionSQL)){
             this.cbTriTypeRep.getItems().add(nomTr);
         }
+        this.cbTriTypeRep.getSelectionModel().selectFirst();
     }
     public void remplirComboBoxCat(){
-            for(String nomTr:BiblioSQL.getLesCat(this.ConnexionSQL)){
-                this.cbTriTypeRep.getItems().add(nomTr);
+            for(String nomCat:BiblioSQL.getLesCat(this.ConnexionSQL)){
+                this.cbTriTypeRep.getItems().add(nomCat);
             }
+            this.cbTriTypeRep.getSelectionModel().selectFirst();
+    }
+    public Question getQuestion(){
+        return this.questionActu;
     }
 
-    public List<Double> tailleChart(HashMap<String,List<Reponse>> lReponses){
+    public List<Double> tailleChart(Map<String,List<Reponse>> lReponses){
         List<Double> res = new ArrayList<>();
         int cpt = 0;
         double laValeur = 0;
@@ -313,7 +335,7 @@ public class appliSondage extends Application{
             }
             return -1;
     }
-public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lReponses){
+public List<Reponse> lesReponsesDifferentes(Map<String,List<Reponse>> lReponses){
     List<Reponse> lrep = new ArrayList<>();
     for (List<Reponse> valeur: lReponses.values()){
             for(Reponse r:valeur){
@@ -325,13 +347,12 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
     return lrep;
 }
     
-    public PieChart createPieChart(HashMap<String,List<Reponse>> lReponses,Question question){
+    public void createPieChart(Map<String,List<Reponse>> lReponses,Question question){
         List<Reponse> lrep = lesReponsesDifferentes(lReponses); 
         Integer occRep;
         PieChart circulaire = new PieChart();
         circulaire.setTitle(question.getTextQ());
         for (Map.Entry<String, List<Reponse>> entry : lReponses.entrySet()) { 
-            String key = entry.getKey();
             List<Reponse> value = entry.getValue();
             for (Reponse r:value){
                 occRep = nbChaqueReponses(r, question,this.cbTri.getValue());
@@ -339,10 +360,13 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
                 circulaire.getData().add(new PieChart.Data(r.getValue(),occRep));
                 lrep.remove(r);
                 }
+                if (lrep.isEmpty()){
+                    break;
+                }
             }
         }
 
-        return circulaire;
+        this.leChart = circulaire;
 
     }
     
@@ -403,10 +427,23 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
     public ComboBox<String> getcbTri(){
         return this.cbTri;
     }
-    
+    public ComboBox<String> getcbDiag(){
+        return this.cbTypediag;
+    }
+    public ComboBox<String> getcbRep(){
+        return this.cbTriTypeRep;
+    }
+    public ComboBox<String> getcbQuestion(){
+        return this.cbQuestion;
+    }
 
+    public PieChart getPieChart(){
+        return this.leChart;
+    }
 
-
+    public BarChart getBarChart(){
+        return this.bar;
+    }
     public static void main(String[] args){
         Application.launch(args);
     }

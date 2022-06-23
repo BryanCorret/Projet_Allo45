@@ -32,4 +32,18 @@ public class Question{
     public String toString(){
         return "Question #" + numQ + ": " + textQ + " (Max Value: " + MaxVal + ")";
     }
+    @Override
+    public boolean equals(Object o){ //on considère qu'une réponse est différente d'une autre en fonction de sa valeur et le numéro du question
+        if(o==null){
+            return false;
+        }
+        if(o==this){
+            return true;
+        }
+        if(o instanceof Question){
+            Question rep = (Question)o;
+            return rep.getTextQ()==this.getTextQ() && rep.getNumQ()==this.numQ;
+        }
+        return false;
+    }
 }
