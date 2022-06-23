@@ -597,7 +597,44 @@ public class BiblioSQL {
       int cpt = 0;
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESDRION Qst natural join QUESTIONNAIRE Quest WHERE IDQ ="+idQ+" and numQ ="+ numQ+";");
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ ="+idQ+" and numQ ="+ numQ+";");
+        while(rs.next()){
+          if (rep.equals(rs.getString("valeur"))){
+            cpt++;
+          }
+        }
+        return cpt;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return -1;
+    }
+
+    public static int getOccurenceReponseDansQuestionPourCarac(ConnexionMySQL laCo,int numQ,int idQ,String rep,Integer carac){
+      Statement st;
+      int cpt = 0;
+      try {
+        st = laCo.createStatement();
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest natural join CARACTERISTIQUE cerec WHERE IDQ ="+idQ+" and numQ ="+ numQ+ "and idTr ='"+String.valueOf(carac).charAt(0)+"';");
+        while(rs.next()){
+          if (rep.equals(rs.getString("valeur"))){
+            cpt++;
+          }
+        }
+        return cpt;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return -1;
+    }
+    public static int getOccurenceReponseDansQuestionPourCarac(ConnexionMySQL laCo,int numQ,int idQ,String rep,String categ){
+      Statement st;
+      int cpt = 0;
+      try {
+        st = laCo.createStatement();
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest natural join CARACTERISTIQUE cerec WHERE IDQ ="+idQ+" and numQ ="+ numQ+ "and idCat ='"+categ.charAt(0)+"';");
         while(rs.next()){
           if (rep.equals(rs.getString("valeur"))){
             cpt++;
