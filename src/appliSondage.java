@@ -52,8 +52,6 @@ public class appliSondage extends Application{
 
     private Sonde sondeActu;
 
-  
-
     private ComboBox<String> cbTypediag;
 
     private ComboBox<String> cbTri;
@@ -136,7 +134,6 @@ public class appliSondage extends Application{
             boutonFlecheDroite.setOnAction(new ControleurFleche(this,(FenetreAnalyste)this.scene.getRoot()));
             boutonFlecheGauche.setOnAction(new ControleurFleche(this,(FenetreAnalyste)this.scene.getRoot()));
         }
-       
         bpFleche.setRight(boutonFlecheDroite);
         bpFleche.setLeft(boutonFlecheGauche);
         return bpFleche;
@@ -155,8 +152,8 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this, cbTri, cbTri);
-        // ,this.cbTypediag,this.cbTri
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri);
+        
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -182,14 +179,13 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
     */
-
-     public void modeSondeur(){
-         this.fenetreActu = "Sondeur";
-         System.out.println(this.sondageSelectionne);
+    public void modeSondeur(){
+        this.fenetreActu = "Sondeur";
+        System.out.println(this.sondageSelectionne);
          Pane root = new FenetreSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
-     }
+        }
     
 
     public void modeConnexion(){
@@ -313,7 +309,7 @@ public class appliSondage extends Application{
            
         
 
-    //}
+    }
 
 
 
