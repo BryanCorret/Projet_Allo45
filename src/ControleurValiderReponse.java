@@ -57,11 +57,9 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
                     String donnee[] = question[i].split("/");
 
                     //pour chaque donnée de la réponse (sauf le premier, i.e. le TextArea, le texte et le numéro de la question)
-                    for (int j=3;j<donnee[i].length();j++){
                         //on modélise une réponse avec les données du fichier
-                        Reponse rep = new Reponse(this.sondeur.getSondage().getIdQ(), Integer.valueOf(donnee[0]), this.sonde.getCaracteristique(), donnee[j]);
+                        Reponse rep = new Reponse(this.sondeur.getSondage().getIdQ(), Integer.valueOf(donnee[1]), this.sonde.getCaracteristique(), donnee[3]);
                         BiblioSQL.setReponse(this.laConnexionMySQL, rep, this.sonde, this.utilisateur);
-                    }
                 }
             
             }catch (IOException e){System.out.println("ERREUR 404");}

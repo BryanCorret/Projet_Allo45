@@ -66,12 +66,14 @@ public class FenetreSondeur extends BorderPane {
         this.resClassement = "";
 
         this.questionActuelle = sondage.getListQ().get(this.ide);
+        
 
         this.comboMultiple = new ComboBox<>();
 
         this.boutonRefresh = boutonRefresh;
 
         this.boutonParametre = boutonParametre;
+        //this.boutonParametre.setOnAction(new ControleurParam());
         this.valeurBouton = " ";
 
         this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);
@@ -84,6 +86,7 @@ public class FenetreSondeur extends BorderPane {
         this.setTop(borderTop);
         this.setCenter(Bmid);
         this.setRight(vdroite);
+    
     }
     public void maj(int id){
         this.fleche = this.lesFleches();
@@ -245,6 +248,8 @@ public class FenetreSondeur extends BorderPane {
             Label lreponse = new Label();
             
             lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
+            this.setValeurBouton(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
+
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
             reponse.getChildren().addAll(new Label((String.valueOf(i)), lreponse));
@@ -347,9 +352,12 @@ public class FenetreSondeur extends BorderPane {
 
     // Reponse
     public char getTypeReponse(){
-        Question questionPrecedente = sondage.getListQ().get(this.ide-1);
-         
-        return questionPrecedente.getType();}
+        switch(this.ide){
+            case 0:
+            return sondage.getListQ().get(this.ide).getType();
+        }
+            return sondage.getListQ().get(this.ide-1).getType();
+    }
 
     //ComboBox 
     public String getValeurCombo(){return this.comboMultiple.getValue();}
@@ -372,7 +380,8 @@ public class FenetreSondeur extends BorderPane {
     // Le controleur set une valeur a cette variable
     // Bouton
     public void setValeurBouton(String val){this.valeurBouton=val;}
-    public String getValeurBouton(){return this.valeurBouton;}
+    public String getValeurBouton(){
+        return this.valeurBouton;}
     
     public BorderPane lesFleches(){
         //les flèches

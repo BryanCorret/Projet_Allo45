@@ -54,8 +54,6 @@ public class appliSondage extends Application{
 
     private Sonde sondeActu;
 
-  
-
     private ComboBox<String> cbTypediag;
 
     private ComboBox<String> cbTri;
@@ -138,7 +136,6 @@ public class appliSondage extends Application{
             boutonFlecheDroite.setOnAction(new ControleurFleche(this,(FenetreAnalyste)this.scene.getRoot()));
             boutonFlecheGauche.setOnAction(new ControleurFleche(this,(FenetreAnalyste)this.scene.getRoot()));
         }
-       
         bpFleche.setRight(boutonFlecheDroite);
         bpFleche.setLeft(boutonFlecheGauche);
         return bpFleche;
@@ -158,6 +155,7 @@ public class appliSondage extends Application{
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri);
+        
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -183,14 +181,13 @@ public class appliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
     */
-
-     public void modeSondeur(){
-         this.fenetreActu = "Sondeur";
-         System.out.println(this.sondageSelectionne);
+    public void modeSondeur(){
+        this.fenetreActu = "Sondeur";
+        System.out.println(this.sondageSelectionne);
          Pane root = new FenetreSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
-     }
+        }
     
 
     public void modeConnexion(){
@@ -300,47 +297,29 @@ public class appliSondage extends Application{
         //on créer le barChart
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
-        if (question.getType() == 'c'){
-            //on met un titre seulement si c'est un classement
-            xAxis.setLabel("Note");       
-            yAxis.setLabel("Nb de réponse");
+        final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+        bc.setTitle("Histograme this.getNameQuestion(id)");
+        xAxis.setLabel("Country");       
+        yAxis.setLabel("Value");
+
+        for (Reponse r : lReponses) { // creation des  reponse dans des séries 
+            XYChart.Series series1 = new XYChart.Series();
+            series1.setName(r.toString());
+            for (Reponse rtype : lReponses) { // creation des  reponse dans des séries 
+
+            // series1.getData().add(new XYChart.Data(BibloSQL.appratientcategorite(r.getIdC),BiblioSQL.getNbReponse(id,r.toString() ));
+            // appratientcategorite(r.getIdC) renvoie un STRING avec le nom de la cattegorie 
+            // BiblioSQL.getNbReponse(id,rtype.toString()) renvoie le nombre de réponse corrspondante
+            bc.getData().addAll(series1); }
         }
-        final BarChart<String,Number> barChart = new BarChart<String,Number>(xAxis,yAxis);
-        barChart.setTitle("BarChart this.getNameQuestion(id)");
-        
-        
-
-            //pour chaque clé et ses données associées
-            for (Map.Entry<String, List<Reponse>> entry : lReponses.entrySet()) { 
-                String key = entry.getKey();
-                List<Reponse> value = entry.getValue();
-
-                //si on a trouvé la caracteristique recherché
-                if (tout || key.equals(caracteristique)){
-
-                    //on créer un dictionnaire de la forme <La réponse, fréquence de laréponse>
-                    Map<String, Integer> dico = new HashMap<>();
-                    for (Reponse rep : value){
-                        //on ajoute la clé , 1 valeur par défaut   ou  incrémente la valeur de la clé de 1 
-                        dico.merge(rep.getValue(), 1, Integer::sum);
-                    }
-
-                    //on fait une série selon la caracteristique
-                    XYChart.Series<String, Number> serie = new XYChart.Series<String, Number>();
-                    for (Reponse rep : value){
-                        serie.getData().add(new XYChart.Data<String, Number>(rep.getValue(), dico.get(rep.getValue())));
-                    }
-
-                    //on ajoute la série
-                    barChart.getData().add(serie);
-
-                    //on a trouvé la caracteristique cherchée et on a créer le barChart
-                    break;
-                }
-            }
-
-        return barChart;
+            return bc;
     }
+           
+        
+
+    }
+
+
 
     public static void main(String[] args){
         Application.launch(args);
