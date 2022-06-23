@@ -12,7 +12,7 @@ public class ControleurHome implements EventHandler<ActionEvent>{
   @Override
   public void handle(ActionEvent event) {
       try{
-        if (this.app.getUserRole() == 1){
+        if (this.app.getUserRole() == 3){
           this.app.modeHomeAnalyste();
         }
         else {this.app.modeHomeSondeur();}
