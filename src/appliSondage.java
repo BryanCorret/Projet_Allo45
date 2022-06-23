@@ -111,9 +111,9 @@ public class appliSondage extends Application{
         this.boutonConnexion.setOnAction(windowSwitcher);
         this.boutonAnalyste.setOnAction(windowSwitcher);
         this.boutonSondeur.setOnAction(windowSwitcher);
-        this.boutonDonneesBrutes.setOnAction(windowSwitcher);
+        this.boutonDonneesBrutes.setOnAction(new ControleurDonneeBrute(this));
         this.boutonHome.setOnAction(windowSwitcher);
-        this.boutonParam.setOnAction(windowSwitcher);
+        this.boutonParam.setOnAction(new ControleurParam(this));
         this.boutonRefresh.setOnAction(new ControleurRefresh(this));
 
     }
@@ -184,7 +184,7 @@ public class appliSondage extends Application{
 
     public void modeDonneesBrutes(){
         this.fenetreActu = "Donnees";
-        Pane root = new FenetreDonneesBrutes(this.boutonHome, this.boutonRefresh, this.boutonDeconnexion,this.boutonParam, this); //fenetre pas encore faite
+        Pane root = new FenetreDonneesBrutes(this.boutonHome, this.boutonRefresh, this.boutonDeconnexion,this.boutonParam, this); 
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
