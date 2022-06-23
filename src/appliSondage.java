@@ -11,6 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -285,8 +287,14 @@ public class appliSondage extends Application{
     */
 
     
-    public BarChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
-        int i = 1;
+    public BarChart<String, Number> createBarchar(HashMap<String, List<Reponse>> lReponses , Question question, String caracteristique){
+
+        //si on veut analyser tout ou une partie des sondés
+        boolean tout = true;
+        if (!caracteristique.equals("null"))
+            tout = false;
+        
+        //on créer le barChart
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);

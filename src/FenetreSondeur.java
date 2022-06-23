@@ -46,6 +46,7 @@ public class FenetreSondeur extends BorderPane {
     private ConnexionMySQL connexionSQL;
     private String choice;
     private int ide;
+    private String resClassement;
     
   
     public FenetreSondeur(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
@@ -62,6 +63,8 @@ public class FenetreSondeur extends BorderPane {
         this.choice = "";
         this.ide = 0;
         this.sondage = sondage;
+        this.resClassement = "";
+
         this.questionActuelle = sondage.getListQ().get(this.ide);
         
 
@@ -163,10 +166,10 @@ public class FenetreSondeur extends BorderPane {
             
         System.out.println(this.questionActuelle.getType());
         switch(this.questionActuelle.getType()){
-            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons()); break;
-            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());break;
+            case 'u' : vMid.getChildren().add(BorderBoutons()); break;
+            case 'm' : vMid.getChildren().add(comboBoxMultiple());break;
             case 'c' : vMid.getChildren().add(classementTile());break;
-            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());break;
+            case 'n' : vMid.getChildren().add(SliderMidSlider());break;
             case 'l' : vMid.getChildren().add(treponse);break;
         }
             
@@ -189,8 +192,9 @@ public class FenetreSondeur extends BorderPane {
         for(String elem: this.questionActuelle.getValeursPossible(this.connexionSQL, this.sondage.getIdQ())){
             Button b1 = new Button(elem);
             b1.setOnAction(new ControleurReponseBouton(this));
+            b1.setPrefWidth(80);
             b1.setStyle("-fx-background-color:#678466;-fx-text-fill: white;");
-            boutons.getChildren().add( b1);
+            boutons.getChildren().add(b1);
         }
         boutons.getChildren().add(new Text(this.choice));
         
@@ -204,7 +208,7 @@ public class FenetreSondeur extends BorderPane {
         // boutons.setLeft(b1);
         // boutons.setCenter(b2);
         // boutons.setRight(b3);
-        boutons.setSpacing(20);
+        boutons.setSpacing(40);
         Insets arg1 = new Insets(20,20,20,20);
         boutons.setPadding(arg1);
         return boutons;
@@ -219,27 +223,50 @@ public class FenetreSondeur extends BorderPane {
         return res;
     }
 
-    private TilePane classementTile(){
+    private BorderPane classementTile(){
+        BorderPane bfinal = new BorderPane();
         TilePane res = new TilePane(Orientation.VERTICAL) ;
         
-        for(int i=0; i< this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).size();i++){
+        // for(int i=0; i< this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).size();i++){
+        //     HBox reponse = new HBox();  
+        //     Label lreponse = new Label();
+        //     TextField tfreponse = new TextField();
+        //     lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
+
+        //     Insets a = new Insets(10,5,10,10);
+        //     lreponse.setPadding(a);
+        //     reponse.getChildren().addAll(lreponse,tfreponse,new Label("  "));
+            
+        //     res.getChildren().addAll(reponse);
+        
+        // }
+        
+        List<String> valeursPossibles = new ArrayList<>();
+        valeursPossibles = this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ());
+        for(int i=0;i< valeursPossibles.size();i++){
             HBox reponse = new HBox();  
             Label lreponse = new Label();
-            TextField tfreponse = new TextField();
+            
             lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
             this.setValeurBouton(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
 
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
-            reponse.getChildren().addAll(lreponse,tfreponse,new Label("  "));
-            
-            res.getChildren().addAll(reponse);
-        
+            reponse.getChildren().addAll(new Label((String.valueOf(i)), lreponse));
+            res.getChildren().add(reponse);
         }
         
         res.setAlignment(Pos.CENTER);
+        VBox vbox = new VBox();
 
-        return res;
+        Label instruction = new Label("Entrez dans le champs ci-dessous les 3 indices des réponses dans l'ordre choisit, Ex: 1,2,3 ou 1 2 3");
+        TextField resultat = new TextField();
+        this.resClassement += resultat.getText();
+
+        vbox.getChildren().addAll(instruction,resultat);
+        bfinal.setCenter(res);
+        bfinal.setBottom(vbox);
+        return bfinal;
     }
    
     private VBox SliderMidSlider(){
@@ -335,6 +362,20 @@ public class FenetreSondeur extends BorderPane {
     //ComboBox 
     public String getValeurCombo(){return this.comboMultiple.getValue();}
     public void setValeurCombo(String valeur){this.comboMultiple.setValue(valeur);}
+
+    //Classement
+    public String getClassement(){
+        // List<String> res = new ArrayList<>();
+        // String [] newStr ;
+        // if(this.resClassement.contains(" ")){ newStr =this.resClassement.split("\\s+");}
+        // else{ newStr =this.resClassement.split("\\,");}
+        // for(String elem : newStr){
+        //     res.add(elem);
+        // }
+        // return res;
+        return this.resClassement;
+    }
+
 
     // Le controleur set une valeur a cette variable
     // Bouton
