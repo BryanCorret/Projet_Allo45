@@ -5,9 +5,9 @@ import javafx.scene.control.Alert;
 public class ControleurVerifLancement implements EventHandler<ActionEvent>{
 
     private ControleurNavSondeur ctrl;
-    private appliSondage main;
+    private AppliSondage main;
 
-    public ControleurVerifLancement(appliSondage main, ControleurNavSondeur ctrl){
+    public ControleurVerifLancement(AppliSondage main, ControleurNavSondeur ctrl){
         this.main = main;
         this.ctrl = ctrl;
     }

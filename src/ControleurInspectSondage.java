@@ -4,9 +4,9 @@ import javafx.scene.control.Alert;
 
 public class ControleurInspectSondage implements EventHandler<ActionEvent>{
     FenetreHomeSondeur fenHomSond;
-    appliSondage sondage;
+    AppliSondage sondage;
 
-    public ControleurInspectSondage(FenetreHomeSondeur fenetre, appliSondage sondage2) {
+    public ControleurInspectSondage(FenetreHomeSondeur fenetre, AppliSondage sondage2) {
         this.fenHomSond = fenetre;
         this.sondage = sondage2;
     }

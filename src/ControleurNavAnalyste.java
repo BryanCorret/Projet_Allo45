@@ -13,9 +13,9 @@ public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
     
     private FenetreHomeAnalyste fen;
     private ConnexionMySQL maConnexion;
-    private appliSondage sondage;
+    private AppliSondage sondage;
 
-    public ControleurNavAnalyste(FenetreHomeAnalyste fen, appliSondage sondage) {
+    public ControleurNavAnalyste(FenetreHomeAnalyste fen, AppliSondage sondage) {
         this.fen =fen;
         this.sondage = sondage;
         this.maConnexion = sondage.getConnexion();

@@ -22,9 +22,9 @@ public class FenetreConnexion extends VBox{
     TextField NomU;
     PasswordField Mdp;
     Boolean erreur ;
-    appliSondage sondage;
+    AppliSondage sondage;
     
-    public FenetreConnexion(appliSondage sondage){
+    public FenetreConnexion(AppliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");

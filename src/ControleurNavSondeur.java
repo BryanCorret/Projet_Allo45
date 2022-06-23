@@ -23,13 +23,13 @@ import javafx.stage.Stage;
 public class ControleurNavSondeur implements EventHandler<ActionEvent> {
     
     private ConnexionMySQL maConnexion;
-    private appliSondage sondage;
+    private AppliSondage sondage;
     private ComboBox<String> txt1;
     private ComboBox<String> txt2;
     private Stage dialog;
     private int test;
 
-    public ControleurNavSondeur(appliSondage sondage) {
+    public ControleurNavSondeur(AppliSondage sondage) {
         this.sondage = sondage;
         this.maConnexion = sondage.getConnexion();
         this.txt1 = new ComboBox<>();

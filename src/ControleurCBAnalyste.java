@@ -3,9 +3,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
 
 public class ControleurCBAnalyste implements EventHandler<ActionEvent>{
-   private appliSondage app;
+   private AppliSondage app;
    private String valPrec;
-   public ControleurCBAnalyste(appliSondage app){
+   public ControleurCBAnalyste(AppliSondage app){
     this.app = app;
     this.valPrec = "";
    }

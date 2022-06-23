@@ -19,9 +19,9 @@ public class FenetreInscription extends VBox{
     TextField NomF;
     TextField NomP;
     ComboBox<String> idRole;
-    appliSondage sondage;
+    AppliSondage sondage;
     
-    public FenetreInscription(appliSondage sondage){
+    public FenetreInscription(AppliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");

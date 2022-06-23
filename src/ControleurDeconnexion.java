@@ -8,9 +8,9 @@ import javafx.scene.control.Alert.AlertType;
 
 public class ControleurDeconnexion implements EventHandler<ActionEvent>{
 
-  private appliSondage app;
+  private AppliSondage app;
 
-  public ControleurDeconnexion(appliSondage appliSondage) {
+  public ControleurDeconnexion(AppliSondage appliSondage) {
     this.app = appliSondage;
   }
 

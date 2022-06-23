@@ -2,8 +2,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 public class ControleurDonneeBrute implements EventHandler<ActionEvent>{
-    appliSondage app;
-    public ControleurDonneeBrute(appliSondage app){
+    AppliSondage app;
+    public ControleurDonneeBrute(AppliSondage app){
         this.app = app;
     }
     @Override

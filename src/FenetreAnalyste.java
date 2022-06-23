@@ -55,9 +55,9 @@ public class FenetreAnalyste extends BorderPane{
 
     private BorderPane lesFleches;
 
-    private appliSondage app;
+    private AppliSondage app;
     private String Sondageactu;
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app, ComboBox<String> cbTypediag, ComboBox<String> cbTri,ComboBox<String> rep,ComboBox<String> questions){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,AppliSondage app, ComboBox<String> cbTypediag, ComboBox<String> cbTri,ComboBox<String> rep,ComboBox<String> questions){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;

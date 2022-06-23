@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 
 public class FenetreSondeur extends BorderPane {
 
-    private appliSondage main;
+    private AppliSondage main;
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonParametre;
@@ -49,12 +49,12 @@ public class FenetreSondeur extends BorderPane {
     private String resClassement;
     
   
-    public FenetreSondeur(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
+    public FenetreSondeur(AppliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
         super();
         this.init(main,boutonHome,boutonRefresh,boutonParametre,sondage,connexionSQL);
         this.maj(0);
     }
-    public void init(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
+    public void init(AppliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
         this.main = main;
         this.boutonHome = boutonHome;
         this.connexionSQL=connexionSQL;

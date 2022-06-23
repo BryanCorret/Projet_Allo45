@@ -18,10 +18,10 @@ public class FenetreDonneesBrutes extends BorderPane{
     private Button boutonResearch;
     private Button boutonParam;
     private String sondageid;
-    private appliSondage sondage;
+    private AppliSondage sondage;
     public String SondageNom;
 
-    public FenetreDonneesBrutes(Button boutonHome,Button boutonRefresh,Button boutonDeco, Button Param,appliSondage s){
+    public FenetreDonneesBrutes(Button boutonHome,Button boutonRefresh,Button boutonDeco, Button Param,AppliSondage s){
         super();
         this.sondage = s;
         this.boutonHome = boutonHome;

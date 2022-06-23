@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
@@ -20,7 +21,7 @@ import javafx.scene.chart.NumberAxis;
 
 import java.util.*;
 
-public class appliSondage extends Application{
+public class AppliSondage extends Application{
 
 
     private ConnexionMySQL ConnexionSQL;
@@ -73,13 +74,17 @@ public class appliSondage extends Application{
     public void init(){
         this.ConnexionSQL = BiblioSQL.connectRoot();
         this.cbQuestion = new ComboBox<>();
+        this.cbQuestion.setOnAction(new ControleurCBAnalyste(this));
         this.cbTypediag = new ComboBox<>();
         this.cbTypediag.getItems().addAll("Circulaire","Courbes","Bâtons");
         this.cbTypediag.getSelectionModel().selectFirst();
+        this.cbTypediag.setOnAction(new ControleurCBAnalyste(this));
         this.cbTri = new ComboBox<>();
         this.cbTri.getItems().addAll("Tranche d'âge","Catégorie");
         this.cbTri.getSelectionModel().selectFirst();
+        this.cbTri.setOnAction(new ControleurCBAnalyste(this));
         this.cbTriTypeRep = new ComboBox<>();
+        this.cbTriTypeRep.setOnAction(new ControleurCBAnalyste(this));
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");

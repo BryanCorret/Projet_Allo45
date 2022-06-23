@@ -7,16 +7,16 @@ import java.util.*;
 
 public class ControleurFleche implements EventHandler<ActionEvent>{ 
 
-    private appliSondage appli;
+    private AppliSondage appli;
     private FenetreAnalyste analyste;
     private FenetreSondeur sondeur;
 
-    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste){
+    public ControleurFleche(AppliSondage appli, FenetreAnalyste analyste){
         this.appli = appli;
         this.analyste = analyste;
     }
 
-    public ControleurFleche(appliSondage appli, FenetreSondeur sondeur){
+    public ControleurFleche(AppliSondage appli, FenetreSondeur sondeur){
         this.appli = appli;
         this.sondeur = sondeur;
         System.out.println("holoeeg");

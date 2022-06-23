@@ -3,9 +3,9 @@ import javafx.event.EventHandler;
 
 public class ControleurHome implements EventHandler<ActionEvent>{
 
-  private appliSondage app;
+  private AppliSondage app;
 
-  public ControleurHome(appliSondage appliSondage) {
+  public ControleurHome(AppliSondage appliSondage) {
     this.app = appliSondage;
   }
 

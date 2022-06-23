@@ -5,9 +5,9 @@ import javafx.scene.input.MouseEvent;
 public class ControleurInscrit implements EventHandler<MouseEvent> {
     
     FenetreConnexion fenConnexion;
-    appliSondage sondage;
+    AppliSondage sondage;
 
-    public ControleurInscrit(FenetreConnexion fenetreConnexion, appliSondage sondage2) {
+    public ControleurInscrit(FenetreConnexion fenetreConnexion, AppliSondage sondage2) {
         this.fenConnexion = fenetreConnexion;
         this.sondage = sondage2;
     }

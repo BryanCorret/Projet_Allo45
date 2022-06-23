@@ -3,9 +3,9 @@ import javafx.event.EventHandler;
 
 public class ControleurParam implements EventHandler<ActionEvent> {
 
-    private appliSondage app;
+    private AppliSondage app;
 
-    public ControleurParam(appliSondage main){
+    public ControleurParam(AppliSondage main){
         this.app = main;
     }
     @Override

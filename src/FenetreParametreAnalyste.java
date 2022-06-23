@@ -23,13 +23,13 @@ public class FenetreParametreAnalyste extends BorderPane {
             private Button boutonHome;
             private Button boutonRefresh;
             private FileChooser fileChooser = new FileChooser();
-            private appliSondage sondage;
+            private AppliSondage sondage;
             
             
     public FenetreParametreAnalyste(Button boutonHome,Button boutonRefresh){
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh; 
-        this.sondage = new appliSondage();
+        this.sondage = new AppliSondage();
 
         this.setTop(borderPaneTop());
         this.setCenter(borderPaneCenter());

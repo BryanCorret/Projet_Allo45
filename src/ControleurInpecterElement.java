@@ -3,10 +3,10 @@ import javafx.event.EventHandler;
 
 public class ControleurInpecterElement implements EventHandler<ActionEvent>{
 
-    appliSondage  s;
+    AppliSondage  s;
     FenetreHomeAnalyste fen;
 
-    public ControleurInpecterElement(appliSondage s, FenetreHomeAnalyste fen){
+    public ControleurInpecterElement(AppliSondage s, FenetreHomeAnalyste fen){
         this.s = s;
         this.fen = fen;   
     }

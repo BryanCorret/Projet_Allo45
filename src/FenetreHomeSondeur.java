@@ -24,11 +24,11 @@ public class FenetreHomeSondeur extends BorderPane {
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonDeco;
-    private appliSondage sondage;
+    private AppliSondage sondage;
     
     
   
-    public FenetreHomeSondeur(appliSondage sondage, Button boutonHome2,Button boutonRefresh,Button boutonDeconnexion){
+    public FenetreHomeSondeur(AppliSondage sondage, Button boutonHome2,Button boutonRefresh,Button boutonDeconnexion){
         super();
         this.sondage = sondage;
         this.boutonHome = boutonHome2;

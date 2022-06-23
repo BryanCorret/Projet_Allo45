@@ -10,10 +10,10 @@ import javafx.scene.control.Alert;
 public class ControleurConnexion implements EventHandler<ActionEvent> {
     
     private FenetreConnexion fenConnexion;
-    private appliSondage sondage;
+    private AppliSondage sondage;
     private ConnexionMySQL connexion;
 
-    public ControleurConnexion(FenetreConnexion fenConnexion, appliSondage appliSondage,ConnexionMySQL co) {
+    public ControleurConnexion(FenetreConnexion fenConnexion, AppliSondage appliSondage,ConnexionMySQL co) {
         this.fenConnexion = fenConnexion;
         this.sondage = appliSondage;
         this.connexion = co;
