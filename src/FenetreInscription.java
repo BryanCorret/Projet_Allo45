@@ -108,6 +108,7 @@ public class FenetreInscription extends VBox{
         this.Mdp2.setPromptText("Confirmation du mot de passe");
 
         this.idRole.getItems().addAll("Concepteur", "Sondeur", "Analyste");
+        this.idRole.getSelectionModel().selectFirst();
 
         // Button
         ImageView img = new ImageView(new Image("file:IMG/buttonIn.png"));
