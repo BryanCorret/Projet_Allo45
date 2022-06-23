@@ -11,6 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -155,8 +157,7 @@ public class appliSondage extends Application{
 
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
-        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this);
-        // ,this.cbTypediag,this.cbTri
+        Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri);
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -289,31 +290,57 @@ public class appliSondage extends Application{
     */
 
     
-    public BarChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
-        int i = 1;
+    public BarChart<String, Number> createBarchar(HashMap<String, List<Reponse>> lReponses , Question question, String caracteristique){
+
+        //si on veut analyser tout ou une partie des sondés
+        boolean tout = true;
+        if (!caracteristique.equals("null"))
+            tout = false;
+        
+        //on créer le barChart
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
-        final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
-        bc.setTitle("Histograme this.getNameQuestion(id)");
-        xAxis.setLabel("Country");       
-        yAxis.setLabel("Value");
-
-        for (Reponse r : lReponses) { // creation des  reponse dans des séries 
-            XYChart.Series series1 = new XYChart.Series();
-            series1.setName(r.toString());
-            for (Reponse rtype : lReponses) { // creation des  reponse dans des séries 
-
-            // series1.getData().add(new XYChart.Data(BibloSQL.appratientcategorite(r.getIdC),BiblioSQL.getNbReponse(id,r.toString() ));
-            // appratientcategorite(r.getIdC) renvoie un STRING avec le nom de la cattegorie 
-            // BiblioSQL.getNbReponse(id,rtype.toString()) renvoie le nombre de réponse corrspondante
-            bc.getData().addAll(series1); }
-           
+        if (question.getType() == 'c'){
+            //on met un titre seulement si c'est un classement
+            xAxis.setLabel("Note");       
+            yAxis.setLabel("Nb de réponse");
         }
-        return bc;
+        final BarChart<String,Number> barChart = new BarChart<String,Number>(xAxis,yAxis);
+        barChart.setTitle("BarChart this.getNameQuestion(id)");
+        
+        
 
-    //}
+            //pour chaque clé et ses données associées
+            for (Map.Entry<String, List<Reponse>> entry : lReponses.entrySet()) { 
+                String key = entry.getKey();
+                List<Reponse> value = entry.getValue();
 
+                //si on a trouvé la caracteristique recherché
+                if (tout || key.equals(caracteristique)){
 
+                    //on créer un dictionnaire de la forme <La réponse, fréquence de laréponse>
+                    Map<String, Integer> dico = new HashMap<>();
+                    for (Reponse rep : value){
+                        //on ajoute la clé , 1 valeur par défaut   ou  incrémente la valeur de la clé de 1 
+                        dico.merge(rep.getValue(), 1, Integer::sum);
+                    }
+
+                    //on fait une série selon la caracteristique
+                    XYChart.Series<String, Number> serie = new XYChart.Series<String, Number>();
+                    for (Reponse rep : value){
+                        serie.getData().add(new XYChart.Data<String, Number>(rep.getValue(), dico.get(rep.getValue())));
+                    }
+
+                    //on ajoute la série
+                    barChart.getData().add(serie);
+
+                    //on a trouvé la caracteristique cherchée et on a créer le barChart
+                    break;
+                }
+            }
+
+        return barChart;
+    }
 
     public static void main(String[] args){
         Application.launch(args);
