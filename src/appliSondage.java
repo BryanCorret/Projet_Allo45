@@ -11,6 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -140,7 +142,6 @@ public class appliSondage extends Application{
             boutonFlecheDroite.setOnAction(new ControleurFleche(this,(FenetreAnalyste)this.scene.getRoot()));
             boutonFlecheGauche.setOnAction(new ControleurFleche(this,(FenetreAnalyste)this.scene.getRoot()));
         }
-       
         bpFleche.setRight(boutonFlecheDroite);
         bpFleche.setLeft(boutonFlecheGauche);
         return bpFleche;
@@ -193,7 +194,7 @@ public class appliSondage extends Application{
          Pane root = new FenetreSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
-     }
+        }
     
 
     public void modeConnexion(){
@@ -332,8 +333,14 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
     
 
     
-    public BarChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
-        int i = 1;
+    public BarChart<String, Number> createBarchar(HashMap<String, List<Reponse>> lReponses , Question question, String caracteristique){
+
+        //si on veut analyser tout ou une partie des sondés
+        boolean tout = true;
+        if (!caracteristique.equals("null"))
+            tout = false;
+        
+        //on créer le barChart
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
@@ -350,9 +357,11 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
             // appratientcategorite(r.getIdC) renvoie un STRING avec le nom de la cattegorie 
             // BiblioSQL.getNbReponse(id,rtype.toString()) renvoie le nombre de réponse corrspondante
             bc.getData().addAll(series1); }
-           
         }
-        return bc;
+            return bc;
+    }
+           
+        
 
     }
 
