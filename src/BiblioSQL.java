@@ -227,6 +227,25 @@ public class BiblioSQL {
         return valeurs;
     }
 
+    public static String getTypeRepQuestion(ConnexionMySQL laConnection, int idQ, int numQuestion){
+      Statement st;
+      String res = "";
+      try{
+          st = laConnection.createStatement();
+          ResultSet rs = st.executeQuery("SELECT idT FROM QUESTION natural join TYPEQUESTION WHERE IDQ = " + idQ + " and numQ="+numQuestion+";");
+          while(rs.next()){
+            res = rs.getString("idT");
+          }
+          return res;
+      }
+      catch(Exception ex){
+        ex.getMessage();
+      }
+      return res;
+  }
+
+
+
 
   /**
      ____                  _   _                         _          
@@ -344,12 +363,12 @@ public class BiblioSQL {
     Statement st;
     try {
       st = laConnexion.createStatement();
-      st.executeUpdate("INSERT INTO REPONDRE VALUES(" + rep.getIdQ() + "," + rep.getNumQ() + "," + sonde.getCaracteristique() + "," + rep.getValue() + ");");
+      st.executeUpdate("INSERT INTO REPONDRE VALUES(" + rep.getIdQ() + "," + rep.getNumQ() + ",'" + sonde.getCaracteristique() + "','" + rep.getValue() + "');");
 
       st.executeUpdate("INSERT INTO INTERROGER VALUES("+utilisateur.getId()+","+sonde.getNumSond()+","+rep.getIdQ()+");");
     }
     catch (SQLException e) {
-      e.getMessage();
+      e.printStackTrace();
     }
   }
 
@@ -462,8 +481,6 @@ public class BiblioSQL {
 
 
 
-
-
     // get tout les panels de la bd donc Liste de panel
     public static List<Panel> getToutLesPanels(ConnexionMySQL laConnection){
       Statement st;
@@ -533,7 +550,7 @@ public class BiblioSQL {
         return liste;
       }
       catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return liste;
     }
@@ -552,7 +569,7 @@ public class BiblioSQL {
         }        
       }
       catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       if (listeDeNumSond.contains(StringDeNumSond)){
           return true;
@@ -570,7 +587,7 @@ public class BiblioSQL {
           return sond;
         }
       }
-      Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
+      Sonde sond = liste.get((int)Math.random()*liste.size());
       return sond;
     }
     
@@ -580,7 +597,44 @@ public class BiblioSQL {
       int cpt = 0;
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESDRION Qst natural join QUESTIONNAIRE Quest WHERE IDQ ="+idQ+" and numQ ="+ numQ+";");
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ ="+idQ+" and numQ ="+ numQ+";");
+        while(rs.next()){
+          if (rep.equals(rs.getString("valeur"))){
+            cpt++;
+          }
+        }
+        return cpt;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return -1;
+    }
+
+    public static int getOccurenceReponseDansQuestionPourCarac(ConnexionMySQL laCo,int numQ,int idQ,String rep,Integer carac){
+      Statement st;
+      int cpt = 0;
+      try {
+        st = laCo.createStatement();
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest natural join CARACTERISTIQUE cerec WHERE IDQ ="+idQ+" and numQ ="+ numQ+ "and idTr ='"+String.valueOf(carac).charAt(0)+"';");
+        while(rs.next()){
+          if (rep.equals(rs.getString("valeur"))){
+            cpt++;
+          }
+        }
+        return cpt;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return -1;
+    }
+    public static int getOccurenceReponseDansQuestionPourCarac(ConnexionMySQL laCo,int numQ,int idQ,String rep,String categ){
+      Statement st;
+      int cpt = 0;
+      try {
+        st = laCo.createStatement();
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest natural join CARACTERISTIQUE cerec WHERE IDQ ="+idQ+" and numQ ="+ numQ+ "and idCat ='"+categ.charAt(0)+"';");
         while(rs.next()){
           if (rep.equals(rs.getString("valeur"))){
             cpt++;
@@ -658,47 +712,32 @@ public class BiblioSQL {
       }
       return liste;
     }
+ 
+    public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){
+      Statement st;
+      int nbQuestion = 0;
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT COUNT(*) AS nbQuestion FROM QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
+        rs.next();
+        nbQuestion = rs.getInt("nbQuestion");
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return nbQuestion;
+    }
 
 
-  // a modif
-    // public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){
-    //   Statement st;
-    //   int nbQuestion = 0;
-    //   try {
-    //     st = laConnection.createStatement();
-    //     ResultSet rs = st.executeQuery("SELECT COUNT(*) AS nbQuestion FROM QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
-    //     rs.next();
-    //     nbQuestion = rs.getInt("nbQuestion");
-    //   }
-    //   catch (SQLException e) {
-    //     e.getMessage();
-    //   }
-    //   return nbQuestion;
-    // }
-
-
-    //  public static List<HashMap<String,List<Object>>> getReponseDunQuestionnaire(ConnexionMySQL laConnection, int idQ){
-    //    Statement st;
-    //     List<HashMap<String,List<Object>>> reponses = new ArrayList<HashMap<String,List<Object>>>();
-    //     int nbQuestion = getNbQuestionDansQuestionnaire(laConnection, idQ);
-    //     try {
-    //       st = laConnection.createStatement();
-    //       for (int i = 1; i <= nbQuestion; i++) {
-    //         ResultSet rs = st.executeQuery("SELECT * FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + " AND numQ = " + i + ";");
-    //       }
-    //     } catch (SQLException e) {
-    //       e.getMessage();
-    //     }
-    //     return reponses;
-    //  }
+    
     public static void exit(ConnexionMySQL laConnexion){
       Statement st;
       try {
         st = laConnexion.createStatement();
-        ResultSet rs = st.executeQuery("exit");
+        st.executeQuery("exit");
     }
       catch(SQLException e){
 
       }
-}
+    }
 }

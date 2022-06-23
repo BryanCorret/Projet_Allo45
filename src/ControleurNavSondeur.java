@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -50,7 +54,7 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
         Alert Listesondage = new Alert(Alert.AlertType.INFORMATION);
         Listesondage.setTitle("Liste des sondages");
         Listesondage.setHeaderText("Liste des sondages");
-        this.maj();
+        this.maj();       
         // VBox pour les boutons + group
     }
     public void maj(){
@@ -64,7 +68,7 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
         dialogVbox.getChildren().addAll(new Text(String.valueOf(this.test)), Pan, this.txt1, Quest, this.txt2, valider);
         dialog.setScene(dialogScene);
         this.test+=1;
-        valider.setOnAction(new ControleurVerifLancement(this.sondage, this));
+        // valider.setOnAction(new ControleurVerifLancement(this.sondage, this));
         dialog.show();
     }
     public String getTxt1(){
@@ -74,6 +78,7 @@ public class ControleurNavSondeur implements EventHandler<ActionEvent> {
         return this.txt2.getValue();
     }
     public void setText2(){
+        this.txt2.getItems().clear();
         this.txt2.getItems().addAll(BiblioSQL.getNomDesQuestionnaireParRapportAUnPanel(this.sondage.getConnexion(), this.txt1.getValue()));
         System.out.println(this.txt2.getItems());
     }

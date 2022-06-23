@@ -11,11 +11,15 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+
+import java.util.*;
 
 public class appliSondage extends Application{
 
@@ -52,9 +56,13 @@ public class appliSondage extends Application{
 
     private Sonde sondeActu;
 
+    private ComboBox<String> cbTriCat;
+
     private ComboBox<String> cbTypediag;
 
-    private ComboBox<String> cbTri;
+    private ComboBox<String> cbTriTr;
+
+    private ComboBox<String> cbTriTypeRep;
 
     @Override
     public void init(){
@@ -62,7 +70,7 @@ public class appliSondage extends Application{
         this.cbTypediag = new ComboBox<>();
         this.cbTypediag.getItems().addAll("Circulaire","Courbes","Bâtons");
         this.cbTri = new ComboBox<>();
-        this.cbTri.getItems().addAll("Femmes","Hommes","Tous");
+        this.cbTri.getItems().addAll("","","Tous");
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
@@ -153,7 +161,7 @@ public class appliSondage extends Application{
     public void modeAnalyste(){
         this.fenetreActu = "Analyste";
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri);
-        
+        // ,this.cbTypediag,this.cbTri
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
@@ -171,17 +179,18 @@ public class appliSondage extends Application{
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
-/**
+
     public void modeDonneesBrutes(){
         this.fenetreActu = "Donnees";
         Pane root = new FenetreDonneesBrutes(this.boutonHome, this.boutonRefresh, this.boutonDeconnexion,this.boutonParam, this); //fenetre pas encore faite
         this.scene.setRoot(root);
         root.getScene().getWindow().sizeToScene();
     }
-    */
-    public void modeSondeur(){
-        this.fenetreActu = "Sondeur";
-        System.out.println(this.sondageSelectionne);
+    
+
+     public void modeSondeur(){
+         this.fenetreActu = "Sondeur";
+         System.out.println(this.sondageSelectionne);
          Pane root = new FenetreSondeur(this,this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.ConnexionSQL); //fenetre pas encore faite
          this.scene.setRoot(root);
          root.getScene().getWindow().sizeToScene(); //redimensionne le root à la place nécéssaire à l'affichage de l'appli
@@ -265,28 +274,73 @@ public class appliSondage extends Application{
     public void setSondageSelectionne(Questionnaire sondageSelectionne) {
         this.sondageSelectionne = sondageSelectionne;
     }
-    /**
-    public PieChart createPieChart(int id, List<Reponse> lReponses){ // id de la question
-        int sommetotReponse = 0;
-        PieChart Circulaire = new PieChart();
-        for (Reponse r : lReponses) { // somme de toute les reponses
-            // sommetotReponse += BiblioSQL.getNbReponse(id,r.toString());
+
+    public List<Double> tailleChart(HashMap<String,List<Reponse>> lReponses){
+        List<Double> res = new ArrayList<>();
+        int cpt = 0;
+        double laValeur = 0;
+        List<Reponse> repDifferentes = lesReponsesDifferentes(lReponses);
+        List<Integer> valbrutes = new ArrayList<>();
+        for (List<Reponse> valeur: lReponses.values()){
+            cpt+= valeur.size();
+        }
+        for (Map.Entry<String, List<Reponse>> entry : lReponses.entrySet()) { 
+            String key = entry.getKey();
+            List<Reponse> value = entry.getValue();
+            laValeur = value.size()/cpt;
+            res.add(laValeur*100.0);
+    }
+    return res;
+}
+    public Integer nbChaqueReponses(Reponse lReponses,Question question,String tri){
+            if (tri=="idTr"){
+            return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),Integer.valueOf(lReponses.getidC().charAt(1)));
+            }
+            else if(tri=="idCat"){
+                return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),String.valueOf(lReponses.getidC().charAt(2)));
+            }
+            return -1;
+    }
+public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lReponses){
+    List<Reponse> lrep = new ArrayList<>();
+    for (List<Reponse> valeur: lReponses.values()){
+            for(Reponse r:valeur){
+                if(!(lrep.contains(r))){
+                    lrep.add(r);
+                }
+            }
+    }
+    return lrep;
+}
+    
+    public PieChart createPieChart(HashMap<String,List<Reponse>> lReponses,Question question,String tri){ 
+        int rep = 0;
+        Integer occRep;
+        PieChart circulaire = new PieChart();
+        circulaire.setTitle(question.getTextQ());
+        for (Map.Entry<String, List<Reponse>> entry : lReponses.entrySet()) { 
+            String key = entry.getKey();
+            List<Reponse> value = entry.getValue();
+            for (Reponse r:value){
+                occRep = nbChaqueReponses(r, question,tri);
+                circulaire.getData().add(new PieChart.Data(key,occRep));
+            }
         }
 
-        for (Reponse r : lReponses) { // somme de toute les reponses
-            Circulaire.getData().setAll (
-            // new PieChart.Data (r.toString(), BiblioSQL.getNbReponse(id,r.toString())/sommetotReponse)
-            );
-        }
-
-        return Circulaire;
+        return circulaire;
 
     }
-    */
+    
 
     
-    public BarChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
-        int i = 1;
+    public BarChart<String, Number> createBarchar(HashMap<String, List<Reponse>> lReponses , Question question, String caracteristique){
+
+        //si on veut analyser tout ou une partie des sondés
+        boolean tout = true;
+        if (!caracteristique.equals("null"))
+            tout = false;
+        
+        //on créer le barChart
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
@@ -303,9 +357,11 @@ public class appliSondage extends Application{
             // appratientcategorite(r.getIdC) renvoie un STRING avec le nom de la cattegorie 
             // BiblioSQL.getNbReponse(id,rtype.toString()) renvoie le nombre de réponse corrspondante
             bc.getData().addAll(series1); }
-           
         }
-        return bc;
+            return bc;
+    }
+           
+        
 
     }
 
