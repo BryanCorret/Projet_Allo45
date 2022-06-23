@@ -338,7 +338,7 @@ public class BiblioSQL {
       List<Reponse> reponses = new ArrayList<Reponse>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT idQ,numQ,idC,value FROM REPONSE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
+        ResultSet rs = st.executeQuery("SELECT idQ,numQ,idC,value FROM REPONDRE Rsp natural join QUESTION Qst natural join QUESTIONNAIRE Quest WHERE IDQ = " + idQ + ";");
          while(rs.next()){
            Reponse res = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString("idC"), rs.getString("value"));
            reponses.add(res);
@@ -462,8 +462,76 @@ public class BiblioSQL {
       Sonde sond = liste.get(ThreadLocalRandom.current().nextInt(0, liste.size()));
       return sond;
     }
+    
+    
+    public static int getNbDeRepDansLaQuestion(ConnexionMySQL laConnection, int idQ, int numQ, String rep ){
+      Statement st;
+      int cpt = 0;
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT valeur res FROM REPONSE Rsp natural join QUESDRION Qst natural join QUESTIONNAIRE Quest WHERE IDQ ="+idQ+" and numQ ="+ numQ+";");
+        while(rs.next()){
+          if (rep.equals(rs.getString("valeur"))){
+            cpt++;
+          }
+        }
+        return cpt;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return -1;
+    }
 
 
+    public static String leSexeDuCaracteristique(ConnexionMySQL laConnection,String idC){
+      Statement st;
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select sexe from CARACTERISTIQUE where idC = '"+idC+"';");
+        String sexe = rs.getString("sexe");
+        return sexe;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return "";
+    }
+
+    public static List<String> laTrancheDAgeDuCarac(ConnexionMySQL laConnection,String idC){
+      Statement st;
+      List<String> liste = new ArrayList<String>();
+      try {
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select idTr from CARACTERISTIQUE where idC = '"+idC+"';");
+        String idTranche = rs.getString("idTr");
+        ResultSet rs2 = st.executeQuery("select idTr,valDebut, valFin from TRANCHE where idTr = '"+idTranche+"';");
+        String valD = rs2.getString("valDebut");
+        String valF = rs2.getString("valFin");
+        liste.add(valD);
+        liste.add(valF);
+        return liste;
+      }
+      catch (SQLException e) {
+        e.getMessage();
+      }
+      return liste;
+    }
+
+    public static int appartientCategorie(ConnexionMySQL laConnection,Reponse reponse){
+      Statement st;
+      String rep = reponse.getValue();
+      String caracteristique = reponse.getidC();
+      try{        
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select count(valeur) val from REPONDRE where valeur = "+rep+" and idC ="+caracteristique+";");
+        return rs.getInt("val");
+      } catch (SQLException e){
+        e.getMessage();
+      }
+      return -1;
+    }   
+    
 
   // a modif
     // public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){

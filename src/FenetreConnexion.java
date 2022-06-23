@@ -1,6 +1,11 @@
 import javafx.scene.layout.VBox;
+
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,7 +21,7 @@ public class FenetreConnexion extends VBox{
     VBox VBprincipal;
     TextField NomU;
     PasswordField Mdp;
-
+    Boolean erreur ;
     appliSondage sondage;
     
     public FenetreConnexion(appliSondage sondage){
@@ -24,14 +29,14 @@ public class FenetreConnexion extends VBox{
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");
         VBprincipal.setPrefSize(600, 500);
-        
         this.Mdp = new PasswordField();
         this.NomU = new TextField();
 
         this.sondage = sondage;
+        this.erreur =false;
 
         this.setTitle();
-        this.setText();
+        VBprincipal.getChildren().add(this.setText());
         this.getChildren().add(VBprincipal);
 
     }
@@ -43,7 +48,9 @@ public class FenetreConnexion extends VBox{
         VBprincipal.setAlignment(javafx.geometry.Pos.CENTER);
     }
 
-    public void setText(){
+    public VBox setText(){
+        
+        
         // Style Vbox instruction
         VBox VBincription = new VBox();
         VBincription.setSpacing(5);
@@ -52,8 +59,18 @@ public class FenetreConnexion extends VBox{
         "-fx-border-insets: 25 75 100 75;" +
         "-fx-padding: 1em;");
         
-        
-        
+
+        Label textErreur = new Label("Nom d'utilisateur ou mot de passe incorrect");
+        textErreur.setFont(javafx.scene.text.Font.font("Arial", 15));         
+        textErreur.setStyle("-fx-text-fill: #E42B01;");
+
+        HBox hBoxErreur = new HBox();
+        hBoxErreur.setAlignment(Pos.CENTER);
+        hBoxErreur.getChildren().add(textErreur);
+        hBoxErreur.setSpacing(10);
+        hBoxErreur.setPadding(new Insets(10,10,10,10));
+
+
         // text Nom Utilisateur
         Text textU = new Text("Nom utilisateur :");
         textU.setFont(javafx.scene.text.Font.font("Arial", 15)); 
@@ -102,9 +119,19 @@ public class FenetreConnexion extends VBox{
         textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurInscrit(this,this.sondage));
 
         HBox.getChildren().addAll(textMdp, textConnecter);
-        VBincription.getChildren().addAll(textU, NomU, textM, Mdp, btn, HBox);
-        VBprincipal.getChildren().add(VBincription);
+        if(erreur){
+            VBincription.getChildren().addAll(hBoxErreur,textU, NomU, textM, Mdp, btn, HBox);
+            NomU.setStyle("-fx-border-color: #E42B01;");
+            Mdp.setStyle("-fx-border-color: #E42B01;");
 
+
+
+        }
+        else {
+            VBincription.getChildren().addAll(textU, NomU, textM, Mdp, btn, HBox);
+
+        }
+        return VBincription;
     }
 
     public String getNomU(){
@@ -114,7 +141,13 @@ public class FenetreConnexion extends VBox{
     public String getMdp(){
         return Mdp.getText();
     }
-
-
+    public void setErreur(Boolean erreur) {
+        this.erreur = erreur;
+    }
+    public void majVue(){
+        VBprincipal.getChildren().set(1, this.setText());
+        this.getChildren().set(0,VBprincipal);
+        
+    }
 
 }
