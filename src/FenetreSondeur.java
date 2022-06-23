@@ -125,7 +125,8 @@ public class FenetreSondeur extends BorderPane {
         hID.getChildren().addAll(profil,this.boutonParametre);
 
         ltitre.setFont(Font.font(" Arial ",FontWeight.BOLD,32));
-        border.setStyle("-fx-background-color:#587F264B;");
+        border.setStyle("-fx-background-color:#5D6D7E ;");
+        ltitre.setStyle("-fx-text-fill: white;");
         
         border.setLeft(hHome);
         border.setCenter(ltitre);
@@ -153,6 +154,7 @@ public class FenetreSondeur extends BorderPane {
         VBox vBot = new VBox();
         Label lquestion = new Label(""+this.questionActuelle.getTextQ());
         lquestion.setFont(Font.font(" Arial ",FontWeight.BOLD,24));
+        lquestion.setStyle("-fx-text-fill: white;");
             
     
             
@@ -176,7 +178,7 @@ public class FenetreSondeur extends BorderPane {
             
             
         vBot.getChildren().addAll(bot,new Label("\n"),bottom);
-        res.setStyle("-fx-background-color:CORNSILK;");
+        res.setStyle("-fx-background-color:#CACFD2;");
         Insets arg3 = new Insets(40,20,20,20);
         vMid.setPadding(arg3);
         res.setTop(lquestion);
@@ -192,7 +194,7 @@ public class FenetreSondeur extends BorderPane {
         for(String elem: this.questionActuelle.getValeursPossible(this.connexionSQL, this.sondage.getIdQ())){
             Button b1 = new Button(elem);
             b1.setOnAction(new ControleurReponseBouton(this));
-            b1.setPrefWidth(80);
+            b1.setPrefWidth(100);
             b1.setStyle("-fx-background-color:#678466;-fx-text-fill: white;");
             boutons.getChildren().add(b1);
         }
@@ -208,7 +210,7 @@ public class FenetreSondeur extends BorderPane {
         // boutons.setLeft(b1);
         // boutons.setCenter(b2);
         // boutons.setRight(b3);
-        boutons.setSpacing(40);
+        boutons.setSpacing(60);
         Insets arg1 = new Insets(20,20,20,20);
         boutons.setPadding(arg1);
         return boutons;
@@ -256,10 +258,13 @@ public class FenetreSondeur extends BorderPane {
             res.getChildren().add(reponse);
         }
         
+        
         res.setAlignment(Pos.CENTER);
         VBox vbox = new VBox();
 
         Label instruction = new Label("Entrez dans le champs ci-dessous les 3 indices des réponses dans l'ordre choisit, Ex: 1,2,3 ou 1 2 3");
+        instruction.setFont(Font.font(" Arial ",FontWeight.BOLD,15));
+        
         TextField resultat = new TextField();
         this.resClassement += resultat.getText();
 
@@ -297,17 +302,31 @@ public class FenetreSondeur extends BorderPane {
 
     private VBox VBoxDroite(){
         VBox vDroite = new VBox();
-        Label ltitre = new Label("Sommaire: ");
-        vDroite.getChildren().addAll(ltitre);
+        Label nomSonde = new Label("Nom: "+this.main.getSondeActu().getNomSond());
+        Label prenomSonde = new Label("Prenom: "+this.main.getSondeActu().getPrenomSond());
+        Label numSonde = new Label("numero du Sonde: " +String.valueOf(this.main.getSondeActu().getNumSond()));
+        Label telSonde = new Label(this.main.getSondeActu().getTelephoneSond());
+          
+        Label ltitre = new Label(" Sommaire: ");
+        ltitre.setFont(Font.font(" Arial ",FontWeight.BOLD,18));
+        nomSonde.setStyle("-fx-text-fill: white;");
+        numSonde.setStyle("-fx-text-fill: white;");
+        prenomSonde.setStyle("-fx-text-fill: white;");
+        numSonde.setStyle("-fx-text-fill: white;");
+        telSonde.setStyle("-fx-text-fill: white;");
+        ltitre.setStyle("-fx-text-fill: white;");
+    
+        vDroite.getChildren().addAll(numSonde,new Label("\n"),nomSonde,new Label("\n"),prenomSonde,new Label("\n"),telSonde,new Label("\n"),ltitre);
 
         for(Question elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
-            Button bouton =new Button((String) elem.getTextQ());
+            Label bouton =new Label((String) elem.getTextQ());
             bouton.setStyle("-fx-background-color:transparent;");
+            bouton.setStyle("-fx-text-fill: white;");
             
             vDroite.getChildren().add(bouton);
         }
-
-        vDroite.setStyle("-fx-background-color: pink;");
+          
+        vDroite.setStyle("-fx-background-color:#7F8C8D  ;");
         return vDroite;
     }
     
@@ -316,8 +335,20 @@ public class FenetreSondeur extends BorderPane {
         Button resultats = new Button("Resultats");
         Button Valider = new Button("Valider");
         Valider.setOnAction(new ControleurValiderReponse(this, this.main, this.main.getConnexion(), this.main.getSondeActu(), this.main.getUtilisateur()));
+        
         res.setLeft(resultats);
         res.setRight(Valider);
+        // while(this.getIde()<this.getSondage().getListQ().size()-1){
+        //     Valider.setDisable(false);
+        // }
+        System.out.println(this.getSondage().getListQ().size()-1);
+        Valider.setDisable(true);
+        System.out.println(this.questionActuelle.getNumQ()-4);
+        
+        if(this.questionActuelle.getNumQ()-3==this.getSondage().getListQ().size()-1){
+            Valider.setDisable(false);
+
+        }
         return res;
     }
     
