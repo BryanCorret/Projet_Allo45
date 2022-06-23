@@ -26,4 +26,18 @@ public class Reponse{
     public String toString(){
         return "Reponse: " + idQ + " " + numQ + " " + idC + " " + value;
     }
+    @Override
+    public boolean equals(Object o){ //on considère qu'une réponse est différente d'une autre en fonction de sa valeur et le numéro du question
+        if(o==null){
+            return false;
+        }
+        if(o==this){
+            return true;
+        }
+        if(o instanceof Reponse){
+            Reponse rep = (Reponse)o;
+            return rep.getValue()==this.getValue() && rep.getIdQ()==this.idQ && rep.getNumQ()==this.numQ;
+        }
+        return false;
+    }
 }

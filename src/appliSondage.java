@@ -72,7 +72,6 @@ public class appliSondage extends Application{
         this.cbTri = new ComboBox<>();
         this.cbTri.getItems().addAll("Tranche d'âge","Catégorie");
         this.cbTriTypeRep = new ComboBox<>();
-        this.cbTriTypeRep.getItems().addAll();
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
@@ -277,6 +276,17 @@ public class appliSondage extends Application{
         this.sondageSelectionne = sondageSelectionne;
     }
 
+    public void remplirComboBoxTr(){
+        for(String nomTr:BiblioSQL.getLesTr(this.ConnexionSQL)){
+            this.cbTriTypeRep.getItems().add(nomTr);
+        }
+    }
+    public void remplirComboBoxCat(){
+            for(String nomTr:BiblioSQL.getLesCat(this.ConnexionSQL)){
+                this.cbTriTypeRep.getItems().add(nomTr);
+            }
+    }
+
     public List<Double> tailleChart(HashMap<String,List<Reponse>> lReponses){
         List<Double> res = new ArrayList<>();
         int cpt = 0;
@@ -295,10 +305,10 @@ public class appliSondage extends Application{
     return res;
 }
     public Integer nbChaqueReponses(Reponse lReponses,Question question,String tri){
-            if (tri=="idTr"){
+            if (tri=="Tranche d'âge"){
             return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),Integer.valueOf(lReponses.getidC().charAt(1)));
             }
-            else if(tri=="idCat"){
+            else if(tri=="Catégorie"){
                 return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),String.valueOf(lReponses.getidC().charAt(2)));
             }
             return -1;
@@ -315,8 +325,8 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
     return lrep;
 }
     
-    public PieChart createPieChart(HashMap<String,List<Reponse>> lReponses,Question question,String tri){ 
-        int rep = 0;
+    public PieChart createPieChart(HashMap<String,List<Reponse>> lReponses,Question question){
+        List<Reponse> lrep = lesReponsesDifferentes(lReponses); 
         Integer occRep;
         PieChart circulaire = new PieChart();
         circulaire.setTitle(question.getTextQ());
@@ -324,8 +334,11 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
             String key = entry.getKey();
             List<Reponse> value = entry.getValue();
             for (Reponse r:value){
-                occRep = nbChaqueReponses(r, question,tri);
-                circulaire.getData().add(new PieChart.Data(key,occRep));
+                occRep = nbChaqueReponses(r, question,this.cbTri.getValue());
+                if(lrep.contains(r)){
+                circulaire.getData().add(new PieChart.Data(r.getValue(),occRep));
+                lrep.remove(r);
+                }
             }
         }
 
@@ -387,7 +400,9 @@ public List<Reponse> lesReponsesDifferentes(HashMap<String,List<Reponse>> lRepon
         return barChart;
     }
         
-
+    public ComboBox<String> getcbTri(){
+        return this.cbTri;
+    }
     
 
 

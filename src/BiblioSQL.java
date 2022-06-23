@@ -3,6 +3,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -712,6 +713,37 @@ public class BiblioSQL {
       }
       return liste;
     }
+
+    public static List<String> getLesCat(ConnexionMySQL laConnection){
+      Statement st;
+      List<String> liste = new ArrayList<>();
+      try{
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select intituleCat from CATEGORIE;");
+        while(rs.next()){
+          liste.add(rs.getString("intituleCat"));
+      }
+    }
+      catch(SQLException e){
+        e.getMessage();
+      }
+      return liste;
+    }
+    public static List<String> getLesTr(ConnexionMySQL laConnection){
+      Statement st;
+      List<String> liste = new ArrayList<>();
+      try{
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select valDebut,valFin from TRANCHE;");
+        while(rs.next()){
+          liste.add(rs.getString("valDebut")+" - "+rs.getString("valFin"));
+      }
+    }
+      catch(SQLException e){
+        e.getMessage();
+      }
+      return liste;
+    }
  
     public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){
       Statement st;
@@ -726,6 +758,19 @@ public class BiblioSQL {
         e.getMessage();
       }
       return nbQuestion;
+    }
+
+    public static Map<String,List<Reponse>> recupererReponses(ConnexionMySQL laCo,String tri){
+      Map<String,List<Reponse>> res = new HashMap<>();
+      Statement st;
+      try{
+        st = laCo.createStatement();
+        ResultSet rs = st.executeQuery("");
+      }
+      catch(SQLException e){
+        e.getMessage();
+      }
+      return res;
     }
 
 
