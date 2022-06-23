@@ -537,17 +537,17 @@ public class BiblioSQL {
 
 
     //donne tt les sondés qui sont dans le panel
-    public static List<Sonde> getSondeParRapportAuPanel(ConnexionMySQL laConnection, int idPan){
+    public static List<Sonde> getSondeParRapportAuPanel(ConnexionMySQL laConnection, String nomPan){
       Statement st;
       List<Sonde> liste = new ArrayList<Sonde>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("select distinct numSond, nomSond, prenomSond, dateNaisSond, telephoneSond,idC from SONDE natural join PANEL natural join QUESTIONNAIRE where idPan ="+idPan+";");
+        System.out.println("select numSond, nomSond, prenomSond, dateNaisSond, telephoneSond,idC from SONDE natural join PANEL natural join QUESTIONNAIRE where nomPan ='"+nomPan+"';");
+        ResultSet rs = st.executeQuery("select numSond, nomSond, prenomSond, dateNaisSond, telephoneSond,idC from SONDE natural join PANEL natural join QUESTIONNAIRE where nomPan ='"+nomPan+"';");
         while(rs.next()){
           Sonde personne = new Sonde(rs.getInt("numSond"), rs.getString("nomSond"), rs.getString("prenomSond"), rs.getDate("dateNaisSond"), rs.getString("telephoneSond"), rs.getString("idC"));
           liste.add(personne);
         }
-        return liste;
       }
       catch (SQLException e) {
         e.printStackTrace();
@@ -580,8 +580,8 @@ public class BiblioSQL {
 
 
     //donne un sonde choisi au hasard dans le panel (et si il n'a pas déja répondu au Questionnaire)
-    public static Sonde getUnSondeAuHasardDansLePanel(ConnexionMySQL laConnection, int idQ, Integer idPan){
-      List<Sonde> liste = getSondeParRapportAuPanel(laConnection, idPan);
+    public static Sonde getUnSondeAuHasardDansLePanel(ConnexionMySQL laConnection, int idQ, String nomPan){
+      List<Sonde> liste = getSondeParRapportAuPanel(laConnection, nomPan);
       for (Sonde sond : liste){
         if (!voirSiLeSondeADejaRep(laConnection,idQ,sond.getNumSond())) {
           return sond;

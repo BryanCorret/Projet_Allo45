@@ -70,7 +70,9 @@ public class appliSondage extends Application{
         this.cbTypediag = new ComboBox<>();
         this.cbTypediag.getItems().addAll("Circulaire","Courbes","Bâtons");
         this.cbTri = new ComboBox<>();
-        this.cbTri.getItems().addAll("","","Tous");
+        this.cbTri.getItems().addAll("Tranche d'âge","Catégorie");
+        this.cbTriTypeRep = new ComboBox<>();
+        this.cbTriTypeRep.getItems().addAll();
         this.boutonAnalyste = new Button("Analyser les sondage");
         this.boutonSondeur = new Button("Sélectionner");
         this.boutonDonneesBrutes = new Button("Données Brutes");
