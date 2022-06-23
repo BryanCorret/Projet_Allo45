@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -14,7 +15,11 @@ import javafx.scene.control.ToggleGroup;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
+
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.NumberAxis;
 
 public class appliSondage extends Application{
 
@@ -278,8 +283,27 @@ public class appliSondage extends Application{
     }
 
     
-    public PieChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
-    
+    public BarChart createBarchar(int id, List<Reponse> lReponses){ // id de la question
+        int i = 1;
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+        bc.setTitle("Histograme this.getNameQuestion(id)");
+        xAxis.setLabel("Country");       
+        yAxis.setLabel("Value");
+
+        for (Reponse r : lReponses) { // creation des  reponse dans des séries 
+            XYChart.Series series1 = new XYChart.Series();
+            series1.setName(r.toString());
+            for (Reponse rtype : lReponses) { // creation des  reponse dans des séries 
+
+            // series1.getData().add(new XYChart.Data(BibloSQL.appratientcategorite(r.getIdC),BiblioSQL.getNbReponse(id,r.toString() ));
+            // appratientcategorite(r.getIdC) renvoie un STRING avec le nom de la cattegorie 
+            // BiblioSQL.getNbReponse(id,rtype.toString()) renvoie le nombre de réponse corrspondante
+            bc.getData().addAll(series1); }
+           
+        }
+        return bc;
 
     }
 

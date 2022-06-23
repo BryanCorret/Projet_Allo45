@@ -57,7 +57,7 @@ public class FenetreAnalyste extends BorderPane{
 
     private appliSondage app;
     private String Sondageactu;
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app, ComboBox<String> cbTypediag, ComboBox<String> cbTri){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -67,9 +67,9 @@ public class FenetreAnalyste extends BorderPane{
 
         this.app = app;
 
-        this.comboAnalyse = new ComboBox<>();
+        this.comboAnalyse = cbTypediag;
         this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
-        this.comboClasse = new ComboBox<>();
+        this.comboClasse = cbTri;
         this.comboQuestion = new ComboBox<>();
 
         this.questionnaire = questionnaire;
@@ -221,7 +221,7 @@ public class FenetreAnalyste extends BorderPane{
         vbox.getChildren().addAll(vboxGraphique, titreCommentaire, commentaire);
 
         vbox.setPadding(new Insets(5,5,0,5));
-        }
+        
         return vbox;
     }
     public VBox leftVBox(){
