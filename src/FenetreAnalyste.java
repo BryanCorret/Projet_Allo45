@@ -8,7 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -47,15 +47,17 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboClasse;
     private ComboBox<String> comboQuestion;
 
-    //la lise des questions
+    //la liste des questions
     private Questionnaire questionnaire;
     private Question questionActuel;
 
     private TextArea commentaire;
 
     private BorderPane lesFleches;
-    
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches){
+
+    private appliSondage app;
+    private String Sondageactu;
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app, ComboBox<String> cbTypediag, ComboBox<String> cbTri){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -63,10 +65,13 @@ public class FenetreAnalyste extends BorderPane{
         this.boutonDonneeBrute = new Button("Données Brutes");
         this.boutonDonneeBrute.setStyle("-fx-background-color: MEDIUMBLUE;-fx-text-fill: white;");
 
-        this.comboAnalyse = new ComboBox<>();
-        this.comboClasse = new ComboBox<>();
-        this.comboQuestion = new ComboBox<>();
+        this.app = app;
 
+        this.comboAnalyse = cbTypediag;
+        this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
+        this.comboClasse = cbTri;
+        this.comboQuestion = new ComboBox<>();
+        this.Sondageactu = questionnaire.getTitreQ();
         this.questionnaire = questionnaire;
         this.questionActuel = this.questionnaire.getListQ().get(0); //la première question
 
@@ -128,6 +133,7 @@ public class FenetreAnalyste extends BorderPane{
         HBox hboxBoutons = new HBox();
         hboxBoutons.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
+
         Label titreSondage = new Label(this.questionnaire.getTitreQ());
         titreSondage.setFont(Font.font(" Arial ",FontWeight.BOLD,15));
 
@@ -156,19 +162,52 @@ public class FenetreAnalyste extends BorderPane{
         //la partie graphique
         VBox vboxGraphique = new VBox();
 
-        PieChart tarte = new PieChart();
+        PieChart Circulaire = new PieChart();
+
         Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
+        if (Sondageactu.equals("Circulaire")){
+            Circulaire.getData ().setAll (
+            new PieChart.Data ("Oui", 77) ,
+            new PieChart.Data ("Non", 8) ,
+            new PieChart.Data ("Ne sais pas", 11) ,
+            new PieChart.Data ("Autre", 4) ) ;
+            Circulaire.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
+             vboxGraphique.getChildren().add(Circulaire);
+        // vbox.getChildren().add(this.sondage.createPieChart);
 
-        tarte.getData ().setAll (
-        new PieChart.Data ("Oui", 77) ,
-        new PieChart.Data ("Non", 8) ,
-        new PieChart.Data ("Ne sais pas", 11) ,
-        new PieChart.Data ("Autre", 4) ) ;
-        tarte.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
+
+        }
+        else if (Sondageactu.equals("Histogramme")){
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+        bc.setTitle("Histograme Réponse");
+        xAxis.setLabel("Country");       
+        yAxis.setLabel("Value");
+ 
+        XYChart.Series series1 = new XYChart.Series();
+        XYChart.Series series2 = new XYChart.Series();
+        XYChart.Series series3 = new XYChart.Series();
+        
+        series1.setName("R1");
+        series2.setName("R2"); 
+        series3.setName("R3"); 
+
+        series1.getData().add(new XYChart.Data("OUI", 12));
+        
+        series2.getData().add(new XYChart.Data("NON", 11)); 
+        
+        series3.getData().add(new XYChart.Data("Ne sais pas", 3));      
+
+ 
+
+        System.out.println("Histograme");
+        
+        }
 
 
-        vboxGraphique.getChildren().addAll(titreGraphique, tarte, this.lesFleches);
+        vboxGraphique.getChildren().addAll(titreGraphique); // ,this.lesFleches
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -184,8 +223,7 @@ public class FenetreAnalyste extends BorderPane{
         vbox.setPadding(new Insets(5,5,0,5));
         
         return vbox;
-    }
-
+        }
     public VBox leftVBox(){
 
         //une grande vbox contenant deux vbox
@@ -204,13 +242,19 @@ public class FenetreAnalyste extends BorderPane{
 
 
         //on rempli les ComboBox
-        this.comboAnalyse.getItems().addAll("Camembert", "Histogramme", "Pouet", "Machin");
+        this.comboAnalyse.getItems().addAll("Circulaire", "Histogramme", "Pouet", "Machin");
+        this.comboAnalyse.getSelectionModel().select(0);
+
         this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
+        this.comboClasse.getSelectionModel().select(0);
+
 
         //on rempli la ComboBox avec les questions
         for (Question question : this.questionnaire.getListQ()){
             this.comboQuestion.getItems().add(question.getTextQ());
         }
+        this.comboQuestion.getSelectionModel().select(0);
+
 
         vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
         vboxHaute.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
@@ -234,5 +278,14 @@ public class FenetreAnalyste extends BorderPane{
         vbox.setPadding(new Insets(0,5,5,5));
         return vbox;
     }
+    public void majAffichageDiagrame(){
+        this.setCenter(centerVbox());
+    }
+    public void setSondeActu(String sondage){
+        this.Sondageactu = sondage;
+    }
 
+    public ComboBox<String> getComboAnalyse() {
+        return comboAnalyse;
+    }
 }

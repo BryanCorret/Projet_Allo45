@@ -11,15 +11,21 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
     private FenetreAnalyste analyste;
     private FenetreSondeur sondeur;
 
-    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste, FenetreSondeur sondeur){
+    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste){
         this.appli = appli;
         this.analyste = analyste;
+    }
+
+    public ControleurFleche(appliSondage appli, FenetreSondeur sondeur){
+        this.appli = appli;
         this.sondeur = sondeur;
+        System.out.println("holoeeg");
     }
 
     @Override
     public void handle(ActionEvent event) {
         Button bouton = (Button) (event.getTarget());
+        System.out.println("Hellooooooooooooooooooooooo");
         
         /*      
                                      _           _       
@@ -64,7 +70,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                     String line;
                     while((line = br.readLine()) != null){
-                    // ajoute la ligne au buffered reader
+                    // ajoute la ligne
                     sb.append(line); sb.append("\n");     
                     }prec = sb.toString();
                     fr.close();    
@@ -169,7 +175,9 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
 
                 this.sondeur.setQuestion(questionnaire.get(index));
-
+                //maj de l'affichage du sondeur
+                this.sondeur.maj(index);
+                System.out.println(index);
                 
                 //                  PARTIE FICHIER
                 
@@ -191,7 +199,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                     String line;
                     while((line = br.readLine()) != null){
-                    // ajoute la ligne au buffered reader
+                    // ajoute la ligne
                     sb.append(line); sb.append("\n");     
                     }
                     prec = sb.toString();
@@ -208,23 +216,22 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     
                     //selon le type de la question (actuel)
                     //on récupère les données correspondantes
+                    System.out.println(this.sondeur.getTypeReponse());
                     if (this.sondeur.getTypeReponse() == 'u'){
-                        bw.write(this.sondeur.getTextArea() + "/");
-                        bw.write(this.sondeur.getValeurBouton() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurBouton() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'm'){
-                        bw.write(this.sondeur.getTextArea() + "/");
-                        bw.write(this.sondeur.getValeurCombo() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurCombo() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'c'){
                         //RIEN POUR L'INSTANT, IL FAUT FINIR L'IHM DU CLASSEMENT AVANT
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getClassement() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'n'){
-                        bw.write(this.sondeur.getTextArea() + "/");
-                        bw.write(this.sondeur.getSlider() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getSlider() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'l'){
-                        bw.write(this.sondeur.getTextArea() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getTextArea() + "\n");
                     }
                     
                     else{ System.out.println("Mauvais type de Question");}
@@ -246,7 +253,8 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 if (index-1 < 0){index = questionnaire.size()-1;}else{index--;}
                 
                 this.sondeur.setQuestion(questionnaire.get(index));
-
+                //maj de l'affichage du sondeur
+                this.sondeur.maj(index);
 
                 //                  PARTIE FICHIER
                 
@@ -304,9 +312,6 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 }catch (IOException e){System.out.println("ERREUR 404");}
 
                 
-                //maj de l'affichage du sondeur
-                this.appli.majAffichageSondeur();
-
             }
 
         }   

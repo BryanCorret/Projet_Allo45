@@ -16,6 +16,21 @@ insert into UTILISATEUR(idU,nomU,prenomU,login,motDePasse,idR) values
 	(7,'BREBIGNE','Guillaume','util7','util7',1),
 	(8,'CHENALE','Solene','util8','util8',2);
 
+CREATE USER util1 IDENTIFIED BY 'util1';
+CREATE USER util2 IDENTIFIED BY 'util2';
+CREATE USER util3 IDENTIFIED BY 'util3';
+CREATE USER util4 IDENTIFIED BY 'util4';
+CREATE USER util5 IDENTIFIED BY 'util5';
+CREATE USER util6 IDENTIFIED BY 'util6';
+CREATE USER util7 IDENTIFIED BY 'util7';
+CREATE USER util8 IDENTIFIED BY 'util8';
+
+CREATE ROLE ADM, CONCEPTEUR, SONDEUR, ANALYSTE;
+GRANT ALL ON sondeur.* to ADM;
+GRANT SELECT, INSERT, UPDATE, DROP ON sondeur.* to CONCEPTEUR;
+GRANT SELECT, INSERT ON sondeur.* TO SONDEUR;
+GRANT SELECT ON sondeur.* to ANALYSTE;
+
 -- les clients
 insert into CLIENT(numC,raisonSoc,adresse1,adresse2,CodePostal,Ville,Telephone,email) values
 	(15678,'Colore ta vie','12 avenue des Nuages',NULL,'45650','Saint Jean le Blanc','0238778822','ctv@peinture.fr'),

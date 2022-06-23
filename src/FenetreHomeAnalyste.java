@@ -24,20 +24,20 @@ public class FenetreHomeAnalyste extends BorderPane {
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonDeco;
-    private Button boutonCompte;
-    private Button boutonSelect;
     private Button boutonResearch;
-    private Button boutonInspect;
+    private Button boutonParam;
     private String sondageid;
     private appliSondage sondage;
     public String SondageNom;
     
   
-    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, appliSondage s){
+    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, Button Param,appliSondage s){
         super();
+        this.sondage = s;
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
         this.boutonDeco = boutonDeco;
+        this.boutonParam = Param;
         this.sondageid = "";
         this.SondageNom = "";
         this.sondage = s;
@@ -57,6 +57,7 @@ public class FenetreHomeAnalyste extends BorderPane {
         hRefresh.getChildren().add(textHome);
         hRefresh.setAlignment(Pos.CENTER);
         hRefresh.setPadding(new Insets(10,-310,10,10));
+
         
         if (sondageid.equals("")){
             textHome.setVisible(false);
@@ -65,11 +66,11 @@ public class FenetreHomeAnalyste extends BorderPane {
             textHome.setVisible(true);
         }
 
-        hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh, hRefresh);
-        hHome.setSpacing(10);
+        hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh, this.boutonParam, hRefresh);
+        hHome.setSpacing(-5);
 
 
-        Label ltitre = new Label("Bienvenue"+"this.getNom()");
+        Label ltitre = new Label("Bienvenue "+this.sondage.getUtilisateur().getPrenom());
         ltitre.setAlignment(Pos.CENTER);
 
         HBox hID = new HBox();
@@ -120,6 +121,7 @@ public class FenetreHomeAnalyste extends BorderPane {
         bouton2.setOnAction(new ControleurNavAnalyste(this, this.sondage));
         Button bouton3 = new Button("Rechercher une question",ISearch);
         Button bouton4 = new Button("Inspecter le Sondage",ISave);
+        bouton4.setOnAction(new ControleurInpecterElement(this.sondage, this));
 
         bouton1.setContentDisplay(ContentDisplay.TOP);
         bouton2.setContentDisplay(ContentDisplay.TOP);
@@ -150,6 +152,9 @@ public class FenetreHomeAnalyste extends BorderPane {
 
     public void setSondageId(String id){
         this.sondageid = id;
+    }
+    public String getSondageid() {
+        return sondageid;
     }
 
     public void setSondageNom(String sondageNom) {
