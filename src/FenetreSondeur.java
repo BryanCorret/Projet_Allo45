@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 
 public class FenetreSondeur extends BorderPane {
 
-    
+    private appliSondage main;
     private Button boutonHome;
     private Button boutonRefresh;
     private Button boutonParametre;
@@ -44,46 +44,77 @@ public class FenetreSondeur extends BorderPane {
     private String valeurBouton;
     private BorderPane fleche;
     private ConnexionMySQL connexionSQL;
+    private String choice;
+    private int ide;
+    private String resClassement;
     
   
-    public FenetreSondeur(Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage, BorderPane fleche,ConnexionMySQL connexionSQL){
+    public FenetreSondeur(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
         super();
+        this.init(main,boutonHome,boutonRefresh,boutonParametre,sondage,connexionSQL);
+        this.maj(0);
+    }
+    public void init(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
+        this.main = main;
         this.boutonHome = boutonHome;
         this.connexionSQL=connexionSQL;
-        this.fleche = fleche;
+        this.fleche = this.lesFleches();
         this.area= new TextArea();
-
+        this.choice = "";
+        this.ide = 0;
         this.sondage = sondage;
+        this.resClassement = "";
 
-        this.questionActuelle = sondage.getListQ().get(0);
+        this.questionActuelle = sondage.getListQ().get(this.ide);
+        
 
         this.comboMultiple = new ComboBox<>();
 
         this.boutonRefresh = boutonRefresh;
 
         this.boutonParametre = boutonParametre;
+        //this.boutonParametre.setOnAction(new ControleurParam());
         this.valeurBouton = " ";
 
         this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);
 
         BorderPane borderTop = borderPaneTop();
         VBox vdroite = VBoxDroite();
-        BorderPane vMid = VBoxMidTextArea();
+        BorderPane Bmid = VBoxMidTextArea();
         
         
         this.setTop(borderTop);
-        this.setCenter(vMid);
+        this.setCenter(Bmid);
         this.setRight(vdroite);
-        
-    }
     
+    }
+    public void maj(int id){
+        this.fleche = this.lesFleches();
+        this.area= new TextArea();
+        this.questionActuelle = sondage.getListQ().get(id);
+        this.comboMultiple = new ComboBox<>();
+        this.valeurBouton = " ";
+        this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);
+        BorderPane borderTop = borderPaneTop();
+        VBox vdroite = VBoxDroite();
+        BorderPane Bmid = VBoxMidTextArea();
+        this.setTop(borderTop);
+        this.setCenter(Bmid);
+        this.setRight(vdroite);
+    }
+    public void setIde(int o){
+        this.ide = o;
+    }
+    public int getIde(){
+        return this.ide;
+    }
     private BorderPane borderPaneTop(){
         BorderPane border = new BorderPane();
         
         HBox hHome = new HBox();
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
-        Label ltitre = new Label("Titre sondage");
+        Label ltitre = new Label(this.sondage.getTitreQ());
 
         HBox hID = new HBox();
         
@@ -94,7 +125,8 @@ public class FenetreSondeur extends BorderPane {
         hID.getChildren().addAll(profil,this.boutonParametre);
 
         ltitre.setFont(Font.font(" Arial ",FontWeight.BOLD,32));
-        border.setStyle("-fx-background-color:#587F264B;");
+        border.setStyle("-fx-background-color:#5D6D7E ;");
+        ltitre.setStyle("-fx-text-fill: white;");
         
         border.setLeft(hHome);
         border.setCenter(ltitre);
@@ -116,59 +148,69 @@ public class FenetreSondeur extends BorderPane {
     }
     
     
-
     private BorderPane VBoxMidTextArea(){
-        BorderPane vMid = new BorderPane();
+        BorderPane res = new BorderPane();
+        VBox vMid = new VBox();
         VBox vBot = new VBox();
         Label lquestion = new Label(""+this.questionActuelle.getTextQ());
         lquestion.setFont(Font.font(" Arial ",FontWeight.BOLD,24));
-       
-
+        lquestion.setStyle("-fx-text-fill: white;");
+            
+    
+            
         TextArea treponse = this.area;
-        
+            
         BorderPane bot = this.fleche;
         BorderPane bottom = BorderPaneBot();
         treponse.setStyle("-fx-control-inner-background:#ffdab9;");
-
-        vMid.getChildren().addAll(lquestion);
-        
+    
+        vMid.getChildren().addAll(new Label("\n"),new Label("\n"),new Label("\n"));
+            
+        System.out.println(this.questionActuelle.getType());
         switch(this.questionActuelle.getType()){
-            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons());
-            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());
-            case 'c' : vMid.getChildren().add(classementTile());
-            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());
-            case 'l' : vMid.getChildren().add(treponse);
+            case 'u' : vMid.getChildren().add(BorderBoutons()); break;
+            case 'm' : vMid.getChildren().add(comboBoxMultiple());break;
+            case 'c' : vMid.getChildren().add(classementTile());break;
+            case 'n' : vMid.getChildren().add(SliderMidSlider());break;
+            case 'l' : vMid.getChildren().add(treponse);break;
         }
-        
-        
-        
+            
+            
+            
         vBot.getChildren().addAll(bot,new Label("\n"),bottom);
-        vMid.setStyle("-fx-background-color:CORNSILK;");
-        Insets arg3 = new Insets(20,20,20,20);
+        res.setStyle("-fx-background-color:#CACFD2;");
+        Insets arg3 = new Insets(40,20,20,20);
         vMid.setPadding(arg3);
-        vMid.setTop(lquestion);
+        res.setTop(lquestion);
         BorderPane.setAlignment(lquestion, Pos.CENTER);
-        vMid.setCenter(classementTile());
-        vMid.setBottom(vBot);
-
-        return vMid;
+        res.setCenter(vMid);
+        res.setBottom(vBot);
+        return res;
     }
-
-    private BorderPane BorderBoutons(){
-        BorderPane boutons = new BorderPane();
+    private HBox BorderBoutons(){
+        HBox boutons = new HBox();
         
         // img.setFitHeight(35);img.setFitWidth(35);
+        for(String elem: this.questionActuelle.getValeursPossible(this.connexionSQL, this.sondage.getIdQ())){
+            Button b1 = new Button(elem);
+            b1.setOnAction(new ControleurReponseBouton(this));
+            b1.setPrefWidth(100);
+            b1.setStyle("-fx-background-color:#678466;-fx-text-fill: white;");
+            boutons.getChildren().add(b1);
+        }
+        boutons.getChildren().add(new Text(this.choice));
         
-        Button b1 = new Button("Oui");
-        Button b2 = new Button("Non");
-        Button b3 = new Button("Je ne sais pas");
-        b1.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
-        b2.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
-        b3.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
+        // Button b1 = new Button("Oui");
+        // Button b2 = new Button("Non");
+        // Button b3 = new Button("Je ne sais pas");
+        // b1.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
+        // b2.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
+        // b3.setStyle("-fx-background-color:#663366;-fx-text-fill: white;");
 
-        boutons.setLeft(b1);
-        boutons.setCenter(b2);
-        boutons.setRight(b3);
+        // boutons.setLeft(b1);
+        // boutons.setCenter(b2);
+        // boutons.setRight(b3);
+        boutons.setSpacing(60);
         Insets arg1 = new Insets(20,20,20,20);
         boutons.setPadding(arg1);
         return boutons;
@@ -183,26 +225,53 @@ public class FenetreSondeur extends BorderPane {
         return res;
     }
 
-    private TilePane classementTile(){
+    private BorderPane classementTile(){
+        BorderPane bfinal = new BorderPane();
         TilePane res = new TilePane(Orientation.VERTICAL) ;
         
-        for(int i=0; i< this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).size();i++){
+        // for(int i=0; i< this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).size();i++){
+        //     HBox reponse = new HBox();  
+        //     Label lreponse = new Label();
+        //     TextField tfreponse = new TextField();
+        //     lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
+
+        //     Insets a = new Insets(10,5,10,10);
+        //     lreponse.setPadding(a);
+        //     reponse.getChildren().addAll(lreponse,tfreponse,new Label("  "));
+            
+        //     res.getChildren().addAll(reponse);
+        
+        // }
+        
+        List<String> valeursPossibles = new ArrayList<>();
+        valeursPossibles = this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ());
+        for(int i=0;i< valeursPossibles.size();i++){
             HBox reponse = new HBox();  
             Label lreponse = new Label();
-            TextField tfreponse = new TextField();
+            
             lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
+            this.setValeurBouton(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
 
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
-            reponse.getChildren().addAll(lreponse,tfreponse,new Label("  "));
-            
-            res.getChildren().addAll(reponse);
-        
+            reponse.getChildren().addAll(new Label((String.valueOf(i)), lreponse));
+            res.getChildren().add(reponse);
         }
         
+        
         res.setAlignment(Pos.CENTER);
+        VBox vbox = new VBox();
 
-        return res;
+        Label instruction = new Label("Entrez dans le champs ci-dessous les 3 indices des réponses dans l'ordre choisit, Ex: 1,2,3 ou 1 2 3");
+        instruction.setFont(Font.font(" Arial ",FontWeight.BOLD,15));
+        
+        TextField resultat = new TextField();
+        this.resClassement += resultat.getText();
+
+        vbox.getChildren().addAll(instruction,resultat);
+        bfinal.setCenter(res);
+        bfinal.setBottom(vbox);
+        return bfinal;
     }
    
     private VBox SliderMidSlider(){
@@ -233,17 +302,31 @@ public class FenetreSondeur extends BorderPane {
 
     private VBox VBoxDroite(){
         VBox vDroite = new VBox();
-        Label ltitre = new Label("Sommaire: ");
-        vDroite.getChildren().addAll(ltitre);
+        Label nomSonde = new Label("Nom: "+this.main.getSondeActu().getNomSond());
+        Label prenomSonde = new Label("Prenom: "+this.main.getSondeActu().getPrenomSond());
+        Label numSonde = new Label("numero du Sonde: " +String.valueOf(this.main.getSondeActu().getNumSond()));
+        Label telSonde = new Label(this.main.getSondeActu().getTelephoneSond());
+          
+        Label ltitre = new Label(" Sommaire: ");
+        ltitre.setFont(Font.font(" Arial ",FontWeight.BOLD,18));
+        nomSonde.setStyle("-fx-text-fill: white;");
+        numSonde.setStyle("-fx-text-fill: white;");
+        prenomSonde.setStyle("-fx-text-fill: white;");
+        numSonde.setStyle("-fx-text-fill: white;");
+        telSonde.setStyle("-fx-text-fill: white;");
+        ltitre.setStyle("-fx-text-fill: white;");
+    
+        vDroite.getChildren().addAll(numSonde,new Label("\n"),nomSonde,new Label("\n"),prenomSonde,new Label("\n"),telSonde,new Label("\n"),ltitre);
 
         for(Question elem : BiblioSQL.getQuestionQuestionnaire(this.connexionSQL, sondage.getIdQ())){
-            Button bouton =new Button((String) elem.getTextQ());
+            Label bouton =new Label((String) elem.getTextQ());
             bouton.setStyle("-fx-background-color:transparent;");
+            bouton.setStyle("-fx-text-fill: white;");
             
             vDroite.getChildren().add(bouton);
         }
-
-        vDroite.setStyle("-fx-background-color: pink;");
+          
+        vDroite.setStyle("-fx-background-color:#7F8C8D  ;");
         return vDroite;
     }
     
@@ -251,8 +334,21 @@ public class FenetreSondeur extends BorderPane {
         BorderPane res = new BorderPane();
         Button resultats = new Button("Resultats");
         Button Valider = new Button("Valider");
+        Valider.setOnAction(new ControleurValiderReponse(this, this.main, this.main.getConnexion(), this.main.getSondeActu(), this.main.getUtilisateur()));
+        
         res.setLeft(resultats);
         res.setRight(Valider);
+        // while(this.getIde()<this.getSondage().getListQ().size()-1){
+        //     Valider.setDisable(false);
+        // }
+        System.out.println(this.getSondage().getListQ().size()-1);
+        Valider.setDisable(true);
+        System.out.println(this.questionActuelle.getNumQ()-4);
+        
+        if(this.questionActuelle.getNumQ()-3==this.getSondage().getListQ().size()-1){
+            Valider.setDisable(false);
+
+        }
         return res;
     }
     
@@ -286,17 +382,66 @@ public class FenetreSondeur extends BorderPane {
     public void setQuestion(Question que){this.questionActuelle=que;}
 
     // Reponse
-    public char getTypeReponse(){return this.questionActuelle.getType();}
+    public char getTypeReponse(){
+        switch(this.ide){
+            case 0:
+            return sondage.getListQ().get(this.ide).getType();
+        }
+            return sondage.getListQ().get(this.ide-1).getType();
+    }
 
     //ComboBox 
     public String getValeurCombo(){return this.comboMultiple.getValue();}
     public void setValeurCombo(String valeur){this.comboMultiple.setValue(valeur);}
 
+    //Classement
+    public String getClassement(){
+        // List<String> res = new ArrayList<>();
+        // String [] newStr ;
+        // if(this.resClassement.contains(" ")){ newStr =this.resClassement.split("\\s+");}
+        // else{ newStr =this.resClassement.split("\\,");}
+        // for(String elem : newStr){
+        //     res.add(elem);
+        // }
+        // return res;
+        return this.resClassement;
+    }
+
+
     // Le controleur set une valeur a cette variable
     // Bouton
     public void setValeurBouton(String val){this.valeurBouton=val;}
-    public String getValeurBouton(){return this.valeurBouton;}
+    public String getValeurBouton(){
+        return this.valeurBouton;}
     
-    
+    public BorderPane lesFleches(){
+        //les flèches
+        BorderPane bpFleche = new BorderPane();
+        ImageView imgFlecheGauche = new ImageView("file:IMG/fleche.png");
+        ImageView imgFlecheDroite = new ImageView("file:IMG/fleche.png");
+        imgFlecheDroite.setRotate(180.0);
+        imgFlecheGauche.setFitHeight(40);imgFlecheGauche.setFitWidth(40);
+        imgFlecheDroite.setFitHeight(40);imgFlecheDroite.setFitWidth(40);
 
+        Button boutonFlecheGauche = new Button("", imgFlecheGauche);
+        Button boutonFlecheDroite = new Button("", imgFlecheDroite);
+        //cache la partie visible des boutons
+        // boutonFlecheGauche.setStyle("-fx-background-color:transparent;");
+        // boutonFlecheDroite.setStyle("-fx-background-color:transparent;");
+
+        //pour les différencier dans le Controlleur Fleche
+        boutonFlecheGauche.setId("flecheGauche");
+        boutonFlecheDroite.setId("flecheDroite");
+
+        boutonFlecheDroite.setOnAction(new ControleurFleche(this.main,this));
+        boutonFlecheGauche.setOnAction(new ControleurFleche(this.main,this));
+       
+        bpFleche.setRight(boutonFlecheDroite);
+        bpFleche.setLeft(boutonFlecheGauche);
+        return bpFleche;
+    }
+
+    public void setTexteChoice(String choix){
+        this.choice = choix;
+    }
 }
