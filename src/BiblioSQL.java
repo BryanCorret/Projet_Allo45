@@ -635,7 +635,7 @@ public class BiblioSQL {
       String caracteristique = reponse.getidC();
       try{        
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("select count(valeur) val from REPONDRE where valeur = "+rep+" and idC ="+caracteristique+";");
+        ResultSet rs = st.executeQuery("select count(valeur) val from REPONDRE where valeur = '"+rep+" 'and idC ='"+caracteristique+"';");
         return rs.getInt("val");
       } catch (SQLException e){
         e.getMessage();
@@ -643,6 +643,22 @@ public class BiblioSQL {
       return -1;
     }   
     
+    public static List<String> getToutLesCaracteristique(ConnexionMySQL laConnection){
+      Statement st;
+      List<String> liste = new ArrayList<String>();
+      try{        
+        st = laConnection.createStatement();
+        ResultSet rs = st.executeQuery("select idC from CARACTERISTIQUE;");
+        while(rs.next()){
+          liste.add(rs.getString("idC"));
+        }
+        return liste;
+      } catch (SQLException e){
+        e.getMessage();
+      }
+      return liste;
+    }
+
 
   // a modif
     // public static int getNbQuestionDansQuestionnaire(ConnexionMySQL laConnection, int idQ){
