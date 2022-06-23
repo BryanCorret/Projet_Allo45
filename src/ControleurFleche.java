@@ -11,15 +11,21 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
     private FenetreAnalyste analyste;
     private FenetreSondeur sondeur;
 
-    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste, FenetreSondeur sondeur){
+    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste){
         this.appli = appli;
         this.analyste = analyste;
+    }
+
+    public ControleurFleche(appliSondage appli, FenetreSondeur sondeur){
+        this.appli = appli;
         this.sondeur = sondeur;
+        System.out.println("holoeeg");
     }
 
     @Override
     public void handle(ActionEvent event) {
         Button bouton = (Button) (event.getTarget());
+        System.out.println("Hellooooooooooooooooooooooo");
         
         /*      
                                      _           _       
@@ -169,7 +175,8 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
 
                 this.sondeur.setQuestion(questionnaire.get(index));
-
+                //maj de l'affichage du sondeur
+                this.sondeur.maj(index);
                 
                 //                  PARTIE FICHIER
                 
@@ -246,7 +253,8 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 if (index-1 < 0){index = questionnaire.size()-1;}else{index--;}
                 
                 this.sondeur.setQuestion(questionnaire.get(index));
-
+                //maj de l'affichage du sondeur
+                this.sondeur.maj(index);
 
                 //                  PARTIE FICHIER
                 
@@ -304,9 +312,6 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 }catch (IOException e){System.out.println("ERREUR 404");}
 
                 
-                //maj de l'affichage du sondeur
-                this.appli.majAffichageSondeur();
-
             }
 
         }   

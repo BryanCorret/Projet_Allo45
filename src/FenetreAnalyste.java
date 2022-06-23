@@ -71,7 +71,7 @@ public class FenetreAnalyste extends BorderPane{
         this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
         this.comboClasse = cbTri;
         this.comboQuestion = new ComboBox<>();
-
+        this.Sondageactu = questionnaire.getTitreQ();
         this.questionnaire = questionnaire;
         this.questionActuel = this.questionnaire.getListQ().get(0); //la première question
 
@@ -207,7 +207,7 @@ public class FenetreAnalyste extends BorderPane{
         }
 
 
-        vboxGraphique.getChildren().addAll(titreGraphique,this.lesFleches);
+        vboxGraphique.getChildren().addAll(titreGraphique); // ,this.lesFleches
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -223,7 +223,7 @@ public class FenetreAnalyste extends BorderPane{
         vbox.setPadding(new Insets(5,5,0,5));
         
         return vbox;
-    }
+        }
     public VBox leftVBox(){
 
         //une grande vbox contenant deux vbox

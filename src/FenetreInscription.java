@@ -1,6 +1,7 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -17,6 +18,7 @@ public class FenetreInscription extends VBox{
     TextField Mdp2;
     TextField NomF;
     TextField NomP;
+    ComboBox<String> idRole;
     appliSondage sondage;
     
     public FenetreInscription(appliSondage sondage){
@@ -30,6 +32,7 @@ public class FenetreInscription extends VBox{
         this.NomU = new TextField();
         this.NomP = new TextField();
         this.NomF = new TextField();
+        this.idRole = new ComboBox<>();
 
         this.sondage = sondage;
         
@@ -104,7 +107,8 @@ public class FenetreInscription extends VBox{
         Mdp2.setStyle("-fx-Background-Color: #ADAEB0;");
         this.Mdp2.setPromptText("Confirmation du mot de passe");
 
-        
+        this.idRole.getItems().addAll("Concepteur", "Sondeur", "Analyste");
+
         // Button
         ImageView img = new ImageView(new Image("file:IMG/buttonIn.png"));
         img.setFitHeight(100);
@@ -122,15 +126,16 @@ public class FenetreInscription extends VBox{
         Text text = new Text("Déjà un compte ? ");
         text.setFont(javafx.scene.text.Font.font("Arial", 15));
 
-
+        
         Label textConnecter = new Label("Connectez-vous");
+
         textConnecter.setUnderline(true);
         textConnecter.setFont(javafx.scene.text.Font.font("Arial", 15));
         textConnecter.setStyle("-fx-text-fill: blue;");
         textConnecter.setOnMouseClicked((EventHandler<javafx.scene.input.MouseEvent>) new ControleurConnecterVous(this,this.sondage));
 
         HBox.getChildren().addAll(text, textConnecter);
-        VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, btn, HBox);
+        VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, this.idRole, btn, HBox);
         VBprincipal.getChildren().add(VBincription);
 
     }
@@ -153,6 +158,15 @@ public class FenetreInscription extends VBox{
 
     public String getNomP(){
         return NomP.getText();
+    }
+    public int getRole(){
+        switch(this.idRole.getValue()){
+            case "Concepteur": return 1;
+            case "Sondeur": return 2;
+            case "Analyste": return 3;
+        }
+        return -1;
+        
     }
 
 }
