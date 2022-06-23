@@ -177,6 +177,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 this.sondeur.setQuestion(questionnaire.get(index));
                 //maj de l'affichage du sondeur
                 this.sondeur.maj(index);
+                System.out.println(index);
                 
                 //                  PARTIE FICHIER
                 
@@ -215,6 +216,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     
                     //selon le type de la question (actuel)
                     //on récupère les données correspondantes
+                    System.out.println(this.sondeur.getTypeReponse());
                     if (this.sondeur.getTypeReponse() == 'u'){
                         bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurBouton() + "\n");
