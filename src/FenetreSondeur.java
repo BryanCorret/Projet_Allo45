@@ -73,7 +73,7 @@ public class FenetreSondeur extends BorderPane {
         this.boutonRefresh = boutonRefresh;
 
         this.boutonParametre = boutonParametre;
-        //this.boutonParametre.setOnAction(new ControleurParam());
+        this.boutonParametre.setOnAction(new ControleurParam(this.main));
         this.valeurBouton = " ";
 
         this.slider = new Slider(0, this.questionActuelle.getMaxVal(), this.questionActuelle.getMaxVal()/2);

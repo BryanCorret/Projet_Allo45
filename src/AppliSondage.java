@@ -236,6 +236,13 @@ public class AppliSondage extends Application{
         root.getScene().getWindow().sizeToScene();
     }
 
+    public void modeParametreSondeur(){
+        this.fenetreActu = "ParamSondeur";
+        Pane root = new FenetreParametreSondeur(this.boutonHome,this.boutonRefresh);
+        this.scene.setRoot(root);
+        root.getScene().getWindow().sizeToScene();
+    }
+
     public void remplirSondage(Questionnaire q){
         this.sondageSelectionne = q;
     }

@@ -41,7 +41,7 @@ public class FenetreParametreAnalyste extends BorderPane {
         HBox hHome = new HBox();
         hHome.getChildren().addAll(this.boutonHome,this.boutonRefresh);
 
-        Label ltitre = new Label("Parametre"+"this.getNom()");
+        Label ltitre = new Label("Parametres");
 
         HBox hID = new HBox();
         

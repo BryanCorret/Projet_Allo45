@@ -14,7 +14,7 @@ public class ControleurParam implements EventHandler<ActionEvent> {
               if (this.app.getUserRole() == 3){
                 this.app.modeParametreAnalyste();
               }
-              else {this.app.modeHomeSondeur();}
+              else {this.app.modeParametreAnalyste();}
             }
             catch(Exception e){
               
