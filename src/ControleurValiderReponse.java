@@ -26,6 +26,9 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
 
     @Override
     public void handle(ActionEvent event){
+        addRepSet();
+    }
+    public void addRepSet(){
         //On va enregistrer les informations du questionnaire
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Êtes vous sur de vouloir valider et quitter le sondage?", ButtonType.NO,ButtonType.YES);
@@ -58,7 +61,7 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
 
                     //pour chaque donnée de la réponse (sauf le premier, i.e. le TextArea, le texte et le numéro de la question)
                         //on modélise une réponse avec les données du fichier
-                        Reponse rep = new Reponse(this.sondeur.getSondage().getIdQ(), Integer.valueOf(donnee[1]), this.sonde.getCaracteristique(), donnee[3]);
+                        Reponse rep = new Reponse(this.sondeur.getSondage().getIdQ(), Integer.valueOf(donnee[0]), this.sonde.getCaracteristique(), donnee[2]);
                         BiblioSQL.setReponse(this.laConnexionMySQL, rep, this.sonde, this.utilisateur);
                 }
             
@@ -79,6 +82,4 @@ public class ControleurValiderReponse implements EventHandler<ActionEvent>{
         //on ferme simplement la fenêtre pop-up si la réponse est non
         
     } 
-
-        
-}
+    }

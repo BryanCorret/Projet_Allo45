@@ -289,14 +289,14 @@ public class BiblioSQL {
       List<Question> questionnaire = new ArrayList<Question>();
       try {
         st = laConnection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT numQ, texteQ, MaxVal, typeReponse, idT, Valeur FROM TYPEQUESTION natural join VALPOSSIBLE natural join QUESTION Qst natural join QUESTIONNAIRE Qest WHERE Qest.IDQ = " + idQ + " GROUP BY TEXTEQ;");
+        ResultSet rs = st.executeQuery("SELECT Qst.numQ, Qst.texteQ,TQ.typeReponse, Qst.MaxVal, Qst.idT, Valeur FROM TYPEQUESTION TQ join QUESTION Qst on TQ.idT = Qst.idT join VALPOSSIBLE VP on Qst.idQ=VP.idQ join QUESTIONNAIRE Qest on Qest.idQ=Qst.idQ WHERE Qest.IDQ ="+ idQ +" GROUP BY Qst.numQ;");
         while(rs.next()){
-          Question ques = new Question(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(5).charAt(0),idQ);
+          Question ques = new Question(rs.getInt("Qst.numQ"),rs.getString("Qst.texteQ"),rs.getInt("Qst.MaxVal"),rs.getString("Qst.idT").charAt(0),idQ);
           questionnaire.add(ques);
         }
       }
       catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
       }
       return questionnaire;
     }

@@ -13,6 +13,9 @@ public class ControleurVerifLancement implements EventHandler<ActionEvent>{
     }
     @Override
     public void handle(ActionEvent event) {
+        System.out.println("aoe");
+        System.out.println(BiblioSQL.getQuestionnaire(this.main.getConnexion(), this.ctrl.getTxt2()));
+        System.out.println("bruh");
         this.main.setSondageSelectionne(BiblioSQL.getQuestionnaire(this.main.getConnexion(), this.ctrl.getTxt2()));
         this.main.setSondeActu(BiblioSQL.getUnSondeAuHasardDansLePanel(this.main.getConnexion(), this.main.getSondage().getIdQ(), this.ctrl.getTxt1()));
         Alert Informations = new Alert(Alert.AlertType.INFORMATION);
