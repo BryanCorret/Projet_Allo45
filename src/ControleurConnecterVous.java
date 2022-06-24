@@ -6,9 +6,9 @@ public class ControleurConnecterVous implements EventHandler<MouseEvent> {
     
     FenetreInscription fenInscription = null;
     FenetreConnexion fenConnexion = null;
-    appliSondage sondage;
+    AppliSondage sondage;
 
-    public ControleurConnecterVous(FenetreInscription fenetreInscription , appliSondage sondage) {
+    public ControleurConnecterVous(FenetreInscription fenetreInscription , AppliSondage sondage) {
         this.fenInscription = fenetreInscription;
         this.sondage = sondage;
     }

@@ -17,9 +17,9 @@ public class FenetreEditerCompte extends VBox{
     TextField Mdp2;
     TextField NomF;
     TextField NomP;
-    appliSondage sondage;
+    AppliSondage sondage;
     
-    public FenetreEditerCompte(appliSondage sondage){
+    public FenetreEditerCompte(AppliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");

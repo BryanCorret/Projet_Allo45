@@ -19,9 +19,9 @@ public class FenetreInscription extends VBox{
     TextField NomF;
     TextField NomP;
     ComboBox<String> idRole;
-    appliSondage sondage;
+    AppliSondage sondage;
     
-    public FenetreInscription(appliSondage sondage){
+    public FenetreInscription(AppliSondage sondage){
         this.VBprincipal = new VBox();
         VBprincipal.setSpacing(10);
         VBprincipal.setStyle("-fx-background-color: #FFFFFF;");
@@ -108,6 +108,7 @@ public class FenetreInscription extends VBox{
         this.Mdp2.setPromptText("Confirmation du mot de passe");
 
         this.idRole.getItems().addAll("Concepteur", "Sondeur", "Analyste");
+        this.idRole.getSelectionModel().selectFirst();
 
         // Button
         ImageView img = new ImageView(new Image("file:IMG/buttonIn.png"));

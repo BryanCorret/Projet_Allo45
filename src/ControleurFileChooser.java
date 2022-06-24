@@ -7,9 +7,9 @@ import javafx.stage.FileChooser;
 public class ControleurFileChooser implements EventHandler<ActionEvent> {
 
     private FenetreParametreAnalyste fenPara;
-    private appliSondage sondage;
+    private AppliSondage sondage;
 
-    public ControleurFileChooser(FenetreParametreAnalyste fenFileChooser, appliSondage appliSondage) {
+    public ControleurFileChooser(FenetreParametreAnalyste fenFileChooser, AppliSondage appliSondage) {
         this.fenPara = fenFileChooser;
         this.sondage = appliSondage;
     }

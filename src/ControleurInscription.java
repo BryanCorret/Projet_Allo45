@@ -4,9 +4,9 @@ import javafx.event.EventHandler;
 public class ControleurInscription implements EventHandler<ActionEvent> {
     
     private FenetreInscription fenInscription;
-    private appliSondage sondage;
+    private AppliSondage sondage;
 
-    public ControleurInscription(FenetreInscription fenInscription, appliSondage sondage) {
+    public ControleurInscription(FenetreInscription fenInscription, AppliSondage sondage) {
         this.fenInscription = fenInscription;
         this.sondage = sondage;
     }

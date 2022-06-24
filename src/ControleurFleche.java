@@ -7,16 +7,16 @@ import java.util.*;
 
 public class ControleurFleche implements EventHandler<ActionEvent>{ 
 
-    private appliSondage appli;
+    private AppliSondage appli;
     private FenetreAnalyste analyste;
     private FenetreSondeur sondeur;
 
-    public ControleurFleche(appliSondage appli, FenetreAnalyste analyste){
+    public ControleurFleche(AppliSondage appli, FenetreAnalyste analyste){
         this.appli = appli;
         this.analyste = analyste;
     }
 
-    public ControleurFleche(appliSondage appli, FenetreSondeur sondeur){
+    public ControleurFleche(AppliSondage appli, FenetreSondeur sondeur){
         this.appli = appli;
         this.sondeur = sondeur;
         System.out.println("holoeeg");
@@ -46,11 +46,10 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 List<Question> questionnaire = this.analyste.getQuesionnaire().getListQ();
 
                 //la question d'après si possible, la toute première le cas contraire
-                int index = questionnaire.indexOf(this.analyste.getQuestionActuel());
+                int index = questionnaire.indexOf(this.appli.getQuestion());
                 if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
 
-                this.analyste.setQuestionActuel(questionnaire.get(index));
-
+                this.analyste.getComboBoxQuestion().getSelectionModel().select(questionnaire.get(index).getTextQ());
                 
                 //                  PARTIE FICHIER
                 
@@ -70,7 +69,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                     String line;
                     while((line = br.readLine()) != null){
-                    // ajoute la ligne au buffered reader
+                    // ajoute la ligne
                     sb.append(line); sb.append("\n");     
                     }prec = sb.toString();
                     fr.close();    
@@ -83,7 +82,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     FileWriter fw = new FileWriter(fic.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(prec);                                             //les infos précédentes
-                    bw.write(this.analyste.getQuestionActuel() + "/");              //"Question
+                    bw.write(this.appli.getQuestion() + "/");              //"Question
                     bw.write(this.analyste.getComboBoxAnalyse().getValue() + "/");  //"ComboBox analyse
                     bw.write(this.analyste.getComboBoxClasse().getValue()+ "/");    //"ComboBox classe
                     bw.write(this.analyste.getComboBoxQuestion().getValue()+ "/");  //"ComboBox question
@@ -100,10 +99,10 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                 
                 List<Question> questionnaire = this.analyste.getQuesionnaire().getListQ();
 
-                int index = questionnaire.indexOf(this.analyste.getQuestionActuel());
+                int index = questionnaire.indexOf(this.appli.getQuestion());
                 if (index-1 < 0){index = questionnaire.size()-1;}else{index--;}
                 
-                this.analyste.setQuestionActuel(questionnaire.get(index));
+                this.analyste.getComboBoxQuestion().getSelectionModel().select(questionnaire.get(index).getTextQ());
 
 
                 //                  PARTIE FICHIER
@@ -134,7 +133,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                         String donnee[] = question[i].split("/");
 
                         //si on a trouvé la question qu'on veut charger
-                        if (donnee[0].equals(this.analyste.getQuestionActuel().getTextQ())){
+                        if (donnee[0].equals(this.analyste.getComboBoxQuestion().getValue())){
                             this.analyste.getComboBoxAnalyse().setValue(donnee[1]);  //"ComboBox analyse
                             this.analyste.getComboBoxClasse().setValue(donnee[2]);    //"ComboBox classe
                             this.analyste.getComboBoxQuestion().setValue(donnee[3]);  //"ComboBox question
@@ -199,7 +198,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
                     String line;
                     while((line = br.readLine()) != null){
-                    // ajoute la ligne au buffered reader
+                    // ajoute la ligne
                     sb.append(line); sb.append("\n");     
                     }
                     prec = sb.toString();
@@ -218,22 +217,20 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     //on récupère les données correspondantes
                     System.out.println(this.sondeur.getTypeReponse());
                     if (this.sondeur.getTypeReponse() == 'u'){
-                        bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurBouton() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'm'){
-                        bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurCombo() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'c'){
                         //RIEN POUR L'INSTANT, IL FAUT FINIR L'IHM DU CLASSEMENT AVANT
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getClassement() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'n'){
-                        bw.write(this.sondeur.getTextArea() + "/");
                         bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getSlider() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'l'){
-                        bw.write(this.sondeur.getTextArea() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getTextArea() + "\n");
                     }
                     
                     else{ System.out.println("Mauvais type de Question");}

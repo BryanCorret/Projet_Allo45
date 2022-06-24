@@ -3,16 +3,16 @@ import javafx.event.EventHandler;
 
 public class ControleurHome implements EventHandler<ActionEvent>{
 
-  private appliSondage app;
+  private AppliSondage app;
 
-  public ControleurHome(appliSondage appliSondage) {
+  public ControleurHome(AppliSondage appliSondage) {
     this.app = appliSondage;
   }
 
   @Override
   public void handle(ActionEvent event) {
       try{
-        if (this.app.getUserRole() == 1){
+        if (this.app.getUserRole() == 3){
           this.app.modeHomeAnalyste();
         }
         else {this.app.modeHomeSondeur();}

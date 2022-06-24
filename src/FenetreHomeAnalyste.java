@@ -27,11 +27,11 @@ public class FenetreHomeAnalyste extends BorderPane {
     private Button boutonResearch;
     private Button boutonParam;
     private String sondageid;
-    private appliSondage sondage;
+    private AppliSondage sondage;
     public String SondageNom;
     
   
-    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, Button Param,appliSondage s){
+    public FenetreHomeAnalyste(Button boutonHome,Button boutonRefresh,Button boutonDeco, Button Param,AppliSondage s){
         super();
         this.sondage = s;
         this.boutonHome = boutonHome;

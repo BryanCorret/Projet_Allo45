@@ -46,18 +46,18 @@ public class FenetreAnalyste extends BorderPane{
     private ComboBox<String> comboAnalyse;
     private ComboBox<String> comboClasse;
     private ComboBox<String> comboQuestion;
+    private ComboBox<String> comboRep;
 
     //la liste des questions
     private Questionnaire questionnaire;
-    private Question questionActuel;
 
     private TextArea commentaire;
 
     private BorderPane lesFleches;
 
-    private appliSondage app;
+    private AppliSondage app;
     private String Sondageactu;
-    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,appliSondage app, ComboBox<String> cbTypediag, ComboBox<String> cbTri){
+    public FenetreAnalyste(Button boutonHome, Button boutonRefresh, Button boutonParametre, Questionnaire questionnaire, BorderPane lesFleches,AppliSondage app, ComboBox<String> cbTypediag, ComboBox<String> cbTri,ComboBox<String> rep,ComboBox<String> questions){
         super();
         this.boutonHome = boutonHome;
         this.boutonRefresh = boutonRefresh;
@@ -68,12 +68,13 @@ public class FenetreAnalyste extends BorderPane{
         this.app = app;
 
         this.comboAnalyse = cbTypediag;
-        this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
+        //this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
         this.comboClasse = cbTri;
-        this.comboQuestion = new ComboBox<>();
+        this.comboQuestion = questions;
+        this.comboRep = rep;
         this.Sondageactu = questionnaire.getTitreQ();
         this.questionnaire = questionnaire;
-        this.questionActuel = this.questionnaire.getListQ().get(0); //la première question
+        
 
         this.commentaire = new TextArea();
 
@@ -94,9 +95,6 @@ public class FenetreAnalyste extends BorderPane{
     }
 
     //les getteurs
-    public Question getQuestionActuel(){
-        return this.questionActuel;
-    }
     public Questionnaire getQuesionnaire(){
         return this.questionnaire;
     }
@@ -116,10 +114,6 @@ public class FenetreAnalyste extends BorderPane{
     }
 
 
-    //les setteurs
-    public void setQuestionActuel(Question question){
-        this.questionActuel = question;
-    }
     public void setCommentaire(String comment){
         this.commentaire.setText(comment);
     }
@@ -162,52 +156,45 @@ public class FenetreAnalyste extends BorderPane{
         //la partie graphique
         VBox vboxGraphique = new VBox();
 
-        PieChart Circulaire = new PieChart();
-
-        Label titreGraphique = new Label("\n    " + this.questionActuel.getTextQ());
+        PieChart Circulaire = this.app.getPieChart();
+        Label titreGraphique = new Label("\n    " + this.comboQuestion.getValue());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
-        if (Sondageactu.equals("Circulaire")){
-            Circulaire.getData ().setAll (
-            new PieChart.Data ("Oui", 77) ,
-            new PieChart.Data ("Non", 8) ,
-            new PieChart.Data ("Ne sais pas", 11) ,
-            new PieChart.Data ("Autre", 4) ) ;
-            Circulaire.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
-             vboxGraphique.getChildren().add(Circulaire);
+            // pour mettre la légende à droite
+        Circulaire.setLegendSide(Side.LEFT);
         // vbox.getChildren().add(this.sondage.createPieChart);
 
 
-        }
-        else if (Sondageactu.equals("Histogramme")){
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
-        bc.setTitle("Histograme Réponse");
-        xAxis.setLabel("Country");       
-        yAxis.setLabel("Value");
+        
+        // else if (Sondageactu.equals("Histogramme")){
+        // final CategoryAxis xAxis = new CategoryAxis();
+        // final NumberAxis yAxis = new NumberAxis();
+        // final BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+        // bc.setTitle("Histograme Réponse");
+        // xAxis.setLabel("Country");       
+        // yAxis.setLabel("Value");
  
-        XYChart.Series series1 = new XYChart.Series();
-        XYChart.Series series2 = new XYChart.Series();
-        XYChart.Series series3 = new XYChart.Series();
+        // XYChart.Series series1 = new XYChart.Series();
+        // XYChart.Series series2 = new XYChart.Series();
+        // XYChart.Series series3 = new XYChart.Series();
         
-        series1.setName("R1");
-        series2.setName("R2"); 
-        series3.setName("R3"); 
+        // series1.setName("R1");
+        // series2.setName("R2"); 
+        // series3.setName("R3"); 
 
-        series1.getData().add(new XYChart.Data("OUI", 12));
+        // series1.getData().add(new XYChart.Data("OUI", 12));
         
-        series2.getData().add(new XYChart.Data("NON", 11)); 
+        // series2.getData().add(new XYChart.Data("NON", 11)); 
         
-        series3.getData().add(new XYChart.Data("Ne sais pas", 3));      
+        // series3.getData().add(new XYChart.Data("Ne sais pas", 3));      
 
  
 
-        System.out.println("Histograme");
+        // System.out.println("Histograme");
         
-        }
+        
 
 
-        vboxGraphique.getChildren().addAll(titreGraphique); // ,this.lesFleches
+        vboxGraphique.getChildren().addAll(titreGraphique,Circulaire,this.lesFleches); // ,this.lesFleches
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
@@ -242,21 +229,21 @@ public class FenetreAnalyste extends BorderPane{
 
 
         //on rempli les ComboBox
-        this.comboAnalyse.getItems().addAll("Circulaire", "Histogramme", "Pouet", "Machin");
-        this.comboAnalyse.getSelectionModel().select(0);
+        // this.comboAnalyse.getItems().addAll("Circulaire", "Histogramme", "Pouet", "Machin");
+        // this.comboAnalyse.getSelectionModel().select(0);
 
-        this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
-        this.comboClasse.getSelectionModel().select(0);
-
-
-        //on rempli la ComboBox avec les questions
-        for (Question question : this.questionnaire.getListQ()){
-            this.comboQuestion.getItems().add(question.getTextQ());
-        }
-        this.comboQuestion.getSelectionModel().select(0);
+        // this.comboClasse.getItems().addAll("Tout", "Sexe", "Age", "Pieds");
+        // this.comboClasse.getSelectionModel().select(0);
 
 
-        vboxHaute.getChildren().addAll(Parametre, typeAnalyse, comboAnalyse, typeClasses, comboClasse,new Label("\n"), comboQuestion,new Label("\n"), this.boutonDonneeBrute);
+        // //on rempli la ComboBox avec les questions
+        // for (Question question : this.questionnaire.getListQ()){
+        //     this.comboQuestion.getItems().add(question.getTextQ());
+        // }
+        // this.comboQuestion.getSelectionModel().select(0);
+
+
+        vboxHaute.getChildren().addAll(Parametre, typeAnalyse, this.comboAnalyse, typeClasses, this.comboClasse,this.comboRep,new Label("\n"), this.comboQuestion,new Label("\n"), this.boutonDonneeBrute);
         vboxHaute.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
         vboxHaute.setAlignment(Pos.CENTER);
 

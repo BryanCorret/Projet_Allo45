@@ -8,14 +8,14 @@ import java.util.*;
 public class ControleurValiderReponse implements EventHandler<ActionEvent>{
     
     private FenetreSondeur sondeur;
-    private appliSondage appli;
+    private AppliSondage appli;
 
     private ConnexionMySQL laConnexionMySQL;
     private Sonde sonde;
     private Utilisateur utilisateur;
 
 
-    public ControleurValiderReponse(FenetreSondeur sondeur, appliSondage appli, ConnexionMySQL laConnexionMySQL, Sonde sonde, Utilisateur utilisateur){
+    public ControleurValiderReponse(FenetreSondeur sondeur, AppliSondage appli, ConnexionMySQL laConnexionMySQL, Sonde sonde, Utilisateur utilisateur){
         this.sondeur = sondeur;
         this.appli = appli;
 

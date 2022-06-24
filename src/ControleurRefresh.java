@@ -3,9 +3,9 @@ import javafx.event.EventHandler;
 
 public class ControleurRefresh implements EventHandler<ActionEvent>{
     
-    private appliSondage app;
+    private AppliSondage app;
 
-  public ControleurRefresh(appliSondage appliSondage) {
+  public ControleurRefresh(AppliSondage appliSondage) {
     this.app = appliSondage;
   }
   @Override

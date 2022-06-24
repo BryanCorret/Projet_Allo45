@@ -42,14 +42,14 @@ public class FenetreParametreSondeur extends BorderPane{
     private Button boutonRefresh;
     
     private FenetreSondeur sondeur;
-    private appliSondage appli;
+    private AppliSondage appli;
 
     private ConnexionMySQL laConnexionMySQL;
     private Sonde sonde;
     private Utilisateur utilisateur;
 
 
-    public FenetreParametreSondeur(Button boutonHome, Button boutonRefresh, Button boutonParametre, FenetreSondeur sondeur, appliSondage appli, ConnexionMySQL laConnexionMySQL, Sonde sonde, Utilisateur utilisateur){
+    public FenetreParametreSondeur(Button boutonHome, Button boutonRefresh, Button boutonParametre, FenetreSondeur sondeur, AppliSondage appli, ConnexionMySQL laConnexionMySQL, Sonde sonde, Utilisateur utilisateur){
         super();
 
         this.boutonHome = boutonHome;
