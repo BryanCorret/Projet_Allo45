@@ -807,14 +807,14 @@ public class BiblioSQL {
             rep.add(new ArrayList<Reponse>());
             premiereBoucle = false;
           }
-          if (rs.getString(tri)==valActu){
-          Reponse reponse = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString(tri), rs.getString("valeur"));
-          rep.get(Integer.valueOf(valActu)-1).add(reponse);
+          if (rs.getString(tri).equals(valActu)){
+            Reponse reponse = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString(tri), rs.getString("valeur"));
+            rep.get(Integer.valueOf(valActu)-1).add(reponse);
           }
           else{
             res.put(valActu,rep.get(Integer.valueOf(valActu)-1));
             rep.add(new ArrayList<Reponse>());
-            valActu = String.valueOf(Integer.valueOf((valActu)+1));
+            valActu = String.valueOf(Integer.valueOf(valActu)+1);
             Reponse reponse = new Reponse(rs.getInt("idQ"), rs.getInt("numQ"), rs.getString(tri), rs.getString("valeur"));
             rep.get(Integer.valueOf(valActu)-1).add(reponse);
           }

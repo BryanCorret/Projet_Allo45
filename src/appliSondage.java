@@ -336,10 +336,10 @@ public class AppliSondage extends Application{
 }
     public Integer nbChaqueReponses(Reponse lReponses,Question question,String tri){
             if (tri=="Tranche d'âge"){
-            return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),Integer.valueOf(lReponses.getidC().charAt(1)));
+            return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),Integer.valueOf(lReponses.getidC().charAt(0)));
             }
             else if(tri=="Catégorie"){
-                return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),String.valueOf(lReponses.getidC().charAt(2)));
+                return BiblioSQL.getOccurenceReponseDansQuestionPourCarac(this.getConnexion(), this.sondageSelectionne.getIdQ(), question.getNumQ(), lReponses.getValue(),String.valueOf(lReponses.getidC().charAt(0)));
             }
             return -1;
     }
@@ -356,7 +356,8 @@ public List<Reponse> lesReponsesDifferentes(Map<String,List<Reponse>> lReponses)
 }
     
     public void createPieChart(Map<String,List<Reponse>> lReponses,Question question){
-        List<Reponse> lrep = lesReponsesDifferentes(lReponses); 
+        List<Reponse> lrep = lesReponsesDifferentes(lReponses);
+        System.out.println(lReponses); 
         Integer occRep;
         PieChart circulaire = new PieChart();
         circulaire.setTitle(question.getTextQ());

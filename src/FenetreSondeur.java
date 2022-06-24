@@ -377,9 +377,7 @@ public class FenetreSondeur extends BorderPane {
 
     // Sondage
     public Questionnaire getSondage(){return this.sondage;}
-    public String getClassement(){
-        return this.resClassement;
-    }
+    
 
     // Question
     public Question getQuestion(){ return this.questionActuelle;}
