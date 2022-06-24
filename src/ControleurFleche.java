@@ -19,13 +19,11 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
     public ControleurFleche(AppliSondage appli, FenetreSondeur sondeur){
         this.appli = appli;
         this.sondeur = sondeur;
-        System.out.println("holoeeg");
     }
 
     @Override
     public void handle(ActionEvent event) {
         Button bouton = (Button) (event.getTarget());
-        System.out.println("Hellooooooooooooooooooooooo");
         
         /*      
                                      _           _       
@@ -166,19 +164,21 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
         else if(this.appli.getFenetreActu().equals("Sondeur")){
             
             if (bouton.getId().equals("flecheDroite")){
-                
-                //on change la question observée 
-                List<Question> questionnaire = this.sondeur.getSondage().getListQ();
+                if(this.sondeur.getIde() == this.sondeur.getSondage().getListQ().size()){
+                    /**
+                    Alert Informations = new Alert(Alert.AlertType.CONFIRMATION);
+                    Informations.setTitle("Sondage terminé");
+                    Informations.setHeaderText("Le sondage est arrivé a sa fin");
+                    Informations.setContentText("Souhaitez vous valider les réponses ?");
+                    Optional<ButtonType> option = Informations.showAndWait(); 
+                    if (option.get() == ButtonType.OK) {
+                        this.sondeur.addRep();
 
-                int index = questionnaire.indexOf(this.sondeur.getQuestion());
-                if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
-
-                this.sondeur.setQuestion(questionnaire.get(index));
-                //maj de l'affichage du sondeur
-                this.sondeur.maj(index);
-                System.out.println(index);
+                }*/this.sondeur.setIde(0);}
+                else {this.sondeur.setIde(this.sondeur.getIde()+1);}
                 
-                //                  PARTIE FICHIER
+                
+                //id handle                  PARTIE FICHIER
                 
                 //enregistrer les infos de la question dans un fichier
 
@@ -217,7 +217,7 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     //on récupère les données correspondantes
                     System.out.println(this.sondeur.getTypeReponse());
                     if (this.sondeur.getTypeReponse() == 'u'){
-                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurBouton() + "\n");
+                        bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getTextChoice() + "\n");
 
                     }else if (this.sondeur.getTypeReponse() == 'm'){
                         bw.write(this.sondeur.getQuestion().getNumQ() + "/" + this.sondeur.getQuestion().getTextQ() +"/" + this.sondeur.getValeurCombo() + "\n");
@@ -238,7 +238,16 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
                     bw.close();
                 }catch (IOException e){System.out.println("ERREUR 404");}
 
+                //on change la question observée 
+                List<Question> questionnaire = this.sondeur.getSondage().getListQ();
 
+                int index = questionnaire.indexOf(this.sondeur.getQuestion());
+                if (index+1 >= questionnaire.size()){index = 0;}else{index++;}
+
+                this.sondeur.setQuestion(questionnaire.get(index));
+                //maj de l'affichage du sondeur
+                this.sondeur.maj(index);
+                System.out.println(index);
 
                 //maj de l'affichage du sondeur
                 this.appli.majAffichageSondeur();
@@ -315,5 +324,5 @@ public class ControleurFleche implements EventHandler<ActionEvent>{
 
         }   
     }
-          
 }
+          

@@ -294,6 +294,9 @@ public class AppliSondage extends Application{
             this.cbQuestion.getItems().add(q.getTextQ());
         }
         this.cbQuestion.getSelectionModel().selectFirst();
+        System.out.println(this.sondageSelectionne);
+        System.out.println(this.sondageSelectionne.getListQ());
+        System.out.println(this.sondageSelectionne.getListQ().get(0));
         this.questionActu = this.sondageSelectionne.getListQ().get(0);
     }
 
