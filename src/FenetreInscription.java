@@ -1,5 +1,6 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -137,6 +138,7 @@ public class FenetreInscription extends VBox{
 
         HBox.getChildren().addAll(text, textConnecter);
         VBincription.getChildren().addAll(textP, NomP, textNom, NomF, textU, NomU, textM, Mdp, textM2, Mdp2, this.idRole, btn, HBox);
+        VBincription.setAlignment(Pos.CENTER);
         VBprincipal.getChildren().add(VBincription);
 
     }
