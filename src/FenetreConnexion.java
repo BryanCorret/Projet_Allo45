@@ -42,9 +42,12 @@ public class FenetreConnexion extends VBox{
     }
 
     public void setTitle(){
-        Text title = new Text("Créez-votre compte");
+        ImageView logo = new ImageView("file:./IMG/logo_agrandi.png");
+        logo.setFitHeight(100);
+        logo.setFitWidth(100);
+        Text title = new Text("Connectez-Vous");
         title.setFont(javafx.scene.text.Font.font("Arial", 20));
-        VBprincipal.getChildren().add(title);
+        VBprincipal.getChildren().addAll(logo,title);
         VBprincipal.setAlignment(javafx.geometry.Pos.CENTER);
     }
 
