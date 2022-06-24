@@ -46,6 +46,7 @@ public class FenetreSondeur extends BorderPane {
     private ConnexionMySQL connexionSQL;
     private String choice;
     private int ide;
+    private String resClassement;
     
   
     public FenetreSondeur(appliSondage main,Button boutonHome,Button boutonRefresh,Button boutonParametre,Questionnaire sondage,ConnexionMySQL connexionSQL){
@@ -63,7 +64,7 @@ public class FenetreSondeur extends BorderPane {
         this.ide = 0;
         this.sondage = sondage;
         this.questionActuelle = sondage.getListQ().get(this.ide);
-        
+        this.resClassement = "";
 
         this.comboMultiple = new ComboBox<>();
 
@@ -163,10 +164,10 @@ public class FenetreSondeur extends BorderPane {
             
         System.out.println(this.questionActuelle.getType());
         switch(this.questionActuelle.getType()){
-            case 'u' : vMid.getChildren().addAll(treponse,BorderBoutons()); break;
-            case 'm' : vMid.getChildren().addAll(treponse,comboBoxMultiple());break;
+            case 'u' : vMid.getChildren().add(BorderBoutons()); break;
+            case 'm' : vMid.getChildren().add(comboBoxMultiple());break;
             case 'c' : vMid.getChildren().add(classementTile());break;
-            case 'n' : vMid.getChildren().addAll(treponse,SliderMidSlider());break;
+            case 'n' : vMid.getChildren().add(SliderMidSlider());break;
             case 'l' : vMid.getChildren().add(treponse);break;
         }
             
@@ -219,28 +220,36 @@ public class FenetreSondeur extends BorderPane {
         return res;
     }
 
-    private TilePane classementTile(){
+    private BorderPane classementTile(){
+        BorderPane bfinal = new BorderPane();
         TilePane res = new TilePane(Orientation.VERTICAL) ;
-        
-        for(int i=0; i< this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).size();i++){
-            HBox reponse = new HBox();  
-            Label lreponse = new Label();
-            TextField tfreponse = new TextField();
-            lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
-            this.setValeurBouton(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
 
+        List<String> valeursPossibles = new ArrayList<>();
+        valeursPossibles = this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ());
+        for(int i=0;i< valeursPossibles.size();i++){
+            HBox reponse = new HBox();
+            Label lreponse = new Label();
+
+            lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
-            reponse.getChildren().addAll(lreponse,tfreponse,new Label("  "));
-            
-            res.getChildren().addAll(reponse);
-        
+            reponse.getChildren().addAll(new Label((String.valueOf(i)), lreponse));
+            res.getChildren().add(reponse);
         }
-        
-        res.setAlignment(Pos.CENTER);
 
-        return res;
+        res.setAlignment(Pos.CENTER);
+        VBox vbox = new VBox();
+
+        Label instruction = new Label("Entrez dans le champs ci-dessous les 3 indices des réponses dans l'ordre choisit, Ex: 1,2,3 ou 1 2 3");
+        TextField resultat = new TextField();
+        this.resClassement += resultat.getText();
+
+        vbox.getChildren().addAll(instruction,resultat);
+        bfinal.setCenter(res);
+        bfinal.setBottom(vbox);
+        return bfinal;
     }
+
    
     private VBox SliderMidSlider(){
         
@@ -317,6 +326,9 @@ public class FenetreSondeur extends BorderPane {
 
     // Sondage
     public Questionnaire getSondage(){return this.sondage;}
+    public String getClassement(){
+        return this.resClassement;
+    }
 
     // Question
     public Question getQuestion(){ return this.questionActuelle;}
