@@ -66,7 +66,7 @@ public class FenetreSondeur extends BorderPane {
         this.resClassement = "";
 
         this.questionActuelle = sondage.getListQ().get(this.ide);
-        
+        this.resClassement = "";
 
         this.comboMultiple = new ComboBox<>();
 
@@ -252,6 +252,7 @@ public class FenetreSondeur extends BorderPane {
             lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
             this.setValeurBouton(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
 
+            lreponse.setText(this.questionActuelle.getValeursPossible(this.connexionSQL,sondage.getIdQ()).get(i));
             Insets a = new Insets(10,5,10,10);
             lreponse.setPadding(a);
             reponse.getChildren().addAll(new Label((String.valueOf(i)), lreponse));
@@ -273,6 +274,7 @@ public class FenetreSondeur extends BorderPane {
         bfinal.setBottom(vbox);
         return bfinal;
     }
+
    
     private VBox SliderMidSlider(){
         
@@ -375,6 +377,9 @@ public class FenetreSondeur extends BorderPane {
 
     // Sondage
     public Questionnaire getSondage(){return this.sondage;}
+    public String getClassement(){
+        return this.resClassement;
+    }
 
     // Question
     public Question getQuestion(){ return this.questionActuelle;}
