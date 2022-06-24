@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,10 +23,7 @@ public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-       // ArrayList<String> lSondage = BiblioSQL.getListSondage(maConnexion);
-       ArrayList<Questionnaire> lSondage = new ArrayList<>();
-       lSondage.add(new Questionnaire(1, "Totot", "Ouvert"));
-       lSondage.add(new Questionnaire(2, "ratatata", "Ouvert"));
+       List<Questionnaire> lSondage = BiblioSQL.getLesQuestionnaires(maConnexion);
 
         
         
@@ -51,7 +48,7 @@ public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
         Listesondage.getDialogPane().setContent(vbox);
         Listesondage.showAndWait();
         // Afficher le nom sur la vue
-        try{
+        //try{
         String s = group.getSelectedToggle().toString();
         String[] parts = s.split("'"); 
         
@@ -63,14 +60,16 @@ public class ControleurNavAnalyste implements EventHandler<ActionEvent> {
 
         System.out.println("Num sondage sélectionné : " + id);
         
-
-        this.fen.setSondageId(id);
         
+        
+        this.sondage.setSondageSelectionne(BiblioSQL.getQuestionnaireId(this.sondage.getConnexion(), id));
+        
+        //this.fen.setSondageId(id);
         
         this.fen.MajVue();
-        }catch(NullPointerException e){
-            System.out.println("Pas de sondage sélectionné");
-        }
+        // }catch(NullPointerException e){
+        //     System.out.println("Pas de sondage sélectionné");
+        // }
     }
 
 }

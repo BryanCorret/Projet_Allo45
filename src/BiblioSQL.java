@@ -316,7 +316,7 @@ public class BiblioSQL {
         return q;
     }
       catch(SQLException e){
-        e.printStackTrace();;
+        e.printStackTrace();
       }
       return null;
     }
@@ -336,6 +336,32 @@ public class BiblioSQL {
         ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
         rs.first();
         q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
+        rs.close();
+        for(Question question:questions){
+          q.addQuestion(question);
+      }
+        return q;
+    }
+      catch(SQLException e){
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    public static Questionnaire getQuestionnaireId(ConnexionMySQL laConnexion, String IdQ){
+      Statement st;
+      try{
+        st = laConnexion.createStatement();
+        System.out.println("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE idQ = '" + IdQ.charAt(0) + "';");
+        ResultSet rs1 = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE idQ = '" + IdQ.charAt(0) + "';");
+        rs1.first();
+        int idQ = rs1.getInt("idQ");
+
+        List<Question> questions = getQuestionQuestionnaire(laConnexion, idQ);
+        System.out.println(questions);
+        ResultSet rs = st.executeQuery("SELECT idQ,Titre,Etat FROM QUESTIONNAIRE WHERE IDQ = " + idQ + ";");
+        rs.first();
+        Questionnaire q = new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat"));
         rs.close();
         for(Question question:questions){
           q.addQuestion(question);
@@ -800,7 +826,21 @@ public class BiblioSQL {
       return res;
     }
 
-
+    public static List<Questionnaire> getLesQuestionnaires(ConnexionMySQL co){
+      List<Questionnaire> l = new ArrayList<>();
+      Statement st;
+      try{
+        st = co.createStatement();
+        ResultSet rs = st.executeQuery("SELECT idQ, Titre, Etat FROM QUESTIONNAIRE");
+        while(rs.next()){
+          l.add(new Questionnaire(rs.getInt("idQ"), rs.getString("Titre"), rs.getString("Etat")));
+        }
+      }
+      catch(SQLException sql){
+        sql.getMessage();
+      }
+      return l;
+    }
     
     public static void exit(ConnexionMySQL laConnexion){
       Statement st;

@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
@@ -94,7 +95,7 @@ public class AppliSondage extends Application{
         this.boutonDeconnexion = new Button(); //image deconnexion
         this.boutonConnexion = new Button();
         this.boutonInscription = new Button();
-        this.fleches = null;
+        this.fleches = lesFleches();
 
         ImageView home = new ImageView("file:IMG/home.png");
         ImageView refresh = new ImageView("file:IMG/reload.png");
@@ -173,6 +174,8 @@ public class AppliSondage extends Application{
     }
 
     public void modeAnalyste(){
+        createPieChart(BiblioSQL.recupererReponses(this.ConnexionSQL, this.cbTri.getValue(), this.sondageSelectionne.getIdQ(), this.questionActu.getNumQ()), this.questionActu);
+        System.out.println(this.sondageSelectionne);
         this.fenetreActu = "Analyste";
         Pane root = new FenetreAnalyste(this.boutonHome,this.boutonRefresh,this.boutonParam,this.sondageSelectionne,this.fleches,this,this.cbTypediag,this.cbTri,this.cbTriTypeRep,this.cbQuestion);
         // ,this.cbTypediag,this.cbTri
@@ -362,6 +365,7 @@ public List<Reponse> lesReponsesDifferentes(Map<String,List<Reponse>> lReponses)
             for (Reponse r:value){
                 occRep = nbChaqueReponses(r, question,this.cbTri.getValue());
                 if(lrep.contains(r)){
+                //circulaire.getData().setAll(new PieChart.Data(r.getValue(),occRep));
                 circulaire.getData().add(new PieChart.Data(r.getValue(),occRep));
                 lrep.remove(r);
                 }
@@ -370,11 +374,10 @@ public List<Reponse> lesReponsesDifferentes(Map<String,List<Reponse>> lReponses)
                 }
             }
         }
-
         this.leChart = circulaire;
+        System.out.println(this.leChart.equals(circulaire));
 
     }
-    
 
     
     public BarChart<String, Number> createBarchar(HashMap<String, List<Reponse>> lReponses , Question question, String caracteristique){

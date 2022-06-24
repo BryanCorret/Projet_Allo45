@@ -14,17 +14,12 @@ public class ControleurInpecterElement implements EventHandler<ActionEvent>{
 
     @Override
     public void handle(ActionEvent arg0) {
-        // Questionnaire sondageSelectionne = BiblioSQL.getSondage(this.fen.getId());
-        // this.s.setSondageSelectionne(sondageSelectionne);
 
         // Pour test
-       Questionnaire r = new Questionnaire(1, "zesrdtfyguhijokpl", "OUVERT");
-        r.addQuestion(new Question(1, "Etes vous un Homme", 0, 'u', 01));
-        r.addQuestion(new Question(2, "Etes vous majeur", 0, 'u', 02));
         
     try{
-        this.s.setSondageSelectionne(r);
-        
+        //Questionnaire sondageSelectionne = BiblioSQL.getQuestionnaireId(this.s.getConnexion(),this.fen.getId());
+        //this.s.setSondageSelectionne(sondageSelectionne);
     }
 
     catch(NullPointerException e){

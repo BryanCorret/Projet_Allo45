@@ -68,7 +68,7 @@ public class FenetreAnalyste extends BorderPane{
         this.app = app;
 
         this.comboAnalyse = cbTypediag;
-        this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
+        //this.comboAnalyse.setOnAction(new ControleurChoixDiagramme(this));
         this.comboClasse = cbTri;
         this.comboQuestion = questions;
         this.comboRep = rep;
@@ -157,11 +157,10 @@ public class FenetreAnalyste extends BorderPane{
         VBox vboxGraphique = new VBox();
 
         PieChart Circulaire = this.app.getPieChart();
-
         Label titreGraphique = new Label("\n    " + this.comboQuestion.getValue());
         titreGraphique.setWrapText(true); //retour à la ligne automatique
-            Circulaire.setLegendSide (Side.RIGHT) ; // pour mettre la légende à droite
-            vboxGraphique.getChildren().add(Circulaire);
+            // pour mettre la légende à droite
+        Circulaire.setLegendSide(Side.LEFT);
         // vbox.getChildren().add(this.sondage.createPieChart);
 
 
@@ -195,7 +194,7 @@ public class FenetreAnalyste extends BorderPane{
         
 
 
-        vboxGraphique.getChildren().addAll(titreGraphique); // ,this.lesFleches
+        vboxGraphique.getChildren().addAll(titreGraphique,Circulaire,this.lesFleches); // ,this.lesFleches
         vboxGraphique.setBackground(new Background(new BackgroundFill(Color.GAINSBORO,CornerRadii.EMPTY, Insets.EMPTY)));
 
 
