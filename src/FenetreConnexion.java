@@ -121,6 +121,7 @@ public class FenetreConnexion extends VBox{
         HBox.getChildren().addAll(textMdp, textConnecter);
         if(erreur){
             VBincription.getChildren().addAll(hBoxErreur,textU, NomU, textM, Mdp, btn, HBox);
+            VBincription.setAlignment(Pos.CENTER);
             NomU.setStyle("-fx-border-color: #E42B01;");
             Mdp.setStyle("-fx-border-color: #E42B01;");
 
@@ -129,6 +130,7 @@ public class FenetreConnexion extends VBox{
         }
         else {
             VBincription.getChildren().addAll(textU, NomU, textM, Mdp, btn, HBox);
+            VBincription.setAlignment(Pos.CENTER);
 
         }
         return VBincription;
